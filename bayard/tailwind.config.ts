@@ -10,11 +10,23 @@ const config = {
 	],
   prefix: "",
   theme: {
+    fontSize: {
+      xs: '0.75rem', // 12px
+      sm: '0.875rem', // 14px
+      base: '0.875rem', // 15px (modified from default 16px)
+      lg: '1.125rem', // 18px
+      xl: '1.25rem', // 20px
+      '2xl': '1.5rem', // 24px
+    },
     container: {
       center: true,
       padding: "2rem",
       screens: {
         "2xl": "1400px",
+        "xl": "1200px",
+        "lg": "1024px",
+        "md": "768px",
+        "sm": "640px",
       },
     },
     extend: {

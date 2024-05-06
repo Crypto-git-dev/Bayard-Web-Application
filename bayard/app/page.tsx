@@ -1,12 +1,15 @@
 'use client';
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import queryBayard from './api/route';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from 'next/image';
 import BAYARD_LAB_YELLOW from '@/assets/bayard_lab_yellow.png';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useSpring, animated } from 'react-spring';
 
 interface Message {
   user: string;
@@ -33,6 +36,32 @@ export default function ChatPage() {
   const [loadingStatus, setLoadingStatus] = useState("");
   const asideRef = useRef<HTMLElement>(null);
 
+  const [modelOutput, setModelOutput] = useState("");
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [streamedText, setStreamedText] = useState("");
+
+  const springProps = useSpring({
+    from: { opacity: 0, transform: 'translateY(20px)' },
+    to: { opacity: 1, transform: 'translateY(0)' },
+    config: { tension: 220, friction: 20 },
+  });
+
+  useEffect(() => {
+    if (isStreaming) {
+      const timer = setTimeout(() => {
+        setStreamedText((prevText) => {
+          const newText = modelOutput.slice(0, prevText.length + 1);
+          if (newText === modelOutput) {
+            setIsStreaming(false);
+          }
+          return newText;
+        });
+      }, 50);
+
+      return () => clearTimeout(timer);
+    }
+  }, [isStreaming, modelOutput, streamedText]);
+
   const sendMessage = async () => {
     if (message.trim() === "") return;
 
@@ -50,12 +79,17 @@ export default function ChatPage() {
     setIsLoading(true);
     setLoadingStatus("Thinking...");
 
+    setIsStreaming(true);
+    setStreamedText("");
+
     try {
       const response = await queryBayard(message);
       setLoadingStatus("Querying...");
 
+      setModelOutput(response.model_output);
+
       const botMessage: Message = {
-        user: "Assistant",
+        user: "Bayard",
         text: response.model_output,
       };
 
@@ -63,6 +97,8 @@ export default function ChatPage() {
         messages: [...prevChatHistory.messages, botMessage],
         documents: response.documents || [],
       }));
+
+      setLoadingStatus("Generating...");
     } catch (error) {
       console.error("Error:", error);
     }
@@ -76,176 +112,253 @@ export default function ChatPage() {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       sendMessage();
     }
   };
 
   const regenerateResponse = async () => {
-    if (chatHistory.messages.length === 0) return;
-
-    const lastUserMessage = chatHistory.messages[chatHistory.messages.length - 2];
-
     setIsLoading(true);
     setLoadingStatus("Generating...");
-
+  
+    setIsStreaming(true);
+    setStreamedText("");
+  
     try {
-      const response = await queryBayard(lastUserMessage.text);
-      setLoadingStatus("Querying...");
-
+      const lastUserMessage = chatHistory.messages[chatHistory.messages.length - 1].text;
+      const response = await queryBayard(lastUserMessage);
+  
+      setModelOutput(response.model_output);
+  
+      const updatedChatHistory = chatHistory.messages.slice(0, -1);
       const botMessage: Message = {
-        user: "Assistant",
-        text: response.text,
+        user: "Bayard",
+        text: response.model_output,
       };
-
-      setChatHistory((prevChatHistory) => ({
-        messages: [...prevChatHistory.messages.slice(0, -1), botMessage],
+  
+      setChatHistory({
+        messages: [...updatedChatHistory, botMessage],
         documents: response.documents || [],
-      }));
+      });
     } catch (error) {
       console.error("Error:", error);
     }
-
+  
     setIsLoading(false);
     setLoadingStatus("");
   };
 
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
+    if (asideRef.current) {
+      asideRef.current.style.transition = "none";
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+    }
   };
 
   const handleMouseMove = (e: MouseEvent) => {
     if (asideRef.current) {
-      const newWidth = e.clientX - asideRef.current.offsetLeft;
+      const newWidth = e.clientX;
       asideRef.current.style.width = `${newWidth}px`;
     }
   };
 
   const handleMouseUp = () => {
-    document.removeEventListener('mousemove', handleMouseMove);
-    document.removeEventListener('mouseup', handleMouseUp);
+    if (asideRef.current) {
+      asideRef.current.style.transition = "width 0.3s ease-in-out";
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    }
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-900">
-      <header className="bg-[#6] shadow-lg py-4 sticky top-0 z-50">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-center">
-            <Image src={BAYARD_LAB_YELLOW} alt="Bayard Lab Logo" height={48} />
-          </div>
+    <div className="flex flex-col h-screen bg-gray-900 text-xs">
+      <header className="bg-gray-800 text-amber-300 py-4 px-6 flex items-center justify-between shadow-md">
+        <div className="flex items-center space-x-4">
+          <Image src={BAYARD_LAB_YELLOW} alt="Bayard Lab" width={40} height={40} />
+          <h1 className="font-bold text-lg">Bayard</h1>
         </div>
+        <nav>
+          <ul className="flex space-x-4">
+            <li>
+              <a href="#" className="hover:text-amber-500">
+                Home
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-amber-500">
+                About
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-amber-500">
+                Contact
+              </a>
+            </li>
+          </ul>
+        </nav>
       </header>
       <main className="flex flex-1 overflow-hidden">
         <aside
           ref={asideRef}
-          className="w-1/2 bg-gray-700 p-6 transition-all duration-300 overflow-y-auto shadow-lg z-10 relative"
+          className="w-1/2 bg-gray-700 p-4 transition-all duration-300 overflow-y-auto shadow-lg z-10 relative"
         >
-          <h2 className="text-xl font-bold mb-4 text-amber-300">Documents</h2>
-          {isLoading && (
-            <div className="text-center mt-4">
-              <div className="animate-pulse">
-                {loadingStatus === 'Thinking...' && (
-                  <div className="h-4 bg-amber-500 rounded w-1/4 mx-auto"></div>
-                )}
-                {loadingStatus === 'Searching...' && (
-                  <div className="h-4 bg-amber-500 rounded w-1/2 mx-auto"></div>
-                )}
-              </div>
-              <p className="mt-2 text-amber-300">{loadingStatus}</p>
-            </div>
-          )}
-          <div className="overflow-y-auto max-h-[calc(100vh-200px)]">
-            {chatHistory.documents
-              .filter((doc) => doc.abstract)
-              .map((doc, index) => (
-                <Card key={index} className="mb-4 p-4 bg-gray-600 text-amber-300">
-                  <CardHeader>
-                    <CardTitle>{doc.title}</CardTitle>
-                    <CardDescription>
-                      <p className="text-gray-300">
-                        <strong>Authors:</strong> {doc.authors.join(", ")}
-                      </p>
-                      <p className="text-gray-300">
-                        <strong>Year Published:</strong> {doc.yearPublished}
-                      </p>
-                      <p className="text-gray-300 mt-2">
-                        <strong>Abstract:</strong> {doc.abstract}
-                      </p>
-                    </CardDescription>
-                  </CardHeader>
-                  <div className="mt-4">
-                    <Button asChild className="px-4 py-2 bg-amber-500 text-gray-800 hover:bg-amber-400">
-                      <a href={doc.downloadUrl} target="_blank" rel="noopener noreferrer">
-                        Download
-                      </a>
-                    </Button>
-                  </div>
-                </Card>
-              ))}
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-base font-bold text-amber-300">Documents</h2>
+            <div
+              className="w-2 h-full bg-gray-500 hover:bg-gray-400 cursor-col-resize"
+              onMouseDown={handleMouseDown}
+            ></div>
           </div>
-          <p className="mt-4 italic text-gray-400">
-            {chatHistory.documents.length - chatHistory.documents.filter((doc) => doc.abstract).length} documents without abstracts omitted from search results.
-          </p>
-          <div
-            className="absolute top-0 right-0 bottom-0 w-1 bg-amber-500 cursor-col-resize"
-            onMouseDown={handleMouseDown}
-          ></div>
-        </aside>
-        <section className="flex-1 flex flex-col overflow-hidden">
-          <div className="flex-1 p-6 bg-gray-800 overflow-y-auto">
-            {chatHistory.messages.map((message, index) => (
-              <div
-              key={index}
-              className={`mb-4 ${message.user === 'You' ? 'text-right' : 'text-left'} ${
-                message.user === 'You' ? 'text-amber-300' : 'text-gray-300'
-              }`}
-              style={{ lineHeight: '1.6' }}
-            >
-              <strong>{message.user}:</strong> {message.text}
-            </div>
-          ))}
           {isLoading && (
-            <div className="text-center mt-4">
+            <div className="text-center mt-2">
               <div className="animate-pulse">
                 {loadingStatus === 'Thinking...' && (
-                  <div className="h-4 bg-amber-500 rounded w-1/4 mx-auto"></div>
+                    <div className="h-2 bg-amber-500 rounded w-1/4 mx-auto"></div>
                 )}
                 {loadingStatus === 'Querying...' && (
-                  <div className="h-4 bg-amber-500 rounded w-1/2 mx-auto"></div>
+                  <div className="h-2 bg-amber-500 rounded w-1/2 mx-auto"></div>
                 )}
                 {loadingStatus === 'Generating...' && (
-                  <div className="h-4 bg-amber-500 rounded w-3/4 mx-auto"></div>
+                  <div className="h-2 bg-amber-500 rounded w-3/4 mx-auto"></div>
                 )}
               </div>
-              <p className="mt-2 text-amber-300">{loadingStatus}</p>
+              <p className="mt-1 text-amber-300">{loadingStatus}</p>
             </div>
           )}
-        </div>
-        <div className="p-6 bg-gray-800">
-          <div className="flex space-x-2">
-            <div className="flex-1 mr-5">
-              <Textarea
-                value={message}
-                onChange={handleInputChange}
-                onKeyDown={handleKeyDown}
-                className="w-full px-2 bg-gray-700 text-amber-300 border-gray-600 focus:border-amber-300"
-                placeholder="Type your message..."
-              />
-            </div>
-            <div className="flex flex-col space-y-2 mr-5">
-              <Button onClick={sendMessage} disabled={isLoading} className="bg-amber-500 text-gray-800 hover:bg-amber-400">
-                {isLoading ? 'Sending...' : 'Send'}
-              </Button>
-              <Button onClick={regenerateResponse} disabled={isLoading} variant="ghost" className="border-amber-500 text-amber-300 hover:bg-amber-500 hover:text-gray-800">
-                Regenerate
-              </Button>
+          {chatHistory.documents.length > 0 && (
+            <>
+              <div className="overflow-y-auto max-h-[calc(100vh-200px)]">
+                {chatHistory.documents
+                  .filter((doc) => doc.abstract)
+                  .map((doc, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.1 }}
+                    >
+                      <Card className="mb-2 p-2 bg-gray-600 text-amber-300 shadow">
+                        <CardHeader>
+                          <CardTitle className="text-base">{doc.title}</CardTitle>
+                          <CardDescription>
+                            <p className="text-xs text-gray-400">
+                              <strong>Authors:</strong> {doc.authors.join(", ")}
+                            </p>
+                            <p className="text-xs text-gray-400">
+                              <strong>Year Published:</strong> {doc.yearPublished}
+                            </p>
+                            <p className="text-xs mt-1 text-gray-400">
+                              <strong>Abstract:</strong> {doc.abstract.length > 500 ? doc.abstract.slice(0, 500) + "..." : doc.abstract}
+                            </p>
+                          </CardDescription>
+                        </CardHeader>
+                        <CardFooter>
+                          <a href={doc.downloadUrl} target="_blank" rel="noopener noreferrer">
+                            <Button size="sm" className="bg-amber-500 text-gray-800 hover:bg-amber-400">
+                              Download
+                            </Button>
+                          </a>
+                        </CardFooter>
+                      </Card>
+                    </motion.div>
+                  ))}
+              </div>
+              <div className="mt-2 flex justify-between">
+                <p className="text-xs text-amber-300">
+                  {chatHistory.documents.filter((doc) => doc.abstract).length} documents with abstracts
+                </p>
+                {chatHistory.documents.filter((doc) => !doc.abstract).length > 0 && (
+                  <p className="text-xs text-amber-300">
+                    {chatHistory.documents.filter((doc) => !doc.abstract).length} documents without abstracts
+                  </p>
+                )}
+              </div>
+            </>
+          )}
+          {chatHistory.documents.length === 0 && !isLoading && (
+            <p className="text-xs text-amber-300 mt-2">No documents found</p>
+          )}
+        </aside>
+        <div className="w-0.5 bg-gray-600"></div>
+        <section className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex-1 p-4 bg-gray-800 overflow-y-auto">
+            <AnimatePresence>
+              {chatHistory.messages.map((message, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <Card className="mb-2 p-2 bg-gray-700 text-amber-300 shadow-md">
+                    <CardHeader>
+                      <div className="flex items-center space-x-2">
+                        <Avatar className="w-6 h-6">
+                          <AvatarImage src={message.user === 'You' ? '/user-avatar.png' : '/bayard-avatar.png'} alt={message.user} />
+                          <AvatarFallback className="text-xs">{message.user.charAt(0)}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                          <p className="text-sm font-semibold">{message.user}</p>
+                        </div>
+                      </div>
+                    </CardHeader>
+                    <CardContent className="mt-2">
+                      {message.user === 'Bayard' && isStreaming && message.text === modelOutput ? (
+                        <animated.p className="text-xs" style={{ ...springProps, lineHeight: '1.4' }}>
+                          {streamedText}
+                          <span className="animate-pulse">|</span>
+                        </animated.p>
+                      ) : (
+                        <p className="text-xs" style={{ lineHeight: '1.4' }}>{message.text}</p>
+                      )}
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+            {isLoading && (
+              <div className="text-center mt-2">
+                <div className="animate-pulse">
+                  {loadingStatus === 'Thinking...' && (
+                    <div className="h-2 bg-amber-500 rounded w-1/4 mx-auto"></div>
+                  )}
+                  {loadingStatus === 'Querying...' && (
+                    <div className="h-2 bg-amber-500 rounded w-1/2 mx-auto"></div>
+                  )}
+                  {loadingStatus === 'Generating...' && (
+                    <div className="h-2 bg-amber-500 rounded w-3/4 mx-auto"></div>
+                  )}
+                </div>
+                <p className="mt-1 text-amber-300">{loadingStatus}</p>
+              </div>
+            )}
+          </div>
+          <div className="p-4 bg-gray-800">
+            <div className="flex space-x-2">
+              <div className="flex-1 mr-2">
+                <Textarea
+                  value={message}
+                  onChange={handleInputChange}
+                  onKeyDown={handleKeyDown}
+                  className="w-full px-2 py-1 bg-gray-700 text-amber-300 border-gray-600 focus:border-amber-300 shadow-md"
+                  placeholder="Type your message..."
+                />
+              </div>
+              <div className="flex flex-col space-y-2 mr-2">
+                <Button onClick={sendMessage} disabled={isLoading} className="bg-amber-500 text-gray-800 hover:bg-amber-400 text-xs">
+                  {isLoading ? 'Sending...' : 'Send'}
+                </Button>
+                <Button onClick={regenerateResponse} disabled={isLoading} variant="ghost" className="border-amber-500 text-amber-300 hover:bg-amber-500 hover:text-gray-800 text-xs">
+                  Regenerate
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-    </main>
-  </div>
-);
+        </section>
+      </main>
+    </div>
+  );
 }
