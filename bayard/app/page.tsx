@@ -11,10 +11,12 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useSpring, animated } from 'react-spring';
 import { Lexend_Peta } from "next/font/google";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
+import { toast, Toaster } from 'react-hot-toast';
 
 interface Message {
   user: string;
   text: string;
+  timestamp: string;
 }
 
 interface Document {
@@ -104,8 +106,9 @@ export default function ChatPage() {
     const userMessage: Message = {
       user: 'You',
       text: message,
+      timestamp: new Date().toLocaleString(), // Add timestamp
     };
-  
+
     setChatHistory((prevChatHistory) => ({
       ...prevChatHistory,
       messages: [...prevChatHistory.messages, userMessage],
@@ -138,7 +141,9 @@ export default function ChatPage() {
       const botMessage: Message = {
         user: 'Bayard',
         text: data.model_output,
+        timestamp: new Date().toLocaleString(), // Add timestamp
       };
+
   
       await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate generating delay
   
@@ -203,6 +208,54 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
   if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
     sendMessage();
+  }
+};
+
+const copyToClipboard = (text: string) => {
+  navigator.clipboard.writeText(text).then(() => {
+    // Show a success message or toast notification
+    toast.success('Message copied to clipboard');
+  }).catch((error) => {
+    console.error('Failed to copy message:', error);
+    // Show an error message or toast notification
+    toast.error('Failed to copy message');
+  });
+};
+
+const shareMessage = (text: string) => {
+  if (navigator.share) {
+    navigator.share({
+      title: 'Bayard Chat Message',
+      text: text,
+    }).then(() => {
+      // Sharing successful
+      toast.success('Message shared successfully');
+    }).catch((error) => {
+      console.error('Failed to share message:', error);
+      // Fallback to a custom share dialog or message
+      toast.error('Failed to share message');
+    });
+  } else {
+    // Fallback to a custom share dialog or message
+    toast('Sharing not supported', {
+      icon: '❕',
+      style: {
+        borderRadius: '10px',
+        background: '#333',
+        color: '#fff',
+      },
+    });  }
+};
+
+const provideFeedback = (message: Message) => {
+  // Open a modal or dialog to collect feedback
+  const feedback = prompt('Please provide your feedback for this message:', '');
+
+  if (feedback !== null) {
+    // Send the feedback to the server or perform any necessary actions
+    console.log('Feedback submitted:', feedback);
+    // Show a success message or toast notification
+    toast.success('Feedback submitted successfully');
   }
 };
 
@@ -317,29 +370,54 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
           <div ref={chatContainerRef} className="flex-1 p-4 pr-10 pl-10 bg-gray-800 overflow-y-auto">
           <AnimatePresence>
   {chatHistory.messages.map((message, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Card
-              className={`mb-2 p-2 ${
-                message.user === 'You' ? 'bg-gray-900 text-amber-400' : 'bg-gray-700 text-amber-300'
-              } shadow-md`}
-            >
-              <CardHeader>
-                <div className="flex items-center space-x-2">
-                  <Avatar className="w-6 h-6">
-                    <AvatarFallback className="text-xs bg-slate-500">{message.user.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-sm font-semibold">{message.user}</p>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="mt-2">
+    <motion.div
+      key={index}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.3 }}
+    >
+<Card
+  className={`mb-2 p-2 ${
+    message.user === 'You' ? 'bg-gray-900 text-amber-400' : 'bg-gray-700 text-amber-300 shadow-md'
+  }`}
+      >
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <Avatar className="w-6 h-6">
+                <AvatarFallback className="text-xs bg-slate-500">{message.user.charAt(0)}</AvatarFallback>
+              </Avatar>
+              <div>
+                <p className="text-sm font-semibold">{message.user}</p>
+                <p className="text-xs text-gray-100">{message.timestamp}</p>
+              </div>
+            </div>
+            <div className="flex space-x-2">
+              <button
+                className="text-xs text-amber-400 hover:text-amber-300"
+                onClick={() => copyToClipboard(message.text)}
+              >
+                Copy
+              </button>
+              <button
+                className="text-xs text-amber-400 hover:text-amber-300"
+                onClick={() => shareMessage(message.text)}
+              >
+                Share
+              </button>
+              {message.user === 'Bayard' && (
+                <button
+                  className="text-xs text-amber-400 hover:text-amber-300"
+                  onClick={() => provideFeedback(message)}
+                >
+                  Feedback
+                </button>
+              )}
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="mt-2">
                 {message.user === 'Bayard' && isStreaming && message.text === modelOutput ? (
                   <animated.p className="text-xs" style={{ ...springProps, lineHeight: '1.4' }}>
                     {streamedText}
@@ -347,7 +425,7 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
                   </animated.p>
                 ) : (
                   <div
-                    className="text-sm"
+                    className="text-sm text-amber-400"
                     style={{ lineHeight: '1.6' }}
                     dangerouslySetInnerHTML={{ __html: message.user === 'Bayard' ? formatMessage(message.text) : message.text }}
                   />
