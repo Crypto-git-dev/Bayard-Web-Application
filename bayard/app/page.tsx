@@ -10,6 +10,8 @@ import Image from 'next/image';
 import BAYARD_LAB_YELLOW from '@/assets/bayard_lab_yellow.png';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSpring, animated } from 'react-spring';
+import { Lexend_Peta } from "next/font/google";
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 
 interface Message {
   user: string;
@@ -29,12 +31,20 @@ interface ChatHistory {
   documents: Document[];
 }
 
+const lexendPetaStyle = Lexend_Peta({
+  weight: '800',
+  style: 'normal',
+  display: 'swap',
+  subsets: ['latin']
+});
+
 export default function ChatPage() {
   const [message, setMessage] = useState("");
   const [chatHistory, setChatHistory] = useState<ChatHistory>({ messages: [], documents: [] });
   const [isLoading, setIsLoading] = useState(false);
   const [loadingStatus, setLoadingStatus] = useState("");
-  const asideRef = useRef<HTMLElement>(null);
+
+
 
   const [modelOutput, setModelOutput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
@@ -128,6 +138,9 @@ export default function ChatPage() {
     setLoadingStatus("");
   };
 
+  const [asideWidth, setAsideWidth] = useState(400);
+  const asideRef = useRef<HTMLElement>(null);
+
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     if (asideRef.current) {
       asideRef.current.style.transition = "none";
@@ -164,11 +177,9 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
 
   return (
     <div className="flex flex-col h-screen bg-gray-900 text-xs">
-      <header className="bg-gray-800 text-amber-300 py-4 px-6 flex items-center justify-between shadow-md">
-        <div className="flex items-center space-x-4">
-          <Image src={BAYARD_LAB_YELLOW} alt="Bayard Lab" width={200} height={40} />
-          <h1 className="font-sem text-lg">Bayard_One</h1>
-        </div>
+      <header className="bg-gray-900 text-amber-300 py-4 px-6 flex items-center justify-between shadow-md">
+        <Image src={BAYARD_LAB_YELLOW} alt="Bayard Lab Logo" width={150} height={50} />
+        <h1 className={`${lexendPetaStyle} uppercase`}>Bayard_One</h1>
         <nav>
           <ul className="flex space-x-4">
             <li>
@@ -190,9 +201,11 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         </nav>
       </header>
       <main className="flex flex-1 overflow-hidden">
-        <aside
-          ref={asideRef}
-          className="w-1/2 bg-gray-700 p-4 transition-all duration-300 overflow-y-auto shadow-lg z-10 relative"
+      <ResizablePanelGroup direction="horizontal">
+          <ResizablePanel>
+      <aside ref={asideRef}
+          className="bg-gray-700 p-4 transition-all duration-300 overflow-y-auto shadow-lg z-10 relative"
+          style={{ width: '100%', height: '100%' }} 
         >
           <div className="flex items-center justify-between mb-2">
             <h2 className="text-base font-bold text-amber-300">Documents</h2>
@@ -271,8 +284,11 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
             <p className="text-xs text-amber-300 mt-2">No documents found</p>
           )}
         </aside>
+          </ResizablePanel>
+          <ResizableHandle style={{ width: '2px' }} />
+          <ResizablePanel>
         <div className="w-0.5 bg-gray-600"></div>
-        <section className="flex-1 flex flex-col overflow-hidden">
+        <section className="flex-1 flex flex-col overflow-hidden" style={{ width: '100%', height: '100%' }}>
           <div className="flex-1 p-4 bg-gray-800 overflow-y-auto">
             <AnimatePresence>
               {chatHistory.messages.map((message, index) => (
@@ -348,6 +364,8 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
             </div>
           </div>
         </section>
+        </ResizablePanel>
+        </ResizablePanelGroup>
       </main>
     </div>
   );
