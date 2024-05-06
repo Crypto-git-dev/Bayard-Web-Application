@@ -34,7 +34,6 @@ interface ChatHistory {
 const lexendPetaStyle = Lexend_Peta({
   weight: '800',
   style: 'normal',
-  display: 'swap',
   subsets: ['latin']
 });
 
@@ -181,7 +180,7 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
         <a href="https://bayardlab.org" target="_blank" rel="noopener noreferrer">
           <Image src={BAYARD_LAB_YELLOW} alt="Bayard Lab Logo" width={150} height={50} />
         </a>
-        <h1 className={`${lexendPetaStyle} uppercase`}>Bayard_One</h1>
+        <h1 className={`${lexendPetaStyle} lowercase text-lg`}>Bayard_One</h1>
         <nav>
           <ul className="flex space-x-4">
             <li>
@@ -311,7 +310,7 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
                       <div className="flex items-center space-x-2">
                         <Avatar className="w-6 h-6">
                           <AvatarImage src={message.user === 'You' ? '/user-avatar.png' : '/bayard-avatar.png'} alt={message.user} />
-                          <AvatarFallback className="text-xs">{message.user.charAt(0)}</AvatarFallback>
+                          <AvatarFallback className="text-xs bg-slate-500">{message.user.charAt(0)}</AvatarFallback>
                         </Avatar>
                         <div>
                           <p className="text-sm font-semibold">{message.user}</p>
@@ -356,8 +355,8 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
                   value={message}
                   onChange={handleInputChange}
                   onKeyDown={handleKeyDown}
-                  className="w-full px-2 py-1 bg-gray-700 text-amber-300 border-gray-60 focus:border-amber-300 shadow-md"
-                  placeholder="Type your message..."
+                  className="w-full px-2 py-2  bg-gray-700 text-amber-300 border-gray-60 focus:border-amber-300 shadow-md"
+                  placeholder="What would you like to ask Bayard?"
                 />
               </div>
               <div className="flex flex-col space-y-2 mr-2">
