@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Image from 'next/image';
-import BAYARD_LAB_YELLOW from '@/assets/bayard_lab_yellow.png';
+import BAYARD_LAB_YELLOW from '@/assets/BAYARD_LAB_YELLOW.png';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSpring, animated } from 'react-spring';
 import { Lexend_Peta } from "next/font/google";

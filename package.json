@@ -5,11 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -p 8080",
     "lint": "next lint"
   },
-    "engines": {
-      "node": ">=14.18.0"
+  "engines": {
+    "node": ">=v18.17.0"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
@@ -60,7 +60,11 @@
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.0",
-    "zod": "^3.23.6"
+    "zod": "^3.23.6",
+    "framer-motion": "^10.12.16",
+    "react-spring": "^9.7.1",
+    "react-hot-toast": "^2.4.0",
+    "axios": "^1.4.0"
   },
   "devDependencies": {
     "@types/node": "^20",
