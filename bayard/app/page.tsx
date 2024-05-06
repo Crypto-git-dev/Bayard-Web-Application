@@ -315,44 +315,48 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
             <h2 className="text-lg font-semibold">Chat</h2>
           </div>
           <div ref={chatContainerRef} className="flex-1 p-4 pr-10 pl-10 bg-gray-800 overflow-y-auto">
-              <AnimatePresence>
-              {chatHistory.messages.map((message, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <Card className="mb-2 p-2 bg-gray-700 text-amber-300 shadow-md">
-                    <CardHeader>
-                      <div className="flex items-center space-x-2">
-                        <Avatar className="w-6 h-6">
-                          <AvatarFallback className="text-xs bg-slate-500">{message.user.charAt(0)}</AvatarFallback>
-                        </Avatar>
-                        <div>
-                          <p className="text-sm font-semibold">{message.user}</p>
-                        </div>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="mt-2">
-                    {message.user === 'Bayard' && isStreaming && message.text === modelOutput ? (
-                      <animated.p className="text-xs" style={{ ...springProps, lineHeight: '1.4' }}>
-                        {streamedText}
-                        <span className="animate-pulse">|</span>
-                      </animated.p>
-                    ) : (
-                      <div
-                        className="text-sm"
-                        style={{ lineHeight: '1.6' }}
-                        dangerouslySetInnerHTML={{ __html: message.user === 'Bayard' ? formatMessage(message.text) : message.text }}
-                      />
-                    )}
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </AnimatePresence>
+          <AnimatePresence>
+  {chatHistory.messages.map((message, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Card
+              className={`mb-2 p-2 ${
+                message.user === 'You' ? 'bg-gray-900 text-amber-400' : 'bg-gray-700 text-amber-300'
+              } shadow-md`}
+            >
+              <CardHeader>
+                <div className="flex items-center space-x-2">
+                  <Avatar className="w-6 h-6">
+                    <AvatarFallback className="text-xs bg-slate-500">{message.user.charAt(0)}</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <p className="text-sm font-semibold">{message.user}</p>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent className="mt-2">
+                {message.user === 'Bayard' && isStreaming && message.text === modelOutput ? (
+                  <animated.p className="text-xs" style={{ ...springProps, lineHeight: '1.4' }}>
+                    {streamedText}
+                    <span className="animate-pulse">|</span>
+                  </animated.p>
+                ) : (
+                  <div
+                    className="text-sm"
+                    style={{ lineHeight: '1.6' }}
+                    dangerouslySetInnerHTML={{ __html: message.user === 'Bayard' ? formatMessage(message.text) : message.text }}
+                  />
+                )}
+              </CardContent>
+            </Card>
+          </motion.div>
+        ))}
+</AnimatePresence>
             {isLoading && (
               <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
                 <div className="text-center w-1/2">
