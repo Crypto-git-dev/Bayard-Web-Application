@@ -195,6 +195,11 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
               </a>
             </li>
             <li>
+              <a href="https://docs.bayardlab.org" className="hover:text-amber-500">
+                Documentation
+              </a>
+            </li>
+            <li>
               <a href="https://www.bayardlab.org/contact" className="hover:text-amber-500">
                 Contact
               </a>
