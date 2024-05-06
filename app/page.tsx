@@ -12,6 +12,7 @@ import { useSpring, animated } from 'react-spring';
 import { Lexend_Peta } from "next/font/google";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import { toast, Toaster } from 'react-hot-toast';
+import {Progress} from "@radix-ui/react-progress"
 
 interface Message {
   user: string;
@@ -260,8 +261,8 @@ const provideFeedback = (message: Message) => {
 };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-900 text-base">
-      <header className="bg-gray-900 text-amber-500 py-4 px-6 flex items-center justify-between shadow-lg">
+    <div className="flex flex-col h-screen bg-gray-900 text-sm">
+      <header className="bg-gray-900 text-amber-500 h-12 py-4 px-6 flex items-center justify-between shadow-lg">
         <a href="https://bayardlab.org" target="_blank" rel="noopener noreferrer">
           <Image src={BAYARD_LAB_YELLOW} alt="Bayard Lab Logo" width={150} height={50} />
         </a>
@@ -269,22 +270,22 @@ const provideFeedback = (message: Message) => {
         <nav>
           <ul className="flex space-x-4">
             <li>
-              <a href="https://bayardlab.org" className="hover:text-amber-500">
+              <a href="https://bayardlab.org" className="hover:text-amber-400">
                 Home
               </a>
             </li>
             <li>
-              <a href="https://www.bayardlab.org/about-bayard-one" className="hover:text-amber-500">
+              <a href="https://www.bayardlab.org/about-bayard-one" className="hover:text-amber-400">
                 About
               </a>
             </li>
             <li>
-              <a href="https://docs.bayardlab.org" className="hover:text-amber-500">
+              <a href="https://docs.bayardlab.org" className="hover:text-amber-400">
                 Documentation
               </a>
             </li>
             <li>
-              <a href="https://www.bayardlab.org/contact" className="hover:text-amber-500">
+              <a href="https://www.bayardlab.org/contact" className="hover:text-amber-400">
                 Contact
               </a>
             </li>
@@ -457,24 +458,40 @@ const provideFeedback = (message: Message) => {
         ))}
 </AnimatePresence>
             {isLoading && (
-              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
+              <motion.div 
+                initial={{ opacity: 0.6 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0.97}}
+                transition={{ duration: 0.1 }}
+                className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50"
+              >
                 <div className="text-center w-1/2">
-                  <div className="flex justify-center w-full">
-                    <div className="w-full bg-gray-500 rounded h-4">
-                      <div
-                        className={`h-4 rounded  ${
-                          loadingStatus === 'Thinking...' ? 'w-1/3' :
-                          loadingStatus === 'Querying...' ? 'w-2/3' :
-                          loadingStatus === 'Generating...' ? 'w-full' : ''
-                        } bg-amber-500 transition-all duration-500`}
-                      >
-                        <div className="h-4 bg-gray-500 rounded animate-pulse"></div>
-                      </div>
+                  <div className="relative">
+                    <div className="w-full h-2 bg-gray-300 rounded-full">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: `${loadingStatus === 'Thinking...' ? '33%' : loadingStatus === 'Querying...' ? '66%' : '100%'}` }}
+                        transition={{ duration: 0.1, ease: 'easeOut' }}
+                        className="absolute top-0 left-0 h-2 bg-amber-500 rounded-full"
+                      />
                     </div>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.8, repeat: Infinity, repeatType: 'reverse' }}
+                      className="absolute top-0 left-0 w-full h-2 bg-white rounded-full opacity-25"
+                    />
                   </div>
-                  <p className="mt-1 text-amber-300 text-lg">{loadingStatus}</p>
+                  <motion.p 
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.1, delay: 0.1 }}
+                    className="mt-1 text-amber-300 text-lg"
+                  >
+                    {loadingStatus}
+                  </motion.p>
                 </div>
-              </div>
+              </motion.div>
             )}
           </div>
           <div className="p-4 bg-gray-900">
