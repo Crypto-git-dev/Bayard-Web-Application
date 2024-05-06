@@ -12,9 +12,9 @@ const config = {
   theme: {
     fontSize: {
       xs: '0.75rem', // 12px
-      sm: '0.875rem', // 14px
-      base: '0.875rem', // 15px (modified from default 16px)
-      lg: '1.125rem', // 18px
+      sm: '0.905rem', // 14px
+      base: '1rem', // 15px (modified from default 16px)
+      lg: '1.05rem', // 18px
       xl: '1.25rem', // 20px
       '2xl': '1.5rem', // 24px
     },

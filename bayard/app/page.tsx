@@ -64,74 +64,53 @@ export default function ChatPage() {
 
   const sendMessage = async () => {
     if (message.trim() === "") return;
-
+  
     const userMessage: Message = {
       user: "You",
       text: message,
     };
-
+  
     setChatHistory((prevChatHistory) => ({
       ...prevChatHistory,
       messages: [...prevChatHistory.messages, userMessage],
     }));
-
+  
     setMessage("");
     setIsLoading(true);
     setLoadingStatus("Thinking...");
-
-    setIsStreaming(true);
-    setStreamedText("");
-
+  
     try {
       const response = await queryBayard(message);
       setLoadingStatus("Querying...");
-
-      setModelOutput(response.model_output);
-
+  
       const botMessage: Message = {
         user: "Bayard",
         text: response.model_output,
       };
-
+  
       setChatHistory((prevChatHistory) => ({
         messages: [...prevChatHistory.messages, botMessage],
         documents: response.documents || [],
       }));
-
+  
       setLoadingStatus("Generating...");
     } catch (error) {
       console.error("Error:", error);
     }
-
+  
     setIsLoading(false);
     setLoadingStatus("");
   };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setMessage(e.target.value);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
-    }
-  };
-
+  
   const regenerateResponse = async () => {
     setIsLoading(true);
     setLoadingStatus("Generating...");
   
-    setIsStreaming(true);
-    setStreamedText("");
-  
     try {
-      const lastUserMessage = chatHistory.messages[chatHistory.messages.length - 1].text;
+      const lastUserMessage = chatHistory.messages[chatHistory.messages.length - 2].text;
       const response = await queryBayard(lastUserMessage);
   
-      setModelOutput(response.model_output);
-  
-      const updatedChatHistory = chatHistory.messages.slice(0, -1);
+      const updatedChatHistory = [...chatHistory.messages.slice(0, -1)];
       const botMessage: Message = {
         user: "Bayard",
         text: response.model_output,
@@ -172,12 +151,23 @@ export default function ChatPage() {
     }
   };
 
+const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  setMessage(e.target.value);
+};
+
+const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+};
+
   return (
     <div className="flex flex-col h-screen bg-gray-900 text-xs">
       <header className="bg-gray-800 text-amber-300 py-4 px-6 flex items-center justify-between shadow-md">
         <div className="flex items-center space-x-4">
-          <Image src={BAYARD_LAB_YELLOW} alt="Bayard Lab" width={40} height={40} />
-          <h1 className="font-bold text-lg">Bayard</h1>
+          <Image src={BAYARD_LAB_YELLOW} alt="Bayard Lab" width={200} height={40} />
+          <h1 className="font-sem text-lg">Bayard_One</h1>
         </div>
         <nav>
           <ul className="flex space-x-4">
@@ -343,7 +333,7 @@ export default function ChatPage() {
                   value={message}
                   onChange={handleInputChange}
                   onKeyDown={handleKeyDown}
-                  className="w-full px-2 py-1 bg-gray-700 text-amber-300 border-gray-600 focus:border-amber-300 shadow-md"
+                  className="w-full px-2 py-1 bg-gray-700 text-amber-300 border-gray-60 focus:border-amber-300 shadow-md"
                   placeholder="Type your message..."
                 />
               </div>
