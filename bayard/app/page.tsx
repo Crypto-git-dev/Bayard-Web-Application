@@ -36,6 +36,10 @@ const lexendPetaStyle = Lexend_Peta({
   subsets: ['latin']
 });
 
+function formatMessage(message: string): string {
+  return message.replace(/\n/g, '<br>');
+}
+
 async function sendMessage(message: string) {
   const response = await fetch('/api/bayard-proxy', {
     method: 'POST',
@@ -332,14 +336,18 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
                       </div>
                     </CardHeader>
                     <CardContent className="mt-2">
-                      {message.user === 'Bayard' && isStreaming && message.text === modelOutput ? (
-                        <animated.p className="text-xs" style={{ ...springProps, lineHeight: '1.4' }}>
-                          {streamedText}
-                          <span className="animate-pulse">|</span>
-                        </animated.p>
-                      ) : (
-                        <p className="text-sm" style={{ lineHeight: '1.6' }}>{message.text}</p>
-                      )}
+                    {message.user === 'Bayard' && isStreaming && message.text === modelOutput ? (
+                      <animated.p className="text-xs" style={{ ...springProps, lineHeight: '1.4' }}>
+                        {streamedText}
+                        <span className="animate-pulse">|</span>
+                      </animated.p>
+                    ) : (
+                      <div
+                        className="text-sm"
+                        style={{ lineHeight: '1.6' }}
+                        dangerouslySetInnerHTML={{ __html: message.user === 'Bayard' ? formatMessage(message.text) : message.text }}
+                      />
+                    )}
                     </CardContent>
                   </Card>
                 </motion.div>
