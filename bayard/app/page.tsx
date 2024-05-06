@@ -58,6 +58,7 @@ export default function ChatPage() {
   const [chatHistory, setChatHistory] = useState<ChatHistory>({ messages: [], documents: [] });
   const [isLoading, setIsLoading] = useState(false);
   const [loadingStatus, setLoadingStatus] = useState("");
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
 
 
@@ -70,6 +71,12 @@ export default function ChatPage() {
     to: { opacity: 1, transform: 'translateY(0)' },
     config: { tension: 220, friction: 20 },
   });
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [chatHistory.messages]);
 
   useEffect(() => {
     if (isStreaming) {
@@ -231,7 +238,7 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
       <ResizablePanelGroup direction="horizontal">
           <ResizablePanel>
       <aside ref={asideRef}
-          className="bg-gray-700 p-4 transition-all duration-300 overflow-y-auto shadow-lg z-10 relative"
+          className="bg-gray-700 p-4 pl-10 pr-10 transition-all duration-300 overflow-y-auto shadow-lg z-10 relative"
           style={{ width: '100%', height: '100%' }} 
         >
           <div className="flex items-center justify-between mb-2">
@@ -298,10 +305,13 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
           </ResizablePanel>
           <ResizableHandle style={{ width: '2px' }} />
           <ResizablePanel>
-        <div className="w-0.5 bg-gray-600"></div>
+        <div className="w-0.5 bg-gray-60"></div>
         <section className="flex-1 flex flex-col overflow-hidden" style={{ width: '100%', height: '100%' }}>
-          <div className="flex-1 p-4 bg-gray-800 overflow-y-auto">
-            <AnimatePresence>
+          <div className="flex items-center justify-between p-4 pr-10 pl-10 bg-gray-800 text-amber-400">
+            <h2 className="text-lg font-semibold">Chat</h2>
+          </div>
+          <div ref={chatContainerRef} className="flex-1 p-4 pr-10 pl-10 bg-gray-800 overflow-y-auto">
+              <AnimatePresence>
               {chatHistory.messages.map((message, index) => (
                 <motion.div
                   key={index}
@@ -328,7 +338,7 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
                           <span className="animate-pulse">|</span>
                         </animated.p>
                       ) : (
-                        <p className="text-xs" style={{ lineHeight: '1.4' }}>{message.text}</p>
+                        <p className="text-sm" style={{ lineHeight: '1.6' }}>{message.text}</p>
                       )}
                     </CardContent>
                   </Card>
@@ -356,7 +366,7 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
               </div>
             )}
           </div>
-          <div className="p-4 bg-gray-800">
+          <div className="p-4 bg-gray-900">
             <div className="flex space-x-2">
               <div className="flex-1 mr-2">
                 <Textarea
