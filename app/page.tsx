@@ -291,7 +291,7 @@ const provideFeedback = (message: Message) => {
           </ul>
         </nav>
       </header>
-        <div className="bg-amber-100 text-gray-800 p-4 shadow-md flex items-center space-x-2">
+        <div className="bg-amber-100 text-gray-800 p-4 h-10 shadow-md flex items-center space-x-2">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-amber-600">
           <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
         </svg>
@@ -302,12 +302,35 @@ const provideFeedback = (message: Message) => {
       <main className="flex flex-1 overflow-hidden">
       <ResizablePanelGroup direction="horizontal">
           <ResizablePanel>
-      <aside ref={asideRef}
-          className="bg-gray-700 p-4 pl-10 pr-10 transition-all duration-300 overflow-y-auto shadow-lg z-10 relative"
-          style={{ width: '100%', height: '100%' }} 
-        >
+          <aside
+              ref={asideRef}
+              className="bg-gray-700 p-4 pl-10 pr-10 transition-all duration-300 overflow-y-auto shadow-lg z-10 relative h-full"
+            >
           <div className="flex items-center justify-between mb-2">
-            <h2 className="text-lg font-bold text-amber-400 mb-3">Documents</h2>
+            <div>
+              <h2 className="text-lg font-bold text-amber-400 mb-3">Documents</h2>
+              <div className="mt-2">
+                {chatHistory.documents.length > 0 && (
+                  <>
+                    <p className="text-xs text-amber-300 mb-3">
+                      {chatHistory.documents.filter((doc) => doc.abstract).length === 1
+                        ? '1 document with an abstract'
+                        : `${chatHistory.documents.filter((doc) => doc.abstract).length} documents with abstracts`
+                      }
+                    </p>
+                    {chatHistory.documents.filter((doc) => !doc.abstract).length > 0 && (
+                      <p className="text-xs text-amber-300 mt-1 mb-3">
+                        {chatHistory.documents.filter((doc) => !doc.abstract).length === 1 
+                          ? '1 document without an abstract'
+                          : `${chatHistory.documents.filter((doc) => !doc.abstract).length} documents without abstracts`
+                        }
+                      </p>
+                    )}
+                  </>
+
+                )}
+              </div>
+            </div>
             <div
               className="w-2 h-full bg-gray-500 hover:bg-gray-400 cursor-col-resize"
               onMouseDown={handleMouseDown}
@@ -315,7 +338,7 @@ const provideFeedback = (message: Message) => {
           </div>
           {chatHistory.documents.length > 0 && (
             <>
-              <div className="overflow-y-auto max-h-[calc(100vh-200px)]">
+              <div className="max-h-[calc(100vh-200px)]">
                 {chatHistory.documents
                   .filter((doc) => doc.abstract)
                   .map((doc, index) => (
@@ -325,7 +348,7 @@ const provideFeedback = (message: Message) => {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.1 }}
                     >
-                      <Card className="mb-2 p-2 bg-gray-600 text-amber-400 shadow-lg">
+                      <Card className="mb-6 p-2 bg-gray-600 text-amber-400 shadow-lg">
                         <CardHeader>
                           <CardTitle className="text-xl">{doc.title}</CardTitle>
                           <CardDescription>
@@ -350,16 +373,6 @@ const provideFeedback = (message: Message) => {
                       </Card>
                     </motion.div>
                   ))}
-              </div>
-              <div className="mt-2 flex justify-between">
-                <p className="text-xs text-amber-300">
-                  {chatHistory.documents.filter((doc) => doc.abstract).length} documents with abstracts
-                </p>
-                {chatHistory.documents.filter((doc) => !doc.abstract).length > 0 && (
-                  <p className="text-xs text-amber-300">
-                    {chatHistory.documents.filter((doc) => !doc.abstract).length} documents without abstracts
-                  </p>
-                )}
               </div>
             </>
           )}
@@ -489,6 +502,21 @@ const provideFeedback = (message: Message) => {
         </ResizablePanel>
         </ResizablePanelGroup>
       </main>
+      <footer>
+      <div className="bg-gray-800 text-gray-400 py-2 px-4 flex items-center justify-between text-xs">
+        <div>
+          <span>&copy; {new Date().getFullYear()} Bayard Lab. All rights reserved. Open-source use subject to terms. See documentation</span>
+        </div>
+        <div>
+          <a href="https://bayardlab.org/terms" target="_blank" rel="noopener noreferrer" className="text-gray-400 text-xs hover:text-amber-500 mr-4">
+            Terms &amp; Conditions
+          </a>
+          <a href="https://bayardlab.org/privacy-notice" target="_blank" rel="noopener noreferrer" className="text-gray-400 text-xs hover:text-amber-500">
+            Privacy Notice
+          </a>
+        </div>
+      </div>
+      </footer>
     </div>
   );
 }
