@@ -10,4 +10,3 @@ try {
 }
 }
 
-export default queryBayard;

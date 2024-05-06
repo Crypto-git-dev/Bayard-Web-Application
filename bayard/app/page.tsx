@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useRef, useEffect } from "react";
-import queryBayard from './api/route';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
@@ -36,6 +35,23 @@ const lexendPetaStyle = Lexend_Peta({
   style: 'normal',
   subsets: ['latin']
 });
+
+async function sendMessage(message: string) {
+  const response = await fetch('/api/bayard-proxy', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ input_text: message }),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to send message');
+  }
+
+  const data = await response.json();
+  return data;
+}
 
 export default function ChatPage() {
   const [message, setMessage] = useState("");
@@ -72,10 +88,10 @@ export default function ChatPage() {
   }, [isStreaming, modelOutput, streamedText]);
 
   const sendMessage = async () => {
-    if (message.trim() === "") return;
+    if (message.trim() === '') return;
   
     const userMessage: Message = {
-      user: "You",
+      user: 'You',
       text: message,
     };
   
@@ -84,57 +100,62 @@ export default function ChatPage() {
       messages: [...prevChatHistory.messages, userMessage],
     }));
   
-    setMessage("");
+    setMessage('');
     setIsLoading(true);
-    setLoadingStatus("Thinking...");
+    setLoadingStatus('Thinking...');
   
     try {
-      const response = await queryBayard(message);
-      setLoadingStatus("Querying...");
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate thinking delay
+      setLoadingStatus('Querying...');
   
+      const response = await fetch('/api/bayard-proxy', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ input_text: message }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to send message');
+      }
+  
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate querying delay
+      setLoadingStatus('Generating...');
+  
+      const data = await response.json();
       const botMessage: Message = {
-        user: "Bayard",
-        text: response.model_output,
+        user: 'Bayard',
+        text: data.model_output,
       };
+  
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate generating delay
   
       setChatHistory((prevChatHistory) => ({
         messages: [...prevChatHistory.messages, botMessage],
-        documents: response.documents || [],
+        documents: data.documents || [],
       }));
-  
-      setLoadingStatus("Generating...");
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error);
     }
   
     setIsLoading(false);
-    setLoadingStatus("");
+    setLoadingStatus('');
   };
   
   const regenerateResponse = async () => {
     setIsLoading(true);
-    setLoadingStatus("Generating...");
+    setLoadingStatus('Generating...');
   
     try {
       const lastUserMessage = chatHistory.messages[chatHistory.messages.length - 2].text;
-      const response = await queryBayard(lastUserMessage);
-  
-      const updatedChatHistory = [...chatHistory.messages.slice(0, -1)];
-      const botMessage: Message = {
-        user: "Bayard",
-        text: response.model_output,
-      };
-  
-      setChatHistory({
-        messages: [...updatedChatHistory, botMessage],
-        documents: response.documents || [],
-      });
+      await sendMessage(); // Remove the argument from the function call
     } catch (error) {
-      console.error("Error:", error);
+      console.error('Error:', error);
     }
   
     setIsLoading(false);
-    setLoadingStatus("");
+    setLoadingStatus('');
   };
 
   const [asideWidth, setAsideWidth] = useState(400);
@@ -175,12 +196,12 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
 };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-900 text-xs">
-      <header className="bg-gray-900 text-amber-300 py-4 px-6 flex items-center justify-between shadow-md">
+    <div className="flex flex-col h-screen bg-gray-900 text-base">
+      <header className="bg-gray-900 text-amber-500 py-4 px-6 flex items-center justify-between shadow-lg">
         <a href="https://bayardlab.org" target="_blank" rel="noopener noreferrer">
           <Image src={BAYARD_LAB_YELLOW} alt="Bayard Lab Logo" width={150} height={50} />
         </a>
-        <h1 className={`${lexendPetaStyle} lowercase text-lg`}>Bayard_One</h1>
+        <h1 className={`${lexendPetaStyle.className} uppercase text-md`}>Bayard_One</h1>        
         <nav>
           <ul className="flex space-x-4">
             <li>
@@ -214,28 +235,12 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
           style={{ width: '100%', height: '100%' }} 
         >
           <div className="flex items-center justify-between mb-2">
-            <h2 className="text-base font-bold text-amber-300">Documents</h2>
+            <h2 className="text-lg font-bold text-amber-400 mb-3">Documents</h2>
             <div
               className="w-2 h-full bg-gray-500 hover:bg-gray-400 cursor-col-resize"
               onMouseDown={handleMouseDown}
             ></div>
           </div>
-          {isLoading && (
-            <div className="text-center mt-2">
-              <div className="animate-pulse">
-                {loadingStatus === 'Thinking...' && (
-                    <div className="h-2 bg-amber-500 rounded w-1/4 mx-auto"></div>
-                )}
-                {loadingStatus === 'Querying...' && (
-                  <div className="h-2 bg-amber-500 rounded w-1/2 mx-auto"></div>
-                )}
-                {loadingStatus === 'Generating...' && (
-                  <div className="h-2 bg-amber-500 rounded w-3/4 mx-auto"></div>
-                )}
-              </div>
-              <p className="mt-1 text-amber-300">{loadingStatus}</p>
-            </div>
-          )}
           {chatHistory.documents.length > 0 && (
             <>
               <div className="overflow-y-auto max-h-[calc(100vh-200px)]">
@@ -248,17 +253,17 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.1 }}
                     >
-                      <Card className="mb-2 p-2 bg-gray-600 text-amber-300 shadow">
+                      <Card className="mb-2 p-2 bg-gray-600 text-amber-400 shadow-lg">
                         <CardHeader>
-                          <CardTitle className="text-base">{doc.title}</CardTitle>
+                          <CardTitle className="text-xl">{doc.title}</CardTitle>
                           <CardDescription>
-                            <p className="text-xs text-gray-400">
+                            <p className="mt-2 text-xs text-gray-300">
                               <strong>Authors:</strong> {doc.authors.join(", ")}
                             </p>
-                            <p className="text-xs text-gray-400">
+                            <p className="mt-2 text-xs text-gray-300">
                               <strong>Year Published:</strong> {doc.yearPublished}
                             </p>
-                            <p className="text-xs mt-1 text-gray-400">
+                            <p className="mt-5 text-s mt-1 text-gray-300">
                               <strong>Abstract:</strong> {doc.abstract.length > 500 ? doc.abstract.slice(0, 500) + "..." : doc.abstract}
                             </p>
                           </CardDescription>
@@ -309,7 +314,6 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
                     <CardHeader>
                       <div className="flex items-center space-x-2">
                         <Avatar className="w-6 h-6">
-                          <AvatarImage src={message.user === 'You' ? '/user-avatar.png' : '/bayard-avatar.png'} alt={message.user} />
                           <AvatarFallback className="text-xs bg-slate-500">{message.user.charAt(0)}</AvatarFallback>
                         </Avatar>
                         <div>
@@ -332,19 +336,23 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
               ))}
             </AnimatePresence>
             {isLoading && (
-              <div className="text-center mt-2">
-                <div className="animate-pulse">
-                  {loadingStatus === 'Thinking...' && (
-                    <div className="h-2 bg-amber-500 rounded w-1/4 mx-auto"></div>
-                  )}
-                  {loadingStatus === 'Querying...' && (
-                    <div className="h-2 bg-amber-500 rounded w-1/2 mx-auto"></div>
-                  )}
-                  {loadingStatus === 'Generating...' && (
-                    <div className="h-2 bg-amber-500 rounded w-3/4 mx-auto"></div>
-                  )}
+              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50">
+                <div className="text-center w-1/2">
+                  <div className="flex justify-center w-full">
+                    <div className="w-full bg-gray-500 rounded h-4">
+                      <div
+                        className={`h-4 rounded  ${
+                          loadingStatus === 'Thinking...' ? 'w-1/3' :
+                          loadingStatus === 'Querying...' ? 'w-2/3' :
+                          loadingStatus === 'Generating...' ? 'w-full' : ''
+                        } bg-amber-500 transition-all duration-500`}
+                      >
+                        <div className="h-4 bg-gray-500 rounded animate-pulse"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <p className="mt-1 text-amber-300 text-lg">{loadingStatus}</p>
                 </div>
-                <p className="mt-1 text-amber-300">{loadingStatus}</p>
               </div>
             )}
           </div>

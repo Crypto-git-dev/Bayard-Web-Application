@@ -9,7 +9,7 @@ if (req.method === 'POST') {
     const { input_text } = req.body;
 
     const response = await axios.post(
-        'https://bayardapp.onrender.com/api/bayard',
+        'https://bayardapp.onrender.com/api/bayard', 
         { input_text },
         {
         headers: {
@@ -18,8 +18,12 @@ if (req.method === 'POST') {
         },
         }
     );
+    
+    res.status(200).json({ 
+        model_output: response.data.model_output,
+        documents: response.data.documents
+    });
 
-    res.status(200).json(response.data);
     } catch (error) {
     console.error('Error querying Bayard API:', error);
     res.status(500).json({ error: 'An error occurred' });

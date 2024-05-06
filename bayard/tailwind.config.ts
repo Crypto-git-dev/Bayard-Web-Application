@@ -11,12 +11,12 @@ const config = {
   prefix: "",
   theme: {
     fontSize: {
-      xs: '0.75rem', // 12px
-      sm: '0.905rem', // 14px
-      base: '1rem', // 15px (modified from default 16px)
+      xs: '0.7rem', // 12px
+      sm: '0.80rem', // 14px
+      base: '.9rem', // 15px (modified from default 16px)
       lg: '1.05rem', // 18px
-      xl: '1.25rem', // 20px
-      '2xl': '1.5rem', // 24px
+      xl: '1.30rem', // 20px
+      '2xl': '1.6rem', // 24px
     },
     container: {
       center: true,
@@ -31,6 +31,19 @@ const config = {
     },
     extend: {
       colors: {
+        amber: {
+          DEFAULT: '#fcb900',
+          '50': '#fef8e6',
+          '100': '#fef0cd',
+          '200': '#fde49b',
+          '300': '#fcd868',
+          '400': '#fccc35',
+          '500': '#fcb900',
+          '600': '#ca9500',
+          '700': '#977000',
+          '800': '#644b00',
+          '900': '#322500',
+        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
