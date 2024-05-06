@@ -73,7 +73,7 @@ const config = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       fontFamily: {
-        sans: ["var(--font-sans)", "Plus Jakarta Sans", "sans-serif"],
+        sans: ["var(--font-sans)", "Lexend", "Plus Jakarta Sans", "sans-serif"],
       },
     },
   },
