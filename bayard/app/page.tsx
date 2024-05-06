@@ -178,22 +178,24 @@ const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
   return (
     <div className="flex flex-col h-screen bg-gray-900 text-xs">
       <header className="bg-gray-900 text-amber-300 py-4 px-6 flex items-center justify-between shadow-md">
-        <Image src={BAYARD_LAB_YELLOW} alt="Bayard Lab Logo" width={150} height={50} />
+        <a href="https://bayardlab.org" target="_blank" rel="noopener noreferrer">
+          <Image src={BAYARD_LAB_YELLOW} alt="Bayard Lab Logo" width={150} height={50} />
+        </a>
         <h1 className={`${lexendPetaStyle} uppercase`}>Bayard_One</h1>
         <nav>
           <ul className="flex space-x-4">
             <li>
-              <a href="#" className="hover:text-amber-500">
+              <a href="https://bayardlab.org" className="hover:text-amber-500">
                 Home
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-amber-500">
+              <a href="https://www.bayardlab.org/about-bayard-one" className="hover:text-amber-500">
                 About
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-amber-500">
+              <a href="https://www.bayardlab.org/contact" className="hover:text-amber-500">
                 Contact
               </a>
             </li>
