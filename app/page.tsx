@@ -183,7 +183,22 @@ export default function ChatPage() {
     setLoadingStatus('Generating...');
 
     try {
-      const lastUserMessage = chatHistory.messages[chatHistory.messages.length - 2].text;
+      const lastUserMessage = chatHistory.messages[chatHistory.messages.length - 1].text;
+
+      // Create a new message object with the last user message
+      const message: Message = {
+        user: 'You',
+        text: lastUserMessage,
+        timestamp: new Date().toLocaleString(),
+      };
+
+      // Add the message to the chat history
+      setChatHistory((prevChatHistory) => ({
+        ...prevChatHistory,
+        messages: [...prevChatHistory.messages, message],
+      }));
+
+      // Send the message to the backend for processing
       await sendMessage(); // Remove the argument from the function call
     } catch (error) {
       console.error('Error:', error);
@@ -458,7 +473,7 @@ export default function ChatPage() {
                       transition={{ duration: 0.3 }}
                     >
                       <Card
-                        className={`mb-4 p-4 rounded-lg shadow-md backdrop-filter backdrop-blur-2xl bg-opacity-20 ${message.user === 'You' ? 'bg-amber-100/60 dark:bg-gray-800/60 text-gray-800 dark:text-amber-400' : 'bg-gradient-to-r from-amber-200/60 dark:from-gray-700/60 to-amber-100/60 dark:to-gray-800/60 text-gray-800 dark:text-amber-300'
+                        className={`mb-4 p-4 rounded-lg shadow-md backdrop-filter backdrop-blur-2xl bg-opacity-30 ${message.user === 'You' ? 'bg-gradient-to-l from-amber-100/70 to-amber-300/70 dark:from-gray-700/70 dark:to-gray-900/70 text-gray-800 dark:text-amber-500' : 'bg-gradient-to-r from-amber-100/70 to-amber-300/70 dark:from-gray-700/90 dark:to-gray-900/40 text-gray-800 dark:text-amber-500'
                           }`}
                       >
                         <CardHeader>
@@ -558,16 +573,53 @@ export default function ChatPage() {
                       value={message}
                       onChange={handleInputChange}
                       onKeyDown={handleKeyDown}
-                      className="w-full px-4 py-2 bg-amber-50 dark:bg-gray-700 text-gray-800 dark:text-amber-300 border border-amber-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
+                      className="w-full px-4 py-3 bg-amber-50 dark:bg-gray-700 text-gray-800 dark:text-amber-300 border border-amber-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
                       placeholder="What would you like to ask Bayard?"
                     />
                   </div>
                   <div className="flex flex-col space-y-2 mr-2">
-                    <Button onClick={sendMessage} disabled={isLoading} className="bg-gray-800 text-amber-100 dark:bg-amber-500 dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-amber-600 font-bold py-2 px-4 rounded">
-                      {isLoading ? 'Sending...' : 'Send'}
-                    </Button>
-                    <Button onClick={regenerateResponse} disabled={isLoading} variant="ghost" className="border-gray-800 dark:border-amber-500 text-gray-800 dark:text-amber-300 hover:bg-gray-800 dark:hover:bg-amber-500 hover:text-amber-100 dark:hover:text-gray-800 text-xs">
-                      Regenerate
+                    <Button
+                      onClick={sendMessage}
+                      disabled={isLoading}
+                      className="relative flex items-center justify-center mt-2 w-16 h-16 rounded-full bg-gray-800 text-amber-100 dark:bg-amber-500 dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-amber-600 font-bold group transition-colors duration-300"
+                    >
+                      {isLoading ? (
+                        <span className="flex items-center justify-center">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="w-6 h-6 animate-spin"
+                          >
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M12 6v6m0 0v6" />
+                          </svg>
+                        </span>
+                      ) : (
+                          <span className="relative flex items-center justify-center">
+                            <span className="w-2 h-2 border-t-2 border-r-2 border-amber-100 dark:border-gray-900 transform -rotate-45 transition-transform duration-300 ease-in-out group-hover:scale-110"></span>
+                          </span>
+                      )}
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 hidden group-hover:block mb-2 transition-opacity duration-300 ease-in-out">
+                              <span className="bg-gray-800 text-amber-100 dark:bg-amber-500 dark:text-gray-900 px-2 py-1 rounded text-xs whitespace-nowrap">
+                                {isLoading ? 'Sending...' : 'Send'}
+                              </span>
+                            </span>
+                          </TooltipTrigger>
+                          <TooltipContent side="top">
+                            <span className="bg-gray-800 text-amber-100 dark:bg-amber-500 dark:text-gray-900 px-2 py-1 rounded text-xs whitespace-nowrap">
+                              {isLoading ? 'Sending...' : 'Send'}
+                            </span>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     </Button>
                   </div>
                 </div>
