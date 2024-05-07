@@ -13,7 +13,12 @@ import { useSpring, animated } from 'react-spring';
 import { Lexend_Peta } from "next/font/google";
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
 import { toast, Toaster } from 'react-hot-toast';
-import { Progress } from "@radix-ui/react-progress"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface Message {
   user: string;
@@ -276,13 +281,13 @@ export default function ChatPage() {
 
   return (
     <div className="flex flex-col h-screen text-base bg-gray-100 dark:bg-gray-900 dark:text-base dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 dark:bg-fixed dark:bg-opacity-100">
-      <header className="bg-gradient-to-r from-amber-200 to-amber-100 dark:from-gray-900 dark:to-gray-800 text-gray-800 dark:text-amber-500 py-4 px-6 flex items-center justify-between shadow-lg backdrop-filter backdrop-blur-2xl bg-opacity-10">
+      <header className="bg-gradient-to-r from-amber-200 to-amber-100 dark:from-gray-900 dark:to-gray-800 text-gray-800 dark:text-amber-500 py-3 px-6 flex items-center justify-between shadow-lg backdrop-filter backdrop-blur-2xl bg-opacity-10">
         <a href="https://bayardlab.org" target="_blank" rel="noopener noreferrer">
           <Image src={isDarkMode ? BAYARD_LAB_YELLOW : BAYARD_LAB} alt="Bayard Lab Logo" width={150} height={50} />
         </a>
         <h1 className={`${lexendPetaStyle.className} uppercase text-sm`}>Bayard_One</h1>
         <nav>
-          <ul className="flex space-x-4">
+          <ul className="flex space-x-4 items-center">
             <li>
               <a href="https://bayardlab.org" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
                 Home
@@ -303,30 +308,43 @@ export default function ChatPage() {
                 Contact
               </a>
             </li>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={toggleDarkMode}
+                    className="p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
+                  >
+                    <span className="sr-only">Toggle Dark Mode</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className={`w-5 h-5 ${isDarkMode ? 'text-amber-500' : 'text-gray-500'}`}
+                    >
+                      {isDarkMode ? (
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M12 1C5.92487 1 1 5.92487 1 12C1 18.0751 5.92487 23 12 23C18.0751 23 23 18.0751 23 12C23 5.92487 18.0751 1 12 1ZM12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3V21Z"
+                        />
+                      ) : (
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM12 20V4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20Z"
+                        />
+                      )}
+                    </svg>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="left" sideOffset={30}>
+                  <p>{isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </ul>
         </nav>
-        <button
-          onClick={toggleDarkMode}
-          className="p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
-        >
-          <span className="sr-only">Toggle Dark Mode</span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            className={`w-5 h-5 ${isDarkMode ? 'text-amber-500' : 'text-gray-500'}`}
-          >
-            {isDarkMode ? (
-              <path
-                fillRule="evenodd"
-                d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-                clipRule="evenodd"
-              />
-            ) : (
-              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-            )}
-          </svg>
-        </button>
       </header>
       <div className="bg-gray-800 text-amber-100 dark:bg-amber-100 dark:text-gray-800 p-4 shadow-md flex items-center space-x-2">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-amber-400 dark:text-amber-600">
