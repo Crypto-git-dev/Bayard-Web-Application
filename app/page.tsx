@@ -260,13 +260,13 @@ const provideFeedback = (message: Message) => {
   }
 };
 
-  return (
+return (
 <div className="flex flex-col h-screen bg-gray-900 text-base bg-gradient-to-br from-gray-900 to-gray-800 bg-fixed bg-opacity-100">
-  <header className="bg-gradient-to-r from-gray-900 to-gray-800 text-amber-500 py-4 px-6 flex items-center justify-between shadow-lg">
-        <a href="https://bayardlab.org" target="_blank" rel="noopener noreferrer">
-          <Image src={BAYARD_LAB_YELLOW} alt="Bayard Lab Logo" width={150} height={50} />
-        </a>
-        <h1 className={`${lexendPetaStyle.className} uppercase text-sm`}>Bayard_One</h1>        
+  <header className="bg-gradient-to-r from-gray-900 to-gray-800 text-amber-500 py-4 px-6 flex items-center justify-between shadow-lg backdrop-filter backdrop-blur-2xl bg-opacity-10 bg-white/10">
+    <a href="https://bayardlab.org" target="_blank" rel="noopener noreferrer">
+      <Image src={BAYARD_LAB_YELLOW} alt="Bayard Lab Logo" width={150} height={50} />
+  </a>
+    <h1 className={`${lexendPetaStyle.className} uppercase text-sm`}>Bayard_One</h1>        
         <nav>
           <ul className="flex space-x-4">
             <li>
@@ -405,8 +405,8 @@ const provideFeedback = (message: Message) => {
       transition={{ duration: 0.3 }}
     >
 <Card
-  className={`mb-4 p-4 rounded-lg shadow-md backdrop-filter backdrop-blur-md bg-opacity-30 ${
-    message.user === 'You' ? 'bg-gray-800 text-amber-400' : 'bg-gradient-to-r from-gray-700 to-gray-800 text-amber-300'
+  className={`mb-4 p-4 rounded-lg shadow-md backdrop-filter backdrop-blur-2xl bg-opacity-20 ${
+    message.user === 'You' ? 'bg-gray-800/60 text-amber-400' : 'bg-gradient-to-r from-gray-700/60 to-gray-800/60 text-amber-300'
   }`}
 >
         <CardHeader>
@@ -525,20 +525,20 @@ const provideFeedback = (message: Message) => {
         </ResizablePanelGroup>
       </main>
       <footer>
-      <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-gray-400 py-4 px-6 flex items-center justify-between text-xs backdrop-filter backdrop-blur-lg bg-opacity-30">
-        <div>
-          <span>&copy; {new Date().getFullYear()} Bayard Lab. All rights reserved. Open-source use subject to terms. See documentation.</span>
-        </div>
-        <div>
-          <a href="https://bayardlab.org/terms" target="_blank" rel="noopener noreferrer" className="text-gray-400 text-xs hover:text-amber-500 mr-4">
-            Terms &amp; Conditions
-          </a>
-          <a href="https://bayardlab.org/privacy-notice" target="_blank" rel="noopener noreferrer" className="text-gray-400 text-xs hover:text-amber-500">
-            Privacy Notice
-          </a>
-        </div>
-      </div>
-      </footer>
+  <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-gray-400 py-4 px-6 flex items-center justify-between text-xs backdrop-filter backdrop-blur-3xl bg-opacity-20 bg-gray-800/60 shadow-lg">
+    <div>
+      <span>&copy; {new Date().getFullYear()} Bayard Lab. All rights reserved. Open-source use subject to <a href="https://docs.bayardlab.org/wl1.0gp-license-terms" target="_blank" rel="noopener noreferrer" className="text-amber-500 hover:text-amber-400">terms</a>.</span>
+    </div>
+    <div>
+      <a href="https://bayardlab.org/terms" target="_blank" rel="noopener noreferrer" className="text-gray-400 text-xs hover:text-amber-500 mr-4">
+        Terms &amp; Conditions
+      </a>
+      <a href="https://bayardlab.org/privacy-notice" target="_blank" rel="noopener noreferrer" className="text-gray-400 text-xs hover:text-amber-500">
+        Privacy Notice
+      </a>
+    </div>
+  </div>
+</footer>
     </div>
   );
 }
