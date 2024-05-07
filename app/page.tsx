@@ -261,31 +261,31 @@ const provideFeedback = (message: Message) => {
 };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-900 text-sm">
-      <header className="bg-gray-900 text-amber-500 h-12 py-4 px-6 flex items-center justify-between shadow-lg">
+<div className="flex flex-col h-screen bg-gray-900 text-base bg-gradient-to-br from-gray-900 to-gray-800 bg-fixed bg-opacity-100">
+  <header className="bg-gradient-to-r from-gray-900 to-gray-800 text-amber-500 py-4 px-6 flex items-center justify-between shadow-lg">
         <a href="https://bayardlab.org" target="_blank" rel="noopener noreferrer">
           <Image src={BAYARD_LAB_YELLOW} alt="Bayard Lab Logo" width={150} height={50} />
         </a>
-        <h1 className={`${lexendPetaStyle.className} uppercase text-md`}>Bayard_One</h1>        
+        <h1 className={`${lexendPetaStyle.className} uppercase text-sm`}>Bayard_One</h1>        
         <nav>
           <ul className="flex space-x-4">
             <li>
-              <a href="https://bayardlab.org" className="hover:text-amber-400">
+              <a href="https://bayardlab.org" className="text-sm hover:text-amber-400">
                 Home
               </a>
             </li>
             <li>
-              <a href="https://www.bayardlab.org/about-bayard-one" className="hover:text-amber-400">
+              <a href="https://www.bayardlab.org/about-bayard-one" className="text-sm hover:text-amber-400">
                 About
               </a>
             </li>
             <li>
-              <a href="https://docs.bayardlab.org" className="hover:text-amber-400">
+              <a href="https://docs.bayardlab.org" className="text-sm hover:text-amber-400">
                 Documentation
               </a>
             </li>
             <li>
-              <a href="https://www.bayardlab.org/contact" className="hover:text-amber-400">
+              <a href="https://www.bayardlab.org/contact" className="text-sm hover:text-amber-400">
                 Contact
               </a>
             </li>
@@ -302,7 +302,7 @@ const provideFeedback = (message: Message) => {
       </div>
       <main className="flex flex-1 overflow-hidden">
       <ResizablePanelGroup direction="horizontal">
-          <ResizablePanel>
+      <ResizablePanel className="shadow-md">
           <aside
               ref={asideRef}
               className="bg-gray-700 p-4 pl-10 pr-10 transition-all duration-300 overflow-y-auto shadow-lg z-10 relative h-full"
@@ -349,7 +349,7 @@ const provideFeedback = (message: Message) => {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.1 }}
                     >
-                      <Card className="mb-6 p-2 bg-gray-600 text-amber-400 shadow-lg">
+    <Card className="mb-6 p-4 bg-gradient-to-r from-gray-700 to-gray-800 text-amber-400 shadow-md rounded-lg">
                         <CardHeader>
                           <CardTitle className="text-xl">{doc.title}</CardTitle>
                           <CardDescription>
@@ -365,11 +365,16 @@ const provideFeedback = (message: Message) => {
                           </CardDescription>
                         </CardHeader>
                         <CardFooter>
-                          <a href={doc.downloadUrl} target="_blank" rel="noopener noreferrer">
-                            <Button size="sm" className="bg-amber-500 text-gray-800 hover:bg-amber-400">
-                              Download
-                            </Button>
-                          </a>
+                        <div className="flex items-center justify-between">
+              <a href={doc.downloadUrl} target="_blank" rel="noopener noreferrer">
+                <Button size="sm" className="bg-amber-500 text-gray-900 hover:bg-amber-600 font-bold py-2 px-4 rounded">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  Download
+                </Button>
+              </a>
+            </div>
                         </CardFooter>
                       </Card>
                     </motion.div>
@@ -383,7 +388,7 @@ const provideFeedback = (message: Message) => {
         </aside>
           </ResizablePanel>
           <ResizableHandle style={{ width: '2px' }} />
-          <ResizablePanel>
+          <ResizablePanel className="shadow-md">
         <div className="w-0.5 bg-gray-60"></div>
         <section className="flex-1 flex flex-col overflow-hidden" style={{ width: '100%', height: '100%' }}>
           <div className="flex items-center justify-between p-4 pr-10 pl-10 bg-gray-800 text-amber-400">
@@ -400,10 +405,10 @@ const provideFeedback = (message: Message) => {
       transition={{ duration: 0.3 }}
     >
 <Card
-  className={`mb-2 p-2 ${
-    message.user === 'You' ? 'bg-gray-900 text-amber-400' : 'bg-gray-700 text-amber-300 shadow-md'
+  className={`mb-4 p-4 rounded-lg shadow-md backdrop-filter backdrop-blur-md bg-opacity-30 ${
+    message.user === 'You' ? 'bg-gray-800 text-amber-400' : 'bg-gradient-to-r from-gray-700 to-gray-800 text-amber-300'
   }`}
-      >
+>
         <CardHeader>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
@@ -494,19 +499,19 @@ const provideFeedback = (message: Message) => {
               </motion.div>
             )}
           </div>
-          <div className="p-4 bg-gray-900">
+          <div className="p-4 bg-gradient-to-r from-gray-800 to-gray-900 backdrop-filter backdrop-blur-md bg-opacity-30">
             <div className="flex space-x-2">
               <div className="flex-1 mr-2">
                 <Textarea
                   value={message}
                   onChange={handleInputChange}
                   onKeyDown={handleKeyDown}
-                  className="w-full px-2 py-2  bg-gray-700 text-amber-300 border-gray-60 focus:border-amber-300 shadow-md"
+                  className="w-full px-4 py-2 bg-gray-700 text-amber-300 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500"
                   placeholder="What would you like to ask Bayard?"
                 />
               </div>
               <div className="flex flex-col space-y-2 mr-2">
-                <Button onClick={sendMessage} disabled={isLoading} className="bg-amber-500 text-gray-800 hover:bg-amber-400 text-xs">
+                <Button onClick={sendMessage} disabled={isLoading} className="bg-amber-500 text-gray-900 hover:bg-amber-600 font-bold py-2 px-4 rounded">
                   {isLoading ? 'Sending...' : 'Send'}
                 </Button>
                 <Button onClick={regenerateResponse} disabled={isLoading} variant="ghost" className="border-amber-500 text-amber-300 hover:bg-amber-500 hover:text-gray-800 text-xs">
@@ -520,9 +525,9 @@ const provideFeedback = (message: Message) => {
         </ResizablePanelGroup>
       </main>
       <footer>
-      <div className="bg-gray-800 text-gray-400 py-2 px-4 flex items-center justify-between text-xs">
+      <div className="bg-gradient-to-r from-gray-800 to-gray-900 text-gray-400 py-4 px-6 flex items-center justify-between text-xs backdrop-filter backdrop-blur-lg bg-opacity-30">
         <div>
-          <span>&copy; {new Date().getFullYear()} Bayard Lab. All rights reserved. Open-source use subject to terms. See documentation</span>
+          <span>&copy; {new Date().getFullYear()} Bayard Lab. All rights reserved. Open-source use subject to terms. See documentation.</span>
         </div>
         <div>
           <a href="https://bayardlab.org/terms" target="_blank" rel="noopener noreferrer" className="text-gray-400 text-xs hover:text-amber-500 mr-4">
