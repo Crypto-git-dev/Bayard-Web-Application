@@ -89,6 +89,9 @@ export default function ChatPage() {
     // Check if the user has a preferred color scheme
     const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
     setIsDarkMode(prefersDarkMode);
+
+    // Apply dark mode class to body element
+    document.body.classList.toggle('dark', prefersDarkMode);
   }, []);
 
   const toggleDarkMode = () => {
@@ -417,7 +420,7 @@ export default function ChatPage() {
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.3, delay: index * 0.1 }}
                         >
-                          <Card className="mb-6 p-4 bg-gradient-to-r from-amber-100 to-amber-200 dark:from-gray-700 dark:to-gray-800 text-gray-800 dark:text-amber-400 shadow-md rounded-lg">
+                          <Card className="mb-6 p-4 bg-gradient-to-r from-amber-100 to-amber-200 dark:from-gray-700/100 dark:to-gray-900/50 text-gray-800 dark:text-amber-400 shadow-md rounded-lg">
                             <CardHeader>
                               <CardTitle className="text-xl">{doc.title}</CardTitle>
                               <CardDescription>
