@@ -81,9 +81,17 @@ export default function ChatPage() {
   });
 
   useEffect(() => {
-    // Check if the user has a preferred color scheme
-    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    setIsDarkMode(prefersDarkMode);
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = () => {
+      setIsDarkMode(mediaQuery.matches);
+    };
+  
+    mediaQuery.addListener(handleChange);
+    handleChange();
+  
+    return () => {
+      mediaQuery.removeListener(handleChange);
+    };
   }, []);
 
   const toggleDarkMode = () => {
