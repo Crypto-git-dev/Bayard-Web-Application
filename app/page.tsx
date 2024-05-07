@@ -19,6 +19,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import * as amplitude from '@amplitude/analytics-browser';
+import { autocapturePlugin } from '@amplitude/plugin-autocapture-browser';
+
+const apiKey = process.env.AMPLITUDE_API_KEY || ""; // Set a default value if the API key is undefined
+amplitude.init(apiKey);
+amplitude.add(autocapturePlugin());
+
 
 interface Message {
   user: string;
