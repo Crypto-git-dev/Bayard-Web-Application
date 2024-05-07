@@ -289,22 +289,22 @@ export default function ChatPage() {
         <nav>
           <ul className="flex space-x-4 items-center">
             <li>
-              <a href="https://bayardlab.org" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
+              <a href="https://bayardlab.org" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
                 Home
               </a>
             </li>
             <li>
-              <a href="https://www.bayardlab.org/about-bayard-one" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
+              <a href="https://www.bayardlab.org/about-bayard-one" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
                 About
               </a>
             </li>
             <li>
-              <a href="https://docs.bayardlab.org" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
+              <a href="https://docs.bayardlab.org" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
                 Documentation
               </a>
             </li>
             <li>
-              <a href="https://www.bayardlab.org/contact" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
+              <a href="https://www.bayardlab.org/contact" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
                 Contact
               </a>
             </li>
@@ -579,7 +579,7 @@ export default function ChatPage() {
       <footer>
         <div className="bg-gradient-to-r from-amber-200 dark:from-gray-800 to-amber-100 dark:to-gray-900 text-gray-600 dark:text-gray-400 py-4 px-6 flex items-center justify-between text-xs backdrop-filter backdrop-blur-3xl bg-opacity-20 bg-amber-100/60 dark:bg-gray-800/60 shadow-lg">
           <div>
-            <span>© {new Date().getFullYear()} Bayard Lab. All rights reserved. Open-source use subject to <a href="https://docs.bayardlab.org/wl1.0gp-license-terms" target="_blank" rel="noopener noreferrer" className="text-gray-800 dark:text-amber-500 hover:text-gray-600 dark:hover:text-amber-400">terms</a>.</span>
+            <span>© {new Date().getFullYear()} Bayard Lab. All rights reserved. Open-source use subject to <a href="https://docs.bayardlab.org/wl1.0gp-license-terms" target="_blank" rel="noopener noreferrer" className="underline text-amber-700 dark:text-amber-500 hover:text-gray-600 dark:hover:text-amber-400">terms</a>.</span>
           </div>
           <div>
             <a href="https://bayardlab.org/terms" target="_blank" rel="noopener noreferrer" className="text-gray-600 dark:text-gray-400 text-xs hover:text-gray-800 dark:hover:text-amber-500 mr-4">
