@@ -17,6 +17,7 @@ const config = {
       lg: '1.05rem', // 18px
       xl: '1.30rem', // 20px
       '2xl': '1.6rem', // 24px
+      'hero': '2.5rem', // 40px
     },
     container: {
       center: true,
