@@ -21,6 +21,10 @@ import {
 } from "@/components/ui/tooltip";
 import * as amplitude from '@amplitude/analytics-browser';
 import { autocapturePlugin } from '@amplitude/plugin-autocapture-browser';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import BAYARD_AVATAR from '@/assets/noun-squirrel-2777144.png';
+
 
 const apiKey = process.env.AMPLITUDE_API_KEY || ""; // Set a default value if the API key is undefined
 amplitude.init(apiKey);
@@ -483,18 +487,34 @@ export default function ChatPage() {
                       transition={{ duration: 0.3 }}
                     >
                       <Card
-                        className={`mb-4 p-4 rounded-lg shadow-md backdrop-filter backdrop-blur-2xl bg-opacity-30 ${message.user === 'You' ? 'bg-gradient-to-l from-amber-100/70 to-amber-300/70 dark:from-gray-700/70 dark:to-gray-900/70 text-gray-800 dark:text-amber-500' : 'bg-gradient-to-r from-amber-100/70 to-amber-300/70 dark:from-gray-700/90 dark:to-gray-900/40 text-gray-800 dark:text-amber-500'
+                        className={`mb-4 p-4 rounded-lg shadow-md backdrop-filter backdrop-blur-2xl bg-opacity-30 ${message.user === 'You'
+                            ? 'bg-gradient-to-l from-amber-100/70 to-amber-300/70 dark:from-gray-700/70 dark:to-gray-900/70 text-gray-800 dark:text-amber-500'
+                            : 'bg-gradient-to-r from-amber-100/70 to-amber-300/70 dark:from-gray-700/90 dark:to-gray-900/40 text-gray-800 dark:text-amber-500'
                           }`}
                       >
                         <CardHeader>
                           <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-2">
-                              <Avatar className="w-6 h-6">
-                                <AvatarFallback className="text-xs bg-slate-500">{message.user.charAt(0)}</AvatarFallback>
-                              </Avatar>
+                            <div className="flex items-center space-x-2"> 
+                              {message.user === 'You' ? (
+                                <Avatar className="w-6 h-6">
+                                  <AvatarFallback className="text-xs bg-slate-500">
+                                    {message.user.charAt(0)}
+                                  </AvatarFallback>
+                                </Avatar>
+                              ) : (
+                                <Image
+                                  src={BAYARD_AVATAR}
+                                  alt="Bayard Avatar"
+                                  width={24}
+                                  height={24}
+                                  className="w-6 h-6 rounded-full"
+                                />
+                              )}
                               <div>
                                 <p className="text-sm font-semibold">{message.user}</p>
-                                <p className="text-xs text-gray-600 dark:text-gray-100">{message.timestamp}</p>
+                                <p className="text-xs text-gray-600 dark:text-gray-100">
+                                  {message.timestamp}
+                                </p>
                               </div>
                             </div>
                             <div className="flex space-x-2">
@@ -528,11 +548,20 @@ export default function ChatPage() {
                               <span className="animate-pulse">|</span>
                             </animated.p>
                           ) : (
-                            <div
-                              className="text-sm text-gray-800 dark:text-amber-400"
-                              style={{ lineHeight: '1.6' }}
-                              dangerouslySetInnerHTML={{ __html: message.user === 'Bayard' ? formatMessage(message.text) : message.text }}
-                            />
+                            <ReactMarkdown
+                              className="text-sm text-gray-800 dark:text-amber-400 prose prose-sm max-w-none"
+                              components={{
+                                p: ({ node, ...props }) => <p style={{ marginBottom: '1rem' }} {...props} />,
+                                ul: ({ node, ...props }) => <ul style={{ marginBottom: '1rem' }} {...props} />,
+                                ol: ({ node, ...props }) => <ol style={{ marginBottom: '1rem' }} {...props} />,
+                                li: ({ node, ...props }) => <li style={{ marginBottom: '0.5rem' }} {...props} />,
+                                blockquote: ({ node, ...props }) => <blockquote style={{ marginBottom: '1rem' }} {...props} />,
+                                a: ({ node, ...props }) => <a target="_blank" rel="noopener noreferrer" {...props} />,
+                              }}
+                              remarkPlugins={[remarkGfm]}
+                            >
+                              {message.text}
+                            </ReactMarkdown>
                           )}
                         </CardContent>
                       </Card>
@@ -610,9 +639,9 @@ export default function ChatPage() {
                           </svg>
                         </span>
                       ) : (
-                          <span className="relative flex items-center justify-center">
-                            <span className="w-2 h-2 border-t-2 border-r-2 border-amber-100 dark:border-gray-900 transform -rotate-45 transition-transform duration-300 ease-in-out group-hover:scale-110"></span>
-                          </span>
+                        <span className="relative flex items-center justify-center">
+                          <span className="w-2 h-2 border-t-2 border-r-2 border-amber-100 dark:border-gray-900 transform -rotate-45 transition-transform duration-300 ease-in-out group-hover:scale-110"></span>
+                        </span>
                       )}
                       <TooltipProvider>
                         <Tooltip>
