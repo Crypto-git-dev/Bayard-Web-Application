@@ -9,7 +9,7 @@ if (req.method === 'POST') {
     const { input_text } = req.body;
 
     const response = await axios.post(
-        'https://bayardapp.onrender.com/api/bayard', 
+        'https://bayard-one.onrender.com/api/bayard', 
         { input_text },
         {
         headers: {
