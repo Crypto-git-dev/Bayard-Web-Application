@@ -431,8 +431,7 @@ export default function ChatPage() {
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.3, delay: index * 0.1 }}
                         >
-                          <Card className="mb-6 p-4 bg-gradient-to-r from-amber-100 to-amber-200 dark:from-gray-700/100 dark:to-gray-900/50 text-gray-800 dark:text-amber-400 shadow-md rounded-lg">
-                            <CardHeader>
+                        <Card className="mb-6 p-4 bg-amber-100 dark:bg-gray-800 text-gray-800 dark:text-amber-400 shadow-md rounded-lg">                            <CardHeader>
                               <CardTitle className="text-xl">{doc.title}</CardTitle>
                               <CardDescription>
                                 <p className="mt-2 text-xs text-gray-600 dark:text-gray-300">
@@ -486,11 +485,12 @@ export default function ChatPage() {
                       exit={{ opacity: 0, y: -20 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <Card
-                        className={`mb-4 p-4 rounded-lg shadow-md backdrop-filter backdrop-blur-2xl bg-opacity-30 ${message.user === 'You'
-                            ? 'bg-gradient-to-l from-amber-100/70 to-amber-300/70 dark:from-gray-700/70 dark:to-gray-900/70 text-gray-800 dark:text-amber-500'
-                            : 'bg-gradient-to-r from-amber-100/70 to-amber-300/70 dark:from-gray-700/90 dark:to-gray-900/40 text-gray-800 dark:text-amber-500'
-                          }`}
+                    <Card
+                      className={`mb-4 p-4 rounded-lg shadow-md backdrop-filter backdrop-blur-2xl bg-opacity-30 ${
+                        message.user === 'You'
+                          ? 'bg-amber-100/70 dark:bg-gray-700/70 text-gray-800 dark:text-amber-500'
+                          : 'bg-amber-300/70 dark:bg-gray-900/70 text-gray-800 dark:text-amber-500'
+                      }`}
                       >
                         <CardHeader>
                           <div className="flex items-center justify-between">
