@@ -20,7 +20,7 @@ if (req.method === 'POST') {
     );
     
     res.status(200).json({ 
-        model_output: response.data.model_output,
+        model_output: response.data.markdown_output || response.data.model_output, 
         documents: response.data.documents
     });
 
