@@ -92,10 +92,12 @@ export default function ChatPage() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [activeTabId, setActiveTabId] = useState<string | null>(null);
   const [activeTabIndex, setActiveTabIndex] = useState(0);
-  
+
   const [modelOutput, setModelOutput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamedText, setStreamedText] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
 
   const springProps = useSpring({
     from: { opacity: 0, transform: 'translateY(20px)' },
@@ -397,42 +399,61 @@ export default function ChatPage() {
               <div className="flex items-center justify-between mb-2">
                 <div>
                   <h2 className="text-lg font-bold text-gray-800 dark:text-amber-400 mb-3">Documents</h2>
-                  <div className="mt-2 relative">
-                    {chatHistory.documentTabs.length > 3 && (
+                  <div className="relative inline-block text-left">
+                    <div>
                       <button
-                        className="absolute left-0 top-0 px-2 py-1 bg-amber-200 dark:bg-gray-600 text-gray-800 dark:text-amber-400 rounded-l focus:outline-none"
-                        onClick={() => setActiveTabIndex((prevIndex) => Math.max(0, prevIndex - 1))}
-                        disabled={activeTabIndex === 0}
+                        type="button"
+                        className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-amber-400 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-amber-500"
+                        id="options-menu"
+                        aria-haspopup="true"
+                        aria-expanded="true"
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                       >
-                        &lt;
-                      </button>
-                    )}
-                    <div className="flex space-x-2 border-b border-amber-300 dark:border-gray-500 overflow-x-auto">
-                      {chatHistory.documentTabs.slice(activeTabIndex, activeTabIndex + 3).map((tab) => (
-                        <button
-                          key={tab.id}
-                          className={`px-4 py-2 text-sm font-semibold focus:outline-none transition-colors duration-200 whitespace-nowrap ${activeTabId === tab.id
-                              ? 'bg-amber-100 dark:bg-gray-600 text-gray-800 dark:text-amber-400 border-b-2 border-amber-500 dark:border-amber-400'
-                              : 'text-gray-600 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-gray-600 hover:text-gray-800 dark:hover:text-amber-400'
-                            }`}
-                          onClick={() => setActiveTabId(tab.id)}
+                        {activeTabId
+                          ? chatHistory.documentTabs.find((tab) => tab.id === activeTabId)?.title
+                          : 'Select a document set'}
+                        <svg
+                          className="-mr-1 ml-2 h-5 w-5"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          aria-hidden="true"
                         >
-                          {tab.title}
-                        </button>
-                      ))}
-                    </div>
-                    {chatHistory.documentTabs.length > 3 && (
-                      <button
-                        className="absolute right-0 top-0 px-2 py-1 bg-amber-200 dark:bg-gray-600 text-gray-800 dark:text-amber-400 rounded-r focus:outline-none"
-                        onClick={() =>
-                          setActiveTabIndex((prevIndex) =>
-                            Math.min(prevIndex + 1, chatHistory.documentTabs.length - 3)
-                          )
-                        }
-                        disabled={activeTabIndex + 3 >= chatHistory.documentTabs.length}
-                      >
-                        &gt;
+                          <path
+                            fillRule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
                       </button>
+                    </div>
+
+                    {isDropdownOpen && (
+                      <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5">
+                        <div
+                          className="py-1"
+                          role="menu"
+                          aria-orientation="vertical"
+                          aria-labelledby="options-menu"
+                        >
+                          {chatHistory.documentTabs.map((tab) => (
+                            <button
+                              key={tab.id}
+                              className={`${activeTabId === tab.id
+                                  ? 'bg-amber-100 dark:bg-gray-700 text-gray-900 dark:text-amber-400'
+                                  : 'text-gray-700 dark:text-amber-400'
+                                } block px-4 py-2 text-sm w-full text-left`}
+                              role="menuitem"
+                              onClick={() => {
+                                setActiveTabId(tab.id);
+                                setIsDropdownOpen(false);
+                              }}
+                            >
+                              {tab.title}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
                     )}
                   </div>
                 </div>
