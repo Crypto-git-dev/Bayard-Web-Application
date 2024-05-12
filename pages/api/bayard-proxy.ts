@@ -8,7 +8,7 @@ const BAYARD_API_KEY = process.env.BAYARD_API_KEY;
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
         try {
-            const { input_text } = req.body;
+            const { input_text, documentTabs } = req.body;
 
             // Get the user ID from the cookie
             const cookies = cookie.parse(req.headers.cookie || '');
@@ -46,9 +46,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 documents: documents,
             };
 
+            // Add the new document tab to the existing documentTabs array
+            const updatedDocumentTabs = [...documentTabs, newDocumentTab];
+
             res.status(200).json({
                 model_output: response.data.model_output,
-                documentTabs: [newDocumentTab],
+                documentTabs: updatedDocumentTabs,
                 userId: userId,
             });
         } catch (error) {

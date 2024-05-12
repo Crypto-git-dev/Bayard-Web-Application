@@ -86,12 +86,13 @@ async function sendMessage(message: string) {
 
 export default function ChatPage() {
   const [message, setMessage] = useState("");
-  const [chatHistory, setChatHistory] = useState<ChatHistory>({ messages: [], documentTabs: [] });  const [isLoading, setIsLoading] = useState(false);
+  const [chatHistory, setChatHistory] = useState<ChatHistory>({ messages: [], documentTabs: [] }); const [isLoading, setIsLoading] = useState(false);
   const [loadingStatus, setLoadingStatus] = useState("");
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
-
-
+  const [activeTabId, setActiveTabId] = useState<string | null>(null);
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
+  
   const [modelOutput, setModelOutput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamedText, setStreamedText] = useState("");
@@ -166,31 +167,26 @@ export default function ChatPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ input_text: message }),
+        body: JSON.stringify({ input_text: message, documentTabs: chatHistory.documentTabs }),
       });
 
       if (!response.ok) {
         throw new Error('Failed to send message');
       }
 
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate querying delay
-      setLoadingStatus('Generating...');
-
       const data = await response.json();
       const botMessage: Message = {
         user: 'Bayard',
         text: data.model_output,
-        timestamp: new Date().toLocaleString(), // Add timestamp
+        timestamp: new Date().toLocaleString(),
       };
-
-
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate generating delay
 
       setChatHistory((prevChatHistory) => ({
         messages: [...prevChatHistory.messages, botMessage],
-        documentTabs: data.documentTabs || [],
+        documentTabs: data.documentTabs,
       }));
-      
+
+      setActiveTabId(data.documentTabs[data.documentTabs.length - 1].id);
     } catch (error) {
       console.error('Error:', error);
     }
@@ -198,6 +194,7 @@ export default function ChatPage() {
     setIsLoading(false);
     setLoadingStatus('');
   };
+
 
   const regenerateResponse = async () => {
     setIsLoading(true);
@@ -400,18 +397,42 @@ export default function ChatPage() {
               <div className="flex items-center justify-between mb-2">
                 <div>
                   <h2 className="text-lg font-bold text-gray-800 dark:text-amber-400 mb-3">Documents</h2>
-                  <div className="mt-2">
-                    {chatHistory.documentTabs.length > 0 && (
-                      <div className="flex space-x-2">
-                        {chatHistory.documentTabs.map((tab) => (
-                          <button
-                            key={tab.id}
-                            className="px-2 py-1 text-xs font-semibold text-gray-800 dark:text-amber-400 bg-amber-200 dark:bg-gray-600 rounded-md focus:outline-none"
-                          >
-                            {tab.title}
-                          </button>
-                        ))}
-                      </div>
+                  <div className="mt-2 relative">
+                    {chatHistory.documentTabs.length > 3 && (
+                      <button
+                        className="absolute left-0 top-0 px-2 py-1 bg-amber-200 dark:bg-gray-600 text-gray-800 dark:text-amber-400 rounded-l focus:outline-none"
+                        onClick={() => setActiveTabIndex((prevIndex) => Math.max(0, prevIndex - 1))}
+                        disabled={activeTabIndex === 0}
+                      >
+                        &lt;
+                      </button>
+                    )}
+                    <div className="flex space-x-2 border-b border-amber-300 dark:border-gray-500 overflow-x-auto">
+                      {chatHistory.documentTabs.slice(activeTabIndex, activeTabIndex + 3).map((tab) => (
+                        <button
+                          key={tab.id}
+                          className={`px-4 py-2 text-sm font-semibold focus:outline-none transition-colors duration-200 whitespace-nowrap ${activeTabId === tab.id
+                              ? 'bg-amber-100 dark:bg-gray-600 text-gray-800 dark:text-amber-400 border-b-2 border-amber-500 dark:border-amber-400'
+                              : 'text-gray-600 dark:text-amber-300 hover:bg-amber-200 dark:hover:bg-gray-600 hover:text-gray-800 dark:hover:text-amber-400'
+                            }`}
+                          onClick={() => setActiveTabId(tab.id)}
+                        >
+                          {tab.title}
+                        </button>
+                      ))}
+                    </div>
+                    {chatHistory.documentTabs.length > 3 && (
+                      <button
+                        className="absolute right-0 top-0 px-2 py-1 bg-amber-200 dark:bg-gray-600 text-gray-800 dark:text-amber-400 rounded-r focus:outline-none"
+                        onClick={() =>
+                          setActiveTabIndex((prevIndex) =>
+                            Math.min(prevIndex + 1, chatHistory.documentTabs.length - 3)
+                          )
+                        }
+                        disabled={activeTabIndex + 3 >= chatHistory.documentTabs.length}
+                      >
+                        &gt;
+                      </button>
                     )}
                   </div>
                 </div>
@@ -420,32 +441,62 @@ export default function ChatPage() {
                   onMouseDown={handleMouseDown}
                 ></div>
               </div>
-              {chatHistory.documentTabs.length > 0 && (
-                <>
-                  <div className="max-h-[calc(100vh-200px)]">
-                    {chatHistory.documentTabs.map((tab) => (
-                      <div key={tab.id}>
-                        {tab.documents
-                          .filter((doc) => doc.abstract)
-                          .map((doc, index) => (
-                          <motion.div
-                              key={index}
-                              initial={{ opacity: 0, y: 20 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ duration: 0.3, delay: index * 0.1 }}
-                          >
-                              <div className="bg-white dark:bg-gray-800 shadow-md rounded-md p-4 mb-4">
-                                  <h3 className="text-xl font-semibold text-gray-800 dark:text-amber-400 mb-2">{doc.title}</h3>
-                                  <p className="text-sm text-gray-600 dark:text-amber-300 mb-2"><strong>Authors:</strong> {doc.authors}</p>
-                                  <p className="text-sm text-gray-600 dark:text-amber-300 mb-2"><strong>Year Published:</strong> {doc.yearPublished}</p>
-                                  <p className="text-sm text-gray-600 dark:text-amber-300 mb-2"><strong>Abstract:</strong> {doc.abstract.slice(0, 500)}...</p>
-                              </div>
-                          </motion.div>
-                          ))}
-                      </div>
+              {activeTabId && (
+                <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
+                  {chatHistory.documentTabs
+                    .find((tab) => tab.id === activeTabId)
+                    ?.documents.filter((doc) => doc.abstract)
+                    .map((doc, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3, delay: index * 0.1 }}
+                      >
+                        <div className="bg-white dark:bg-gray-800 shadow-md rounded-md p-4 mb-4">
+                          <h3 className="text-xl font-semibold text-gray-800 dark:text-amber-400 mb-2">{doc.title}</h3>
+                          <p className="text-sm text-gray-600 dark:text-amber-300 mb-2">
+                            <strong>Authors:</strong> {doc.authors}
+                          </p>
+                          <p className="text-sm text-gray-600 dark:text-amber-300 mb-2">
+                            <strong>Year Published:</strong> {doc.yearPublished}
+                          </p>
+                          <p className="text-sm text-gray-600 dark:text-amber-300 mb-2">
+                            <strong>Abstract:</strong> {doc.abstract.slice(0, 500)}...
+                          </p>
+                          <div className="mt-4">
+                            <a
+                              href={doc.downloadUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-block px-4 py-2 text-sm font-semibold text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+                            >
+                              <span className="inline-flex items-center">
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-4 w-4 mr-1"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                                  />
+                                </svg>
+                                Download
+                              </span>
+                            </a>
+                          </div>
+                        </div>
+                      </motion.div>
                     ))}
-                  </div>
-                </>
+                </div>
+              )}
+              {!activeTabId && chatHistory.documentTabs.length > 0 && (
+                <p className="text-xs text-gray-600 dark:text-amber-300 mt-2">Select a tab to view documents</p>
               )}
               {chatHistory.documentTabs.length === 0 && !isLoading && (
                 <p className="text-xs text-gray-600 dark:text-amber-300 mt-2">No documents found</p>
@@ -471,8 +522,8 @@ export default function ChatPage() {
                     >
                       <Card
                         className={`mb-4 p-4 rounded-lg shadow-md backdrop-filter backdrop-blur-2xl bg-opacity-30 ${message.user === 'You'
-                            ? 'bg-amber-100/70 dark:bg-gray-700/70 text-gray-800 dark:text-amber-500'
-                            : 'bg-amber-300/70 dark:bg-gray-900/70 text-gray-800 dark:text-amber-500'
+                          ? 'bg-amber-100/70 dark:bg-gray-700/70 text-gray-800 dark:text-amber-500'
+                          : 'bg-amber-300/70 dark:bg-gray-900/70 text-gray-800 dark:text-amber-500'
                           }`}
                       >
                         <CardHeader>
