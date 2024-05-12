@@ -143,26 +143,26 @@ export default function ChatPage() {
 
   const sendMessage = async () => {
     if (message.trim() === '') return;
-  
+
     const userMessage: Message = {
       user: 'You',
       text: message,
       timestamp: new Date().toLocaleString(),
     };
-  
+
     setChatHistory((prevChatHistory) => ({
       ...prevChatHistory,
       messages: [...prevChatHistory.messages, userMessage],
     }));
-  
+
     setMessage('');
     setIsLoading(true);
     setLoadingStatus('Thinking...');
-  
+
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setLoadingStatus('Querying...');
-  
+
       const response = await fetch('/api/bayard-proxy', {
         method: 'POST',
         headers: {
@@ -170,28 +170,28 @@ export default function ChatPage() {
         },
         body: JSON.stringify({ input_text: message, documentTabs: chatHistory.documentTabs }),
       });
-  
+
       if (!response.ok) {
         throw new Error('Failed to send message');
       }
-  
+
       const data = await response.json();
       const botMessage: Message = {
         user: 'Bayard',
         text: data.model_output,
         timestamp: new Date().toLocaleString(),
       };
-  
+
       setChatHistory((prevChatHistory) => ({
         messages: [...prevChatHistory.messages, botMessage],
         documentTabs: data.documentTabs,
       }));
-  
+
       setActiveTabId(data.documentTabs[data.documentTabs.length - 1].id);
     } catch (error) {
       console.error('Error:', error);
     }
-  
+
     setIsLoading(false);
     setLoadingStatus('');
   };
@@ -399,7 +399,7 @@ export default function ChatPage() {
                   <h2 className="text-lg font-bold text-gray-800 dark:text-amber-400 mb-3">Documents</h2>
                   <div className="relative inline-block text-left">
                     <div>
-                      <button
+                    <button
                         type="button"
                         className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-amber-400 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-amber-500"
                         id="options-menu"
@@ -408,7 +408,7 @@ export default function ChatPage() {
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                       >
                         {activeTabId
-                          ? chatHistory.documentTabs.find((tab) => tab.id === activeTabId)?.title
+                          ? chatHistory.documentTabs.find((tab) => tab.id === activeTabId)?.title.replace(/^["']|["']$/g, '')
                           : 'Select a document set'}
                         <svg
                           className="-mr-1 ml-2 h-5 w-5"
@@ -448,7 +448,7 @@ export default function ChatPage() {
                                 setIsDropdownOpen(false);
                               }}
                             >
-                              {tab.title}
+                              {tab.title.replace(/^["']|["']$/g, '')}
                             </button>
                           ))}
                         </div>
@@ -462,28 +462,35 @@ export default function ChatPage() {
                 ></div>
               </div>
               {activeTabId && (
-                  <div className="space-y-4">
-                    {chatHistory.documentTabs
-                      .find((tab) => tab.id === activeTabId)
-                      ?.documents.map((doc, index) => (
-                        <motion.div
-                          key={index}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -20 }}
-                          transition={{ duration: 0.3 }}
-                        >
+                <div className="space-y-4">
+                  {chatHistory.documentTabs
+                    .find((tab) => tab.id === activeTabId)
+                    ?.documents.map((doc, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.3 }}
+                      >
                         <div className="bg-white dark:bg-gray-800 shadow-md rounded-md p-4 mb-4">
-                          <h3 className="text-xl font-semibold text-gray-800 dark:text-amber-400 mb-2">{doc.title}</h3>
-                          <p className="text-sm text-gray-600 dark:text-amber-300 mb-2">
-                            <strong>Authors:</strong> {doc.authors}
-                          </p>
-                          <p className="text-sm text-gray-600 dark:text-amber-300 mb-2">
-                            <strong>Year Published:</strong> {doc.yearPublished}
-                          </p>
-                          <p className="text-sm text-gray-600 dark:text-amber-300 mb-2">
-                            <strong>Abstract:</strong> {doc.abstract.slice(0, 500)}...
-                          </p>
+                          <h3 className="text-xl font-semibold text-gray-800 dark:text-amber-400 mb-2 capitalize">
+                            {doc.title}
+                          </h3>
+                          <div className="text-sm text-gray-600 dark:text-amber-300 mb-2">
+                            <p><strong>Authors</strong></p>
+                            {doc.authors.map((author, index) => (
+                              <p key={index}>{author}</p>
+                            ))}
+                          </div>
+                          <div className="text-sm text-gray-600 dark:text-amber-300 mb-2">
+                            <p><strong>Year Published</strong></p>
+                            <p>{doc.yearPublished}</p>
+                          </div>
+                          <div className="text-sm text-gray-600 dark:text-amber-300 mb-2">
+                            <p><strong>Abstract</strong></p>
+                            <p>{doc.abstract.length > 500 ? doc.abstract.slice(0, 500) + '...' : doc.abstract}</p>
+                          </div>
                           <div className="mt-4">
                             <a
                               href={doc.downloadUrl}
