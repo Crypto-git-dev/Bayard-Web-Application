@@ -45,9 +45,16 @@ interface Document {
   downloadUrl: string;
 }
 
+
+interface DocumentTab {
+  id: string;
+  title: string;
+  documents: Document[];
+}
+
 interface ChatHistory {
   messages: Message[];
-  documents: Document[];
+  documentTabs: DocumentTab[];
 }
 
 const lexendPetaStyle = Lexend_Peta({
@@ -79,8 +86,7 @@ async function sendMessage(message: string) {
 
 export default function ChatPage() {
   const [message, setMessage] = useState("");
-  const [chatHistory, setChatHistory] = useState<ChatHistory>({ messages: [], documents: [] });
-  const [isLoading, setIsLoading] = useState(false);
+  const [chatHistory, setChatHistory] = useState<ChatHistory>({ messages: [], documentTabs: [] });  const [isLoading, setIsLoading] = useState(false);
   const [loadingStatus, setLoadingStatus] = useState("");
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -182,8 +188,9 @@ export default function ChatPage() {
 
       setChatHistory((prevChatHistory) => ({
         messages: [...prevChatHistory.messages, botMessage],
-        documents: data.documents || [],
+        documentTabs: data.documentTabs || [],
       }));
+      
     } catch (error) {
       console.error('Error:', error);
     }
@@ -394,23 +401,17 @@ export default function ChatPage() {
                 <div>
                   <h2 className="text-lg font-bold text-gray-800 dark:text-amber-400 mb-3">Documents</h2>
                   <div className="mt-2">
-                    {chatHistory.documents.length > 0 && (
-                      <>
-                        <p className="text-xs text-gray-600 dark:text-amber-300 mb-3">
-                          {chatHistory.documents.filter((doc) => doc.abstract).length === 1
-                            ? '1 document with an abstract'
-                            : `${chatHistory.documents.filter((doc) => doc.abstract).length} documents with abstracts`
-                          }
-                        </p>
-                        {chatHistory.documents.filter((doc) => !doc.abstract).length > 0 && (
-                          <p className="text-xs text-gray-600 dark:text-amber-300 mt-1 mb-3">
-                            {chatHistory.documents.filter((doc) => !doc.abstract).length === 1
-                              ? '1 document without an abstract'
-                              : `${chatHistory.documents.filter((doc) => !doc.abstract).length} documents without abstracts`
-                            }
-                          </p>
-                        )}
-                      </>
+                    {chatHistory.documentTabs.length > 0 && (
+                      <div className="flex space-x-2">
+                        {chatHistory.documentTabs.map((tab) => (
+                          <button
+                            key={tab.id}
+                            className="px-2 py-1 text-xs font-semibold text-gray-800 dark:text-amber-400 bg-amber-200 dark:bg-gray-600 rounded-md focus:outline-none"
+                          >
+                            {tab.title}
+                          </button>
+                        ))}
+                      </div>
                     )}
                   </div>
                 </div>
@@ -419,51 +420,29 @@ export default function ChatPage() {
                   onMouseDown={handleMouseDown}
                 ></div>
               </div>
-              {chatHistory.documents.length > 0 && (
+              {chatHistory.documentTabs.length > 0 && (
                 <>
                   <div className="max-h-[calc(100vh-200px)]">
-                    {chatHistory.documents
-                      .filter((doc) => doc.abstract)
-                      .map((doc, index) => (
-                        <motion.div
-                          key={index}
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3, delay: index * 0.1 }}
-                        >
-                        <Card className="mb-6 p-4 bg-amber-100 dark:bg-gray-800 text-gray-800 dark:text-amber-400 shadow-md rounded-lg">                            <CardHeader>
-                              <CardTitle className="text-xl">{doc.title}</CardTitle>
-                              <CardDescription>
-                                <p className="mt-2 text-xs text-gray-600 dark:text-gray-300">
-                                  <strong>Authors:</strong> {doc.authors.join(", ")}
-                                </p>
-                                <p className="mt-2 text-xs text-gray-600 dark:text-gray-300">
-                                  <strong>Year Published:</strong> {doc.yearPublished}
-                                </p>
-                                <p className="mt-5 text-s mt-1 text-gray-600 dark:text-gray-300">
-                                  <strong>Abstract:</strong> {doc.abstract.length > 500 ? doc.abstract.slice(0, 500) + "..." : doc.abstract}
-                                </p>
-                              </CardDescription>
-                            </CardHeader>
-                            <CardFooter>
-                              <div className="flex items-center justify-between">
-                                <a href={doc.downloadUrl} target="_blank" rel="noopener noreferrer">
-                                  <Button size="sm" className="bg-gray-800 text-amber-100 dark:bg-amber-500 dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-amber-600 font-bold py-2 px-4 rounded">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                                    </svg>
-                                    Download
-                                  </Button>
-                                </a>
-                              </div>
-                            </CardFooter>
-                          </Card>
-                        </motion.div>
-                      ))}
+                    {chatHistory.documentTabs.map((tab) => (
+                      <div key={tab.id}>
+                        {tab.documents
+                          .filter((doc) => doc.abstract)
+                          .map((doc, index) => (
+                            <motion.div
+                              key={index}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.3, delay: index * 0.1 }}
+                            >
+                              {/* Document card JSX */}
+                            </motion.div>
+                          ))}
+                      </div>
+                    ))}
                   </div>
                 </>
               )}
-              {chatHistory.documents.length === 0 && !isLoading && (
+              {chatHistory.documentTabs.length === 0 && !isLoading && (
                 <p className="text-xs text-gray-600 dark:text-amber-300 mt-2">No documents found</p>
               )}
             </aside>
@@ -485,16 +464,15 @@ export default function ChatPage() {
                       exit={{ opacity: 0, y: -20 }}
                       transition={{ duration: 0.3 }}
                     >
-                    <Card
-                      className={`mb-4 p-4 rounded-lg shadow-md backdrop-filter backdrop-blur-2xl bg-opacity-30 ${
-                        message.user === 'You'
-                          ? 'bg-amber-100/70 dark:bg-gray-700/70 text-gray-800 dark:text-amber-500'
-                          : 'bg-amber-300/70 dark:bg-gray-900/70 text-gray-800 dark:text-amber-500'
-                      }`}
+                      <Card
+                        className={`mb-4 p-4 rounded-lg shadow-md backdrop-filter backdrop-blur-2xl bg-opacity-30 ${message.user === 'You'
+                            ? 'bg-amber-100/70 dark:bg-gray-700/70 text-gray-800 dark:text-amber-500'
+                            : 'bg-amber-300/70 dark:bg-gray-900/70 text-gray-800 dark:text-amber-500'
+                          }`}
                       >
                         <CardHeader>
                           <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-2"> 
+                            <div className="flex items-center space-x-2">
                               {message.user === 'You' ? (
                                 <Avatar className="w-6 h-6">
                                   <AvatarFallback className="text-xs bg-slate-500">
