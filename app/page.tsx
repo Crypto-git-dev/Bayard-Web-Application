@@ -98,7 +98,6 @@ export default function ChatPage() {
   const [streamedText, setStreamedText] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-
   const springProps = useSpring({
     from: { opacity: 0, transform: 'translateY(20px)' },
     to: { opacity: 1, transform: 'translateY(0)' },
@@ -144,26 +143,26 @@ export default function ChatPage() {
 
   const sendMessage = async () => {
     if (message.trim() === '') return;
-
+  
     const userMessage: Message = {
       user: 'You',
       text: message,
-      timestamp: new Date().toLocaleString(), // Add timestamp
+      timestamp: new Date().toLocaleString(),
     };
-
+  
     setChatHistory((prevChatHistory) => ({
       ...prevChatHistory,
       messages: [...prevChatHistory.messages, userMessage],
     }));
-
+  
     setMessage('');
     setIsLoading(true);
     setLoadingStatus('Thinking...');
-
+  
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate thinking delay
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       setLoadingStatus('Querying...');
-
+  
       const response = await fetch('/api/bayard-proxy', {
         method: 'POST',
         headers: {
@@ -171,32 +170,31 @@ export default function ChatPage() {
         },
         body: JSON.stringify({ input_text: message, documentTabs: chatHistory.documentTabs }),
       });
-
+  
       if (!response.ok) {
         throw new Error('Failed to send message');
       }
-
+  
       const data = await response.json();
       const botMessage: Message = {
         user: 'Bayard',
         text: data.model_output,
         timestamp: new Date().toLocaleString(),
       };
-
+  
       setChatHistory((prevChatHistory) => ({
         messages: [...prevChatHistory.messages, botMessage],
         documentTabs: data.documentTabs,
       }));
-
+  
       setActiveTabId(data.documentTabs[data.documentTabs.length - 1].id);
     } catch (error) {
       console.error('Error:', error);
     }
-
+  
     setIsLoading(false);
     setLoadingStatus('');
   };
-
 
   const regenerateResponse = async () => {
     setIsLoading(true);
@@ -406,7 +404,7 @@ export default function ChatPage() {
                         className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-amber-400 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-amber-500"
                         id="options-menu"
                         aria-haspopup="true"
-                        aria-expanded="true"
+                        aria-expanded={isDropdownOpen}
                         onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                       >
                         {activeTabId
@@ -439,10 +437,11 @@ export default function ChatPage() {
                           {chatHistory.documentTabs.map((tab) => (
                             <button
                               key={tab.id}
-                              className={`${activeTabId === tab.id
+                              className={`${
+                                activeTabId === tab.id
                                   ? 'bg-amber-100 dark:bg-gray-700 text-gray-900 dark:text-amber-400'
                                   : 'text-gray-700 dark:text-amber-400'
-                                } block px-4 py-2 text-sm w-full text-left`}
+                              } block px-4 py-2 text-sm w-full text-left`}
                               role="menuitem"
                               onClick={() => {
                                 setActiveTabId(tab.id);
@@ -463,17 +462,17 @@ export default function ChatPage() {
                 ></div>
               </div>
               {activeTabId && (
-                <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
-                  {chatHistory.documentTabs
-                    .find((tab) => tab.id === activeTabId)
-                    ?.documents.filter((doc) => doc.abstract)
-                    .map((doc, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.3, delay: index * 0.1 }}
-                      >
+                  <div className="space-y-4">
+                    {chatHistory.documentTabs
+                      .find((tab) => tab.id === activeTabId)
+                      ?.documents.map((doc, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -20 }}
+                          transition={{ duration: 0.3 }}
+                        >
                         <div className="bg-white dark:bg-gray-800 shadow-md rounded-md p-4 mb-4">
                           <h3 className="text-xl font-semibold text-gray-800 dark:text-amber-400 mb-2">{doc.title}</h3>
                           <p className="text-sm text-gray-600 dark:text-amber-300 mb-2">

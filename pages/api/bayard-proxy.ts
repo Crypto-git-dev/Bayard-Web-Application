@@ -36,13 +36,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 }
             );
 
+            // Extract the headline from the Bayard API response
+            const headline = response.data.headline || 'Untitled';
+
             // Extract the documents from the Bayard API response
             const documents = response.data.documents || [];
 
-            // Create a new document tab with the retrieved documents
+            // Create a new document tab with the retrieved headline and documents
             const newDocumentTab = {
                 id: uuidv4(),
-                title: input_text,
+                title: headline,
                 documents: documents,
             };
 
