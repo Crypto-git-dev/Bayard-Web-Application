@@ -428,14 +428,19 @@ export default function ChatPage() {
                         {tab.documents
                           .filter((doc) => doc.abstract)
                           .map((doc, index) => (
-                            <motion.div
+                          <motion.div
                               key={index}
                               initial={{ opacity: 0, y: 20 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ duration: 0.3, delay: index * 0.1 }}
-                            >
-                              {/* Document card JSX */}
-                            </motion.div>
+                          >
+                              <div className="bg-white dark:bg-gray-800 shadow-md rounded-md p-4 mb-4">
+                                  <h3 className="text-xl font-semibold text-gray-800 dark:text-amber-400 mb-2">{doc.title}</h3>
+                                  <p className="text-sm text-gray-600 dark:text-amber-300 mb-2"><strong>Authors:</strong> {doc.authors}</p>
+                                  <p className="text-sm text-gray-600 dark:text-amber-300 mb-2"><strong>Year Published:</strong> {doc.yearPublished}</p>
+                                  <p className="text-sm text-gray-600 dark:text-amber-300 mb-2"><strong>Abstract:</strong> {doc.abstract.slice(0, 500)}...</p>
+                              </div>
+                          </motion.div>
                           ))}
                       </div>
                     ))}
