@@ -177,3 +177,40 @@
     background-color: #444;
     color: #fff;
   }
+
+  @keyframes countdown {
+    0% {
+      width: 100%;
+    }
+    100% {
+      width: 0%;
+    }
+  }
+
+  /* ... existing styles ... */
+
+.prompt-suggestions {
+  margin-bottom: 20px;
+}
+
+.prompt-suggestions h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.prompt-suggestions ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.prompt-suggestions li {
+  cursor: pointer;
+  margin-bottom: 5px;
+  padding: 8px;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+}
+
+.dark .prompt-suggestions li {
+  background-color: #444;
+}

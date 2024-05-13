@@ -29,13 +29,12 @@ import React from 'react';
 import { ToastContainer, toast  } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Modal from 'react-modal';
+import PromptSuggestions from "@/components/ui/PromptSuggestions";
 
 
 const apiKey = process.env.AMPLITUDE_API_KEY || ""; // Set a default value if the API key is undefined
 amplitude.init(apiKey);
 amplitude.add(autocapturePlugin());
-
-
 
 
 interface Message {
@@ -179,41 +178,63 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
         {formattedText}
 </ReactMarkdown>
 <Modal
-        isOpen={isModalOpen}
-        onRequestClose={() => setIsModalOpen(false)}
-        contentLabel="You are leaving Bayard_One..."
-        className="fixed inset-0 flex items-center justify-center z-50 p-4 backdrop-filter backdrop-blur-md"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-40"
+  isOpen={isModalOpen}
+  onRequestClose={() => setIsModalOpen(false)}
+  onAfterOpen={() => {
+    const progressBar = document.querySelector('.progress-bar') as HTMLElement;
+    if (progressBar) {
+      progressBar.style.animation = 'none';
+      setTimeout(() => {
+        progressBar.style.animation = 'countdown 5s linear forwards';
+      }, 100);
+    }
+  }}
+  contentLabel="You are leaving Bayard_One..."
+  className="fixed inset-0 flex items-center justify-center z-50 p-4 backdrop-filter backdrop-blur-md"
+  overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-40"
+>
+  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-xl mx-auto">
+    <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-amber-4000">You clicked an external link...</h2>
+    <p className="text-gray-700 dark:text-amber-300 mb-6">
+      Please note that the links provided lead to third-party sources.<br /><br />
+      Bayard Lab&apos;s mission is to promote the accessibility of scholarship and knowledge pertaining to LGBTQIA+ and other marginalized communities.<br /><br />
+      However, we do not have editorial control over the content of these external resources. We encourage users to critically evaluate the information found through these links using their own discretion and judgment.
+    </p>
+    <div className="relative h-2 bg-gray-300 rounded-full mb-6">
+      <div
+        className="progress-bar absolute top-0 right-0 h-2 bg-amber-500 rounded-full"
+        onAnimationEnd={() => {
+          setIsModalOpen(false);
+          window.open(modalLinkUrl, '_blank');
+        }}
       >
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-xl mx-auto">
-          <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-amber-400">You clicked an external link...</h2>
-          <p className="text-gray-700 dark:text-amber-300 mb-6">
-            Please note that the links provided lead to third-party sources.<br /><br />
-            Bayard Lab&apos;s mission is to promote the accessibility of scholarships and knowledge pertaining to LGBTQIA+ and other marginalized communities.<br /><br />
-            However, we do not have editorial control over the content of these external resources. We encourage users to critically evaluate the information found through these links using their own discretion and judgment.
-          </p>
-          <div className="flex justify-end space-x-4">
-            <button
-              onClick={() => {
-                setIsModalOpen(false);
-                window.open(modalLinkUrl, '_blank');
-              }}
-              className="px-4 py-2 text-sm font-semibold text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 dark:bg-amber-600 dark:hover:bg-amber-700 dark:focus:ring-amber-500 dark:focus:ring-offset-gray-800 dark:text-gray-800"
-            >
-              Proceed
-            </button>
-            <button
-              onClick={() => setIsModalOpen(false)}
-              className="px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 dark:text-amber-400 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-amber-500 dark:focus:ring-offset-gray-800"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      </Modal>
+      </div>
+    <div className="flex justify-end space-x-4">
+      <button
+        onClick={() => {
+          setIsModalOpen(false);
+          window.open(modalLinkUrl, '_blank');
+        }}
+        className="px-4 py-2 text-sm font-semibold text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 dark:bg-amber-600 dark:hover:bg-amber-700 dark:focus:ring-amber-500 dark:focus:ring-offset-gray-800 dark:text-gray-800"
+      >
+        Proceed
+      </button>
+      <button
+        onClick={() => {
+          setIsModalOpen(false);
+        }}
+        className="px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 dark:text-amber-400 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-amber-500 dark:focus:ring-offset-gray-800"
+      >
+        Cancel
+      </button>
     </div>
-  );
-};
+  </div>
+  </div>
+</Modal>
+</div>
+);
+} 
+
 
 
   export default function ChatPage() {
@@ -264,7 +285,14 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
     };
     useEffect(() => {
       if (chatContainerRef.current) {
-        chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+        const lastMessage = chatContainerRef.current.lastElementChild;
+        if (lastMessage) {
+          lastMessage.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+            inline: 'nearest',
+          });
+        }
       }
     }, [chatHistory.messages]);
 
@@ -893,4 +921,4 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
         </footer>
       </div>
     );
-  }            
+  }
