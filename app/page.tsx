@@ -11,8 +11,8 @@ import BAYARD_LAB from '@/assets/BAYARD_LAB.png';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSpring, animated } from 'react-spring';
 import { Lexend_Peta } from "next/font/google";
+import { ToastIcon } from 'react-hot-toast';
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
-import { toast, Toaster } from 'react-hot-toast';
 import {
   Tooltip,
   TooltipContent,
@@ -26,7 +26,9 @@ import remarkGfm from 'remark-gfm';
 import BAYARD_AVATAR from '@/assets/noun-squirrel-2777144.png';
 import rehypeRaw from 'rehype-raw'
 import React from 'react';
-
+import { ToastContainer, toast  } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Modal from 'react-modal';
 
 
 const apiKey = process.env.AMPLITUDE_API_KEY || ""; // Set a default value if the API key is undefined
@@ -77,20 +79,39 @@ function formatMessage(message: string): string {
   return message.replace(/\n/g, '<br>');
 }
 
+const handleExternalLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  event.preventDefault();
+  const linkUrl = (event.target as HTMLAnchorElement).href;
+
+  toast.info(
+    'The links go to third-party sources. Bayard Lab\'s objective is to democratize LGBTQIA+ and other marginalized groups\' scholarships and knowledge. These items are not vetted. Use your best judgment.',
+    {
+      position: 'bottom-center',
+      autoClose: 3000,
+      onClose: () => {
+        window.location.href = linkUrl;
+      },
+    }
+  );
+};
+
 function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedModelOutputProps) {
   function handleDocumentClick(e: React.MouseEvent<HTMLAnchorElement>, index: number) {
     e.preventDefault();
     const documentCard = document.getElementById(`doc-${index}`);
     if (documentCard) {
-      documentCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      documentCard.classList.add('highlight');
+      documentCard.scrollIntoView({ behavior: 'smooth' });
+      documentCard.classList.add('glow');
       setTimeout(() => {
-        documentCard.classList.remove('highlight');
-      }, 2000);
+        documentCard.classList.remove('glow');
+      }, 4000);
     }
-  }
+  };
 
-  const formattedText = text.replace(/Document (\d+)/g, (match, index) => {
+  const formattedText = text.replace(/Document (\d+)|\[|\]/g, (match, index) => {
+    if (match === '[' || match === ']') {
+      return '';
+    }
     const documentIndex = parseInt(index, 10) - 1;
     return `<a href="#doc-${documentIndex}" class="document-link" data-index="${documentIndex}">${match}</a>`;
   });
@@ -173,6 +194,8 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
     const [isStreaming, setIsStreaming] = useState(false);
     const [streamedText, setStreamedText] = useState("");
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
 
     const springProps = useSpring({
       from: { opacity: 0, transform: 'translateY(20px)' },
@@ -189,6 +212,7 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
       document.body.classList.toggle('dark', prefersDarkMode);
     }, []);
 
+    
     const toggleDarkMode = () => {
       console.log('toggleDarkMode called');
       const newIsDarkMode = !isDarkMode;
@@ -366,7 +390,6 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
       } else {
         // Fallback to a custom share dialog or message
         toast('Sharing not supported', {
-          icon: '❕',
           style: {
             borderRadius: '10px',
             background: '#333',
@@ -541,16 +564,16 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
                           {chatHistory.documentTabs
                             .find((tab) => tab.id === activeTabId)
                             ?.documents.map((doc, index) => (
-                              <motion.div
-                                key={index}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -20 }}
-                                transition={{ duration: 0.3 }}
-                                data-document-index={index} // Add this attribute
-                                id={`doc-${index}`} // Add the id attribute here
-                              >
-                          <div className="bg-white dark:bg-gray-800 shadow-md rounded-md p-4 mb-4">
+                                  <motion.div
+                                    key={index}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -20 }}
+                                    transition={{ duration: 0.3 }}
+                                    data-document-index={index}
+                                    id={`doc-${index}`}
+                                  >
+                            <div className="bg-white dark:bg-gray-800 shadow-md rounded-md p-4 mb-4 glow">
                             <h3 className="text-xl font-semibold text-gray-800 dark:text-amber-400 mb-2 capitalize">
                               {doc.title}
                             </h3>
@@ -574,6 +597,31 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="inline-block px-4 py-2 text-sm font-semibold text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  toast.info(
+                                    'Please note that the provided links lead to external third-party sources.\n\nBayard Lab aims to promote and disseminate scholarly works and knowledge pertaining to LGBTQIA+ and other underrepresented communities.\n\nHowever, we have not independently verified the content of these resources.\n\nWe encourage users to exercise their own discretion and critical thinking when engaging with the linked materials.',
+                                    {
+                                      position: 'top-left',
+                                      autoClose: 3000,
+                                      hideProgressBar: false,
+                                      closeOnClick: true,
+                                      pauseOnHover: true,
+                                      draggable: true,
+                                      progress: undefined,
+                                      theme: 'colored',
+                                      style: {
+                                        background: 'linear-gradient(to right, #B45309, #92400E)',
+                                        color: '#FBBF24',
+                                        padding: '16px',
+                                      },
+
+                                      onClose: () => {
+                                        window.open(doc.downloadUrl, '_blank');
+                                      },
+                                    }
+                                  );
+                                }}
                               >
                                 <span className="inline-flex items-center">
                                   <svg
@@ -594,6 +642,7 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
                                 </span>
                               </a>
                             </div>
+                            <ToastContainer />
                           </div>
                         </motion.div>
                       ))}
@@ -804,6 +853,41 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
             </ResizablePanel>
           </ResizablePanelGroup>
         </main>
+        <div>
+        <Modal
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+        contentLabel="External Link Notification"
+        style={{
+          overlay: {
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          },
+          content: {
+            top: '50%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight: '-50%',
+            transform: 'translate(-50%, -50%)',
+            maxWidth: '90%',
+            width: '400px',
+            padding: '20px',
+            borderRadius: '4px',
+            backgroundColor: '#fff',
+            color: '#333',
+          },
+        }}
+      >
+        <h2>External Link Notification</h2>
+        <p>
+          The links go to third-party sources. Bayard Lab&apos;s objective is to democratize LGBTQIA+ and other marginalized groups&apos; scholarships and knowledge. These items are not vetted. Use your best judgment.
+        </p>
+        <button onClick={() => setIsModalOpen(false)}>Close</button>
+      </Modal>
+    </div>
         <footer>
           <div className="bg-gradient-to-r from-amber-400 dark:from-gray-800 to-amber-100 dark:to-gray-900 text-gray-600 dark:text-gray-400 py-4 px-6 flex items-center justify-between text-xs backdrop-filter backdrop-blur-3xl bg-opacity-20 bg-amber-100/60 dark:bg-gray-800/60 shadow-lg">
             <div>
