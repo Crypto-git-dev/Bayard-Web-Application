@@ -37,7 +37,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             );
 
             // Extract the headline from the Bayard API response
-            const headline = response.data.headline || 'Untitled';
+            const headline = response.data.content[0].headline || 'Untitled';
 
             // Extract the documents from the Bayard API response
             const documents = response.data.documents || [];
@@ -53,7 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const updatedDocumentTabs = [...documentTabs, newDocumentTab];
 
             res.status(200).json({
-                model_output: response.data.model_output,
+                model_output: response.data.content[0].model_output,
                 documentTabs: updatedDocumentTabs,
                 userId: userId,
             });
