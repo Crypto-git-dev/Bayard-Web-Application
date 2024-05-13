@@ -1,17 +1,128 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
-    if (req.method === 'GET') {
-        const prompts = [
-            'What can I assist you with today?',
-            'How may I help you?',
-            'What would you like to know?',
-            'Is there anything specific you need help with?',
-            'How can I make your day better?',
+const BAYARD_API_KEY = process.env.BAYARD_API_KEY;
+
+async function generatePrompt() {
+    try {
+        const response = await axios.get('https://bayard-one.onrender.com/api/generate_prompt/', {
+            headers: {
+                'content-type': 'application/json',
+                'X-API-key': BAYARD_API_KEY,
+                'User-ID': process.env.userId || uuidv4()
+            },
+        });
+        const prompts = response.data.prompts;
+        const informedExamples = [
+            "What is the history of the Stonewall Riots and their impact on the LGBTQ+ rights movement?",
+            "How has the representation of LGBTQ+ characters in media evolved over time?",
+            "What are the challenges faced by LGBTQ+ youth in schools and how can educators support them?",
+            "How do intersectional identities, such as race and disability, impact the experiences of LGBTQ+ individuals?",
+            "What is the significance of Pride Month and how has it changed since its inception?",
+            "How have LGBTQ+ activists and organizations contributed to the fight for marriage equality?",
+            "What are the health disparities faced by LGBTQ+ communities and what factors contribute to these disparities?",
+            "How has the HIV/AIDS epidemic affected LGBTQ+ communities and what lessons can be learned from the response to the crisis?",
+            "What is the role of allyship in supporting LGBTQ+ rights and how can allies be effective advocates?",
+            "How do different cultures and religions view and treat LGBTQ+ individuals around the world?",
+            "What are the unique challenges faced by transgender and non-binary individuals in accessing healthcare and legal recognition?",
+            "How has the LGBTQ+ rights movement intersected with other social justice movements, such as the civil rights movement and the women's rights movement?",
+            "What is the impact of discrimination and stigma on the mental health of LGBTQ+ individuals?",
+            "How have LGBTQ+ artists and writers used their work to challenge societal norms and push for greater acceptance?",
+            "What are the experiences of LGBTQ+ individuals in the workplace and what policies can employers implement to create inclusive environments?",
+            "How have LGBTQ+ families challenged traditional notions of family structure and parenting?",
+            "What is the history of the LGBTQ+ rights movement in different countries and how have activists worked to advance equality?",
+            "How do LGBTQ+ individuals navigate coming out and what factors influence their decision to disclose their identity?",
+            "What is the role of LGBTQ+ community centers and organizations in providing support and resources to individuals?",
+            "How have LGBTQ+ athletes challenged stereotypes and pushed for greater inclusion in sports?",
+            "What are the unique challenges faced by LGBTQ+ older adults and what resources are available to support them?",
+            "How has the LGBTQ+ rights movement been influenced by feminist and queer theory?",
+            "What is the impact of conversion therapy on LGBTQ+ individuals and what efforts have been made to ban the practice?",
+            "How do LGBTQ+ individuals navigate relationships and dating in a heteronormative society?",
+            "What are the experiences of LGBTQ+ individuals in the military and what policies have been implemented to support them?",
+            "How have LGBTQ+ individuals been affected by the criminal justice system and what reforms are needed to address disparities?",
+            "What is the role of LGBTQ+ representation in politics and how have LGBTQ+ politicians worked to advance equality?",
+            "How do LGBTQ+ individuals navigate issues of faith and spirituality?",
+            "What are the unique challenges faced by LGBTQ+ immigrants and refugees?",
+            "How have LGBTQ+ individuals been impacted by the COVID-19 pandemic and what resources are available to support them?",
+            "What is the history of drag culture and how has it influenced LGBTQ+ activism and art?",
+            "How do LGBTQ+ individuals navigate issues of body image and beauty standards?",
+            "What are the experiences of LGBTQ+ individuals in rural communities and what resources are available to support them?",
+            "How have LGBTQ+ individuals been affected by police brutality and what efforts have been made to address this issue?",
+            "What is the role of LGBTQ+ tourism in promoting acceptance and visibility?",
+            "How do LGBTQ+ individuals navigate issues of reproductive rights and family planning?",
+            "What are the unique challenges faced by LGBTQ+ individuals with disabilities?",
+            "How have LGBTQ+ individuals been affected by the opioid epidemic and what resources are available to support them?",
+            "What is the history of LGBTQ+ activism in the labor movement and how have unions supported LGBTQ+ workers?",
+            "How do LGBTQ+ individuals navigate issues of housing discrimination and homelessness?",
+            "What are the experiences of LGBTQ+ individuals in the foster care system and what reforms are needed to support them?",
+            "How have LGBTQ+ individuals been affected by natural disasters and what resources are available to support them?",
+            "What is the role of LGBTQ+ affinity groups in promoting community and support within organizations?",
+            "How do LGBTQ+ individuals navigate issues of aging and end-of-life care?",
+            "What are the unique challenges faced by LGBTQ+ individuals in the tech industry?",
+            "How have LGBTQ+ individuals been affected by the prison industrial complex and what reforms are needed to address this issue?",
+            "What is the history of LGBTQ+ activism in the environmental movement and how are LGBTQ+ individuals impacted by climate change?",
+            "How do LGBTQ+ individuals navigate issues of substance abuse and addiction?",
+            "What are the experiences of LGBTQ+ individuals in the sex work industry and what resources are available to support them?",
+            "How have LGBTQ+ individuals been affected by the student debt crisis and what reforms are needed to address this issue?",
+            "What is the role of LGBTQ+ employee resource groups in promoting diversity and inclusion in the workplace?",
+            "How do LGBTQ+ individuals navigate issues of domestic violence and intimate partner violence?",
+            "What are the unique challenges faced by LGBTQ+ individuals in the healthcare industry?",
+            "How have LGBTQ+ individuals been affected by the war on drugs and what reforms are needed to address this issue?",
+            "What is the history of LGBTQ+ activism in the anti-war movement and how are LGBTQ+ individuals impacted by military conflicts?",
+            "How do LGBTQ+ individuals navigate issues of self-care and mental health?",
+            "What are the experiences of LGBTQ+ individuals in the entertainment industry and what efforts have been made to increase representation?",
+            "How have LGBTQ+ individuals been affected by the affordable housing crisis and what reforms are needed to address this issue?",
+            "What is the role of LGBTQ+ sports leagues and organizations in promoting community and visibility?",
+            "How do LGBTQ+ individuals navigate issues of immigration and citizenship?",
+            "What are the unique challenges faced by LGBTQ+ individuals in the education system and what reforms are needed to support them?",
+            "How have LGBTQ+ individuals been affected by the rise of right-wing extremism and what efforts have been made to combat hate crimes?",
+            "What is the history of LGBTQ+ activism in the reproductive rights movement and how are LGBTQ+ individuals impacted by restrictions on reproductive healthcare?",
+            "How do LGBTQ+ individuals navigate issues of polyamory and non-monogamy?",
+            "What are the experiences of LGBTQ+ individuals in the gig economy and what resources are available to support them?",
+            "How have LGBTQ+ individuals been affected by the COVID-19 pandemic and what efforts have been made to address health disparities?",
+            "What is the role of LGBTQ+ media in promoting visibility and representation?",
+            "How do LGBTQ+ individuals navigate issues of body modification and gender-affirming surgery?",
+            "What are the unique challenges faced by LGBTQ+ individuals in the fashion industry?",
+            "How have LGBTQ+ individuals been affected by the rise of social media and what efforts have been made to combat online harassment?",
+            "What is the history of LGBTQ+ activism in the disability rights movement and how are LGBTQ+ individuals with disabilities impacted by ableism?",
+            "How do LGBTQ+ individuals navigate issues of kink and BDSM?",
+            "What are the experiences of LGBTQ+ individuals in the publishing industry and what efforts have been made to increase representation?",
+            "How have LGBTQ+ individuals been affected by the rise of gentrification and what reforms are needed to address this issue?",
+            "What is the role of LGBTQ+ organizations in providing legal support and advocacy?",
+            "How do LGBTQ+ individuals navigate issues of sex education and sexual health?",
+            "What are the unique challenges faced by LGBTQ+ individuals in the music industry?",
+            "How have LGBTQ+ individuals been affected by the rise of the gig economy and what reforms are needed to address worker exploitation?",
+            "What is the history of LGBTQ+ activism in the prison abolition movement and how are LGBTQ+ individuals impacted by mass incarceration?",
+            "How do LGBTQ+ individuals navigate issues of chosen family and alternative kinship structures?",
+            "What are the experiences of LGBTQ+ individuals in the art world and what efforts have been made to increase representation?",
+            "How have LGBTQ+ individuals been affected by the rise of the surveillance state and what efforts have been made to protect privacy rights?",
+            "What is the role of LGBTQ+ organizations in providing mental health support and resources?",
+            "How do LGBTQ+ individuals navigate issues of public accommodations and access to public spaces?",
+            "What are the unique challenges faced by LGBTQ+ individuals in the culinary industry?",
+            "How have LGBTQ+ individuals been affected by the rise of the wellness industry and what efforts have been made to promote body positivity?",
+            "What is the history of LGBTQ+ activism in the harm reduction movement and how are LGBTQ+ individuals impacted by the criminalization of drug use?",
+            "How do LGBTQ+ individuals navigate issues of travel and tourism?",
+            "What are the experiences of LGBTQ+ individuals in the beauty industry and what efforts have been made to increase representation?",
+            "How have LGBTQ+ individuals been affected by the rise of the influencer economy and what efforts have been made to promote authenticity and transparency?",
+            "What is the role of LGBTQ+ organizations in providing career development and networking opportunities?",
+            "How do LGBTQ+ individuals navigate issues of financial planning and wealth management?",
+            "What are the unique challenges faced by LGBTQ+ individuals in the automotive industry?",
+            "How have LGBTQ+ individuals been affected by the rise of the sharing economy and what reforms are needed to address worker exploitation?",
+            "What is the history of LGBTQ+ activism in the animal rights movement and how are LGBTQ+ individuals impacted by speciesism?",
+            "How do LGBTQ+ individuals navigate issues of spirituality and religion?",
+            "What are the experiences of LGBTQ+ individuals in the gaming industry and what efforts have been made to increase representation?",
+            "How have LGBTQ+ individuals been affected by the rise of the attention economy and what efforts have been made to promote digital wellbeing?",
+            "What is the role of LGBTQ+ organizations in providing housing support and resources?",
+            "How do LGBTQ+ individuals navigate issues of estate planning and inheritance?",
+            "What are the unique challenges faced by LGBTQ+ individuals in the sports industry?",
+            "How have LGBTQ+ individuals been affected by the rise of the creator economy and what efforts have been made to promote fair compensation and intellectual property rights?"
         ];
 
-        res.status(200).json({ prompts });
-    } else {
-        res.status(405).json({ message: 'Method not allowed' });
+        const filteredPrompts = prompts.filter((prompt: { prompt: string }) => informedExamples.includes(prompt.prompt));
+        return filteredPrompts;
+    } catch (error) {
+        console.error('Error generating prompts:', error);
+        throw error;
     }
 }

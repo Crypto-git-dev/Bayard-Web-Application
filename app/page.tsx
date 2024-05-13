@@ -250,6 +250,7 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
     const [isStreaming, setIsStreaming] = useState(false);
     const [streamedText, setStreamedText] = useState("");
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [isPromptModalOpen, setIsPromptModalOpen] = useState(false);
     const springProps = useSpring({
       from: { opacity: 0, transform: 'translateY(20px)' },
       to: { opacity: 1, transform: 'translateY(0)' },
@@ -266,6 +267,10 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
       setModalLinkUrl(linkUrl);
     };
   
+    const handlePromptSelect = (prompt: string) => {
+      setMessage(prompt);
+      setIsPromptModalOpen(false);
+    };
   
     useEffect(() => {
       // Check if the user has a preferred color scheme
@@ -334,7 +339,7 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
         await new Promise((resolve) => setTimeout(resolve, 1000));
         setLoadingStatus('Querying...');
 
-        const response = await fetch('/api/bayard-proxy', {
+        const response = await fetch('/api/bayard-proxy/', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -714,6 +719,9 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
                   <h2 className="text-lg font-semibold">Chat</h2>
                 </div>
                 <div ref={chatContainerRef} className="flex-1 p-4 pr-10 pl-10 bg-amber-50 dark:bg-gray-800 overflow-y-auto">
+            {chatHistory.messages.length === 0 ? (
+                  <PromptSuggestions onPromptSelect={handlePromptSelect}></PromptSuggestions>
+            ) : (
                   <AnimatePresence>
                     {chatHistory.messages.map((message, index) => (
                       <motion.div
@@ -804,6 +812,7 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
                       </motion.div>
                     ))}
                   </AnimatePresence>
+            )}
                   {isLoading && (
                     <motion.div
                       initial={{ opacity: 0.6 }}
@@ -899,11 +908,13 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
                     </div>
                   </div>
                 </div>
+  
               </section>
             </ResizablePanel>
           </ResizablePanelGroup>
-  
         </main>
+        <div>
+        </div>
         <footer>
           <div className="bg-gradient-to-r from-amber-400 dark:from-gray-800 to-amber-100 dark:to-gray-900 text-gray-600 dark:text-gray-400 py-4 px-6 flex items-center justify-between text-xs backdrop-filter backdrop-blur-3xl bg-opacity-20 bg-amber-100/60 dark:bg-gray-800/60 shadow-lg">
             <div>
@@ -917,6 +928,7 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
                 Privacy Notice
               </a>
             </div>
+          
           </div>
         </footer>
       </div>
