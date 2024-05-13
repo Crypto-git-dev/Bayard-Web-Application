@@ -36,6 +36,8 @@ amplitude.init(apiKey);
 amplitude.add(autocapturePlugin());
 
 
+
+
 interface Message {
   user: string;
   text: string;
@@ -79,21 +81,6 @@ function formatMessage(message: string): string {
   return message.replace(/\n/g, '<br>');
 }
 
-const handleExternalLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-  event.preventDefault();
-  const linkUrl = (event.target as HTMLAnchorElement).href;
-
-  toast.info(
-    'The links go to third-party sources. Bayard Lab\'s objective is to democratize LGBTQIA+ and other marginalized groups\' scholarships and knowledge. These items are not vetted. Use your best judgment.',
-    {
-      position: 'bottom-center',
-      autoClose: 3000,
-      onClose: () => {
-        window.location.href = linkUrl;
-      },
-    }
-  );
-};
 
 function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedModelOutputProps) {
   function handleDocumentClick(e: React.MouseEvent<HTMLAnchorElement>, index: number) {
@@ -106,6 +93,13 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
         documentCard.classList.remove('glow');
       }, 4000);
     }
+  };
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleExternalLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    setIsModalOpen(true);
   };
 
   const formattedText = text.replace(/Document (\d+)|\[|\]/g, (match, index) => {
@@ -125,6 +119,27 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
         if (index !== null) {
           handleDocumentClick(e as unknown as React.MouseEvent<HTMLAnchorElement>, parseInt(index, 10));
         }
+      });
+    });
+  }, [formattedText]);
+
+  useEffect(() => {
+    const links = document.querySelectorAll('.document-link');
+    links.forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const index = link.getAttribute('data-index');
+        if (index !== null) {
+          handleDocumentClick(e as unknown as React.MouseEvent<HTMLAnchorElement>, parseInt(index, 10));
+        }
+      });
+    });
+
+    const downloadLinks = document.querySelectorAll('a[href^="https://"]');
+    downloadLinks.forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        handleExternalLinkClick(e as unknown as React.MouseEvent<HTMLAnchorElement>);
       });
     });
   }, [formattedText]);
@@ -149,6 +164,8 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
                 if (props.href?.startsWith('#doc-')) {
                   const index = parseInt(props.href.slice(5), 10);
                   handleDocumentClick(e as React.MouseEvent<HTMLAnchorElement>, index);
+                } else if (props.href?.startsWith('https://')) {
+                  handleExternalLinkClick(e as React.MouseEvent<HTMLAnchorElement>);
                 }
               }}
               className="text-blue-600 dark:text-blue-400 font-semibold hover:underline"
@@ -194,15 +211,24 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
     const [isStreaming, setIsStreaming] = useState(false);
     const [streamedText, setStreamedText] = useState("");
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-
     const springProps = useSpring({
       from: { opacity: 0, transform: 'translateY(20px)' },
       to: { opacity: 1, transform: 'translateY(0)' },
       config: { tension: 220, friction: 20 },
     });
 
+
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalLinkUrl, setModalLinkUrl] = useState('');
+  
+    const handleExternalLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+      event.preventDefault();
+      const linkUrl = (event.target as HTMLAnchorElement).href;
+      setIsModalOpen(true);
+      setModalLinkUrl(linkUrl);
+    };
+  
     useEffect(() => {
       // Check if the user has a preferred color scheme
       const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -852,9 +878,7 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
               </section>
             </ResizablePanel>
           </ResizablePanelGroup>
-        </main>
-        <div>
-        <Modal
+          <Modal
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}
         contentLabel="External Link Notification"
@@ -887,7 +911,7 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
         </p>
         <button onClick={() => setIsModalOpen(false)}>Close</button>
       </Modal>
-    </div>
+        </main>
         <footer>
           <div className="bg-gradient-to-r from-amber-400 dark:from-gray-800 to-amber-100 dark:to-gray-900 text-gray-600 dark:text-gray-400 py-4 px-6 flex items-center justify-between text-xs backdrop-filter backdrop-blur-3xl bg-opacity-20 bg-amber-100/60 dark:bg-gray-800/60 shadow-lg">
             <div>
