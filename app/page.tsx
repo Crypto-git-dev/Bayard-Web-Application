@@ -96,11 +96,15 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
   };
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalLinkUrl, setModalLinkUrl] = useState('');
 
   const handleExternalLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
+    const linkUrl = (event.target as HTMLAnchorElement).href;
     setIsModalOpen(true);
+    setModalLinkUrl(linkUrl);
   };
+
 
   const formattedText = text.replace(/Document (\d+)|\[|\]/g, (match, index) => {
     if (match === '[' || match === ']') {
@@ -193,6 +197,39 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
       >
         {formattedText}
 </ReactMarkdown>
+<Modal
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+        contentLabel="External Link Notification"
+        style={{
+          overlay: {
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          },
+          content: {
+            top: '50%',
+            left: '50%',
+            right: 'auto',
+            bottom: 'auto',
+            marginRight: '-50%',
+            transform: 'translate(-50%, -50%)',
+            maxWidth: '90%',
+            width: '400px',
+            padding: '20px',
+            borderRadius: '4px',
+            backgroundColor: '#fff',
+            color: '#333',
+          },
+        }}
+      >
+        <h2>External Link Notification</h2>
+        <p>
+          The links go to third-party sources. Bayard Lab&apos;s objective is to democratize LGBTQIA+ and other marginalized groups&apos; scholarships and knowledge. These items are not vetted. Use your best judgment.
+        </p>
+        <button onClick={() => setIsModalOpen(false)}>Close</button>
+      </Modal>
     </div>
   );
 };
@@ -217,8 +254,6 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
       config: { tension: 220, friction: 20 },
     });
 
-
-
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalLinkUrl, setModalLinkUrl] = useState('');
   
@@ -228,6 +263,7 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
       setIsModalOpen(true);
       setModalLinkUrl(linkUrl);
     };
+  
   
     useEffect(() => {
       // Check if the user has a preferred color scheme
@@ -878,39 +914,7 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
               </section>
             </ResizablePanel>
           </ResizablePanelGroup>
-          <Modal
-        isOpen={isModalOpen}
-        onRequestClose={() => setIsModalOpen(false)}
-        contentLabel="External Link Notification"
-        style={{
-          overlay: {
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          },
-          content: {
-            top: '50%',
-            left: '50%',
-            right: 'auto',
-            bottom: 'auto',
-            marginRight: '-50%',
-            transform: 'translate(-50%, -50%)',
-            maxWidth: '90%',
-            width: '400px',
-            padding: '20px',
-            borderRadius: '4px',
-            backgroundColor: '#fff',
-            color: '#333',
-          },
-        }}
-      >
-        <h2>External Link Notification</h2>
-        <p>
-          The links go to third-party sources. Bayard Lab&apos;s objective is to democratize LGBTQIA+ and other marginalized groups&apos; scholarships and knowledge. These items are not vetted. Use your best judgment.
-        </p>
-        <button onClick={() => setIsModalOpen(false)}>Close</button>
-      </Modal>
+  
         </main>
         <footer>
           <div className="bg-gradient-to-r from-amber-400 dark:from-gray-800 to-amber-100 dark:to-gray-900 text-gray-600 dark:text-gray-400 py-4 px-6 flex items-center justify-between text-xs backdrop-filter backdrop-blur-3xl bg-opacity-20 bg-amber-100/60 dark:bg-gray-800/60 shadow-lg">
