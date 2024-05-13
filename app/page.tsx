@@ -105,6 +105,7 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
     setModalLinkUrl(linkUrl);
   };
 
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const formattedText = text.replace(/Document (\d+)|\[|\]/g, (match, index) => {
     if (match === '[' || match === ']') {
@@ -115,35 +116,15 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
   });
 
   useEffect(() => {
-    const links = document.querySelectorAll('.document-link');
-    links.forEach((link) => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const index = link.getAttribute('data-index');
-        if (index !== null) {
-          handleDocumentClick(e as unknown as React.MouseEvent<HTMLAnchorElement>, parseInt(index, 10));
-        }
-      });
-    });
-  }, [formattedText]);
-
-  useEffect(() => {
-    const links = document.querySelectorAll('.document-link');
-    links.forEach((link) => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        const index = link.getAttribute('data-index');
-        if (index !== null) {
-          handleDocumentClick(e as unknown as React.MouseEvent<HTMLAnchorElement>, parseInt(index, 10));
-        }
-      });
-    });
-
     const downloadLinks = document.querySelectorAll('a[href^="https://"]');
     downloadLinks.forEach((link) => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
-        handleExternalLinkClick(e as unknown as React.MouseEvent<HTMLAnchorElement>);
+        const linkUrl = link.getAttribute('href');
+        if (linkUrl) {
+          setIsModalOpen(true);
+          setModalLinkUrl(linkUrl);
+        }
       });
     });
   }, [formattedText]);
@@ -200,35 +181,35 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
 <Modal
         isOpen={isModalOpen}
         onRequestClose={() => setIsModalOpen(false)}
-        contentLabel="External Link Notification"
-        style={{
-          overlay: {
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          },
-          content: {
-            top: '50%',
-            left: '50%',
-            right: 'auto',
-            bottom: 'auto',
-            marginRight: '-50%',
-            transform: 'translate(-50%, -50%)',
-            maxWidth: '90%',
-            width: '400px',
-            padding: '20px',
-            borderRadius: '4px',
-            backgroundColor: '#fff',
-            color: '#333',
-          },
-        }}
+        contentLabel="You are leaving Bayard_One..."
+        className="fixed inset-0 flex items-center justify-center z-50 p-4 backdrop-filter backdrop-blur-md"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-40"
       >
-        <h2>External Link Notification</h2>
-        <p>
-          The links go to third-party sources. Bayard Lab&apos;s objective is to democratize LGBTQIA+ and other marginalized groups&apos; scholarships and knowledge. These items are not vetted. Use your best judgment.
-        </p>
-        <button onClick={() => setIsModalOpen(false)}>Close</button>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-xl mx-auto">
+          <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-amber-400">You clicked an external link...</h2>
+          <p className="text-gray-700 dark:text-amber-300 mb-6">
+            Please note that the links provided lead to third-party sources.<br /><br />
+            Bayard Lab&apos;s mission is to promote the accessibility of scholarships and knowledge pertaining to LGBTQIA+ and other marginalized communities.<br /><br />
+            However, we do not have editorial control over the content of these external resources. We encourage users to critically evaluate the information found through these links using their own discretion and judgment.
+          </p>
+          <div className="flex justify-end space-x-4">
+            <button
+              onClick={() => {
+                setIsModalOpen(false);
+                window.open(modalLinkUrl, '_blank');
+              }}
+              className="px-4 py-2 text-sm font-semibold text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 dark:bg-amber-600 dark:hover:bg-amber-700 dark:focus:ring-amber-500 dark:focus:ring-offset-gray-800 dark:text-gray-800"
+            >
+              Proceed
+            </button>
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 dark:text-amber-400 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-amber-500 dark:focus:ring-offset-gray-800"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
       </Modal>
     </div>
   );
@@ -661,28 +642,8 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
                                 className="inline-block px-4 py-2 text-sm font-semibold text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
                                 onClick={(e) => {
                                   e.preventDefault();
-                                  toast.info(
-                                    'Please note that the provided links lead to external third-party sources.\n\nBayard Lab aims to promote and disseminate scholarly works and knowledge pertaining to LGBTQIA+ and other underrepresented communities.\n\nHowever, we have not independently verified the content of these resources.\n\nWe encourage users to exercise their own discretion and critical thinking when engaging with the linked materials.',
-                                    {
-                                      position: 'top-left',
-                                      autoClose: 3000,
-                                      hideProgressBar: false,
-                                      closeOnClick: true,
-                                      pauseOnHover: true,
-                                      draggable: true,
-                                      progress: undefined,
-                                      theme: 'colored',
-                                      style: {
-                                        background: 'linear-gradient(to right, #B45309, #92400E)',
-                                        color: '#FBBF24',
-                                        padding: '16px',
-                                      },
-
-                                      onClose: () => {
-                                        window.open(doc.downloadUrl, '_blank');
-                                      },
-                                    }
-                                  );
+                                  setIsModalOpen(true);
+                                  setModalLinkUrl(doc.downloadUrl);
                                 }}
                               >
                                 <span className="inline-flex items-center">
@@ -704,7 +665,6 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
                                 </span>
                               </a>
                             </div>
-                            <ToastContainer />
                           </div>
                         </motion.div>
                       ))}
