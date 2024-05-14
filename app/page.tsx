@@ -583,7 +583,7 @@ export default function ChatPage() {
           <strong>Caution:</strong> Bayard is an open-source, alpha-stage AI research assistant designed to facilitate access to LGBTQ+ scholarship; while it aims to provide reliable information, users should think critically, fact-check key details, and consult primary sources as they would with any research tool.
         </p>
       </div>
-      <main className="flex flex-1 overflow-hidden">
+      <main className="flex-1 overflow-y-auto">
         <ResizablePanelGroup direction="horizontal">
           {!isMobile && (
             <>
@@ -932,237 +932,243 @@ export default function ChatPage() {
                   </div>
                 </div>
               </div>
+    <div className="flex flex-col items-center bg-gray-800">
+    {isMobile && (
+      <button
+        onClick={toggleDrawer}
+        className="px-6 py-3 bg-gray-800 dark:bg-amber-500 text-white dark:text-gray-800 shadow-lg w-full"
+      >
+        {isDrawerOpen ? (
+          <div className="flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+            <span>Close Documents Pane</span>
+          </div>
+        ) : (
+          <div className="flex items-center justify-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+            <span>Open Documents Pane</span>
+          </div>
+        )}
+      </button>
+    )}
+      </div>
             </section>
           </ResizablePanel>
         </ResizablePanelGroup>
       </main>
-      <div>
-      </div>
+
       <footer>
-        <div className="bg-gradient-to-r from-amber-400 dark:from-gray-800 to-amber-100 dark:to-gray-900 text-gray-600 dark:text-gray-400 py-4 px-6 flex items-center justify-between text-xs backdrop-filter backdrop-blur-3xl bg-opacity-20 bg-amber-100/60 dark:bg-gray-800/60 shadow-lg">
-          <div>
+        <div className="bg-gradient-to-r from-amber-400 dark:from-gray-800 to-amber-100 dark:to-gray-900 text-gray-600 dark:text-gray-400 py-4 px-6 flex flex-col sm:flex-row items-left justify-between text-xs backdrop-filter backdrop-blur-3xl bg-opacity-20 bg-amber-100/60 dark:bg-gray-800/60 shadow-lg">
+          <div className="mb-4 sm:mb-0">
             <span>© {new Date().getFullYear()} Bayard Lab. All rights reserved. Open-source use subject to <a href="https://docs.bayardlab.org/wl1.0gp-license-terms" target="_blank" rel="noopener noreferrer" className="underline text-gray-700 dark:text-amber-500 hover:text-gray-400 dark:hover:text-amber-300">terms</a>.</span>
           </div>
-          <div>
-            <a href="https://bayardlab.org/terms" target="_blank" rel="noopener noreferrer" className="text-gray-600 dark:text-gray-400 text-xs hover:text-gray-800 dark:hover:text-amber-500 mr-4">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 mr-12 sm:mr-0">
+            <a href="https://bayardlab.org/terms" target="_blank" rel="noopener noreferrer" className="text-gray-600 dark:text-gray-400 text-xs hover:text-gray-800 dark:hover:text-amber-500">
               Terms & Conditions
             </a>
             <a href="https://bayardlab.org/privacy-notice" target="_blank" rel="noopener noreferrer" className="text-gray-600 dark:text-gray-400 text-xs hover:text-gray-800 dark:hover:text-amber-500">
               Privacy Notice
             </a>
           </div>
-
         </div>
-      </footer>
-      {isMobile && (
-        <button
-          onClick={toggleDrawer}
-          className="fixed bottom-4 right-4 z-50 p-4 bg-amber-500 text-white rounded-full shadow-lg"
-        >
-          {isDrawerOpen ? (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 6h16M4 12h16M4 18h16"
-              />
-            </svg>
-          )}
-        </button>
-      )}
+    </footer>
+
 
       {/* Drawer component on mobile devices */}
       {isMobile && isDrawerOpen && (
-  <div className="fixed inset-0 z-40 bg-gradient-to-r from-amber-200 dark:from-gray-800 to-amber-100 dark:to-gray-900">
-    <div className="flex flex-col h-full">
-      <div className="p-4 border-b border-amber-300 dark:border-gray-700">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-800 dark:text-amber-400">Documents</h2>
-          <button
-            onClick={toggleDrawer}
-            className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-amber-500"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
-      </div>
-      <div className="flex-1 overflow-y-auto">
-        <div className="p-4">
-          <div className="flex items-center justify-between mb-2">
-            <div className="relative inline-block text-left">
-              <div>
+  <div className="fixed inset-0 z-40 bg-gradient-to-r from-amber-200 dark:from-gray-800 to-amber-100 dark:to-gray-900" style={{ height: 'calc(100% - 64px)' }}>
+  <div className="flex flex-col h-full">
+            <div className="p-4 border-b border-amber-300 dark:border-gray-700">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-semibold text-gray-800 dark:text-amber-400">Documents</h2>
                 <button
-                  type="button"
-                  className="inline-flex justify-center w-full rounded-md border border-amber-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-amber-50 dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-amber-100 dark:focus:ring-offset-gray-800 focus:ring-amber-500"
-                  id="options-menu"
-                  aria-haspopup="true"
-                  aria-expanded={isDropdownOpen}
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  onClick={toggleDrawer}
+                  className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-amber-500"
                 >
-                  {activeTabId
-                    ? chatHistory.documentTabs.find((tab) => tab.id === activeTabId)?.title.replace(/^["']|["']$/g, '')
-                    : 'Select a document set'}
                   <svg
-                    className="-mr-1 ml-2 h-5 w-5"
                     xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                    aria-hidden="true"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
                   >
                     <path
-                      fillRule="evenodd"
-                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                      clipRule="evenodd"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
                     />
                   </svg>
                 </button>
               </div>
-
-              {isDropdownOpen && (
-                <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-amber-50 dark:bg-gray-700 ring-1 ring-black ring-opacity-5">
-                  <div
-                    className="py-1"
-                    role="menu"
-                    aria-orientation="vertical"
-                    aria-labelledby="options-menu"
-                  >
-                    {chatHistory.documentTabs.map((tab) => (
+            </div>
+            <div className="flex-1 overflow-y-auto">
+              <div className="p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="relative inline-block text-left">
+                    <div>
                       <button
-                        key={tab.id}
-                        className={`${
-                          activeTabId === tab.id
-                            ? 'bg-amber-100 dark:bg-gray-600 text-gray-900 dark:text-amber-400'
-                            : 'text-gray-700 dark:text-amber-400'
-                        } block px-4 py-2 text-sm w-full text-left`}
-                        role="menuitem"
-                        onClick={() => {
-                          setActiveTabId(tab.id);
-                          setIsDropdownOpen(false);
-                        }}
+                        type="button"
+                        className="inline-flex justify-center w-full rounded-md border border-amber-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-amber-50 dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-amber-100 dark:focus:ring-offset-gray-800 focus:ring-amber-500"
+                        id="options-menu"
+                        aria-haspopup="true"
+                        aria-expanded={isDropdownOpen}
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                       >
-                        {tab.title.replace(/^["']|["']$/g, '')}
+                        {activeTabId
+                          ? chatHistory.documentTabs.find((tab) => tab.id === activeTabId)?.title.replace(/^["']|["']$/g, '')
+                          : 'Select a document set'}
+                        <svg
+                          className="-mr-1 ml-2 h-5 w-5"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
                       </button>
-                    ))}
+                    </div>
+
+                    {isDropdownOpen && (
+                      <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-amber-50 dark:bg-gray-700 ring-1 ring-black ring-opacity-5">
+                        <div
+                          className="py-1"
+                          role="menu"
+                          aria-orientation="vertical"
+                          aria-labelledby="options-menu"
+                        >
+                          {chatHistory.documentTabs.map((tab) => (
+                            <button
+                              key={tab.id}
+                              className={`${activeTabId === tab.id
+                                  ? 'bg-amber-100 dark:bg-gray-600 text-gray-900 dark:text-amber-400'
+                                  : 'text-gray-700 dark:text-amber-400'
+                                } block px-4 py-2 text-sm w-full text-left`}
+                              role="menuitem"
+                              onClick={() => {
+                                setActiveTabId(tab.id);
+                                setIsDropdownOpen(false);
+                              }}
+                            >
+                              {tab.title.replace(/^["']|["']$/g, '')}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
-              )}
+                {activeTabId && (
+                  <div className="space-y-4">
+                    {chatHistory.documentTabs
+                      .find((tab) => tab.id === activeTabId)
+                      ?.documents.map((doc, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: -20 }}
+                          transition={{ duration: 0.3 }}
+                          data-document-index={index}
+                          id={`doc-${index}`}
+                        >
+                          <div className="bg-white dark:bg-gray-800 shadow-md rounded-md p-4 mb-4 glow">
+                            <h3 className="text-xl font-semibold text-gray-800 dark:text-amber-400 mb-2 capitalize">
+                              {doc.title}
+                            </h3>
+                            <div className="text-sm text-gray-600 dark:text-amber-300 mb-2">
+                              <p><strong>Authors</strong></p>
+                              {doc.authors.map((author, index) => (
+                                <p key={index}>{author}</p>
+                              ))}
+                            </div>
+                            <div className="text-sm text-gray-600 dark:text-amber-300 mb-2">
+                              <p><strong>Year Published</strong></p>
+                              <p>{doc.yearPublished}</p>
+                            </div>
+                            <div className="text-sm text-gray-600 dark:text-amber-300 mb-2">
+                              <p><strong>Abstract</strong></p>
+                              <p>{doc.abstract.length > 500 ? doc.abstract.slice(0, 500) + '...' : doc.abstract}</p>
+                            </div>
+                            <div className="mt-4">
+                              <a
+                                href={doc.downloadUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-block px-4 py-2 text-sm font-semibold text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  setIsModalOpen(true);
+                                  setModalLinkUrl(doc.downloadUrl);
+                                }}
+                              >
+                                <span className="inline-flex items-center">
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    className="h-4 w-4 mr-1"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                  >
+                                    <path
+                                      strokeLinecap="round"
+                                      strokeLinejoin="round"
+                                      strokeWidth={2}
+                                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                                    />
+                                  </svg>
+                                  Download
+                                </span>
+                              </a>
+                            </div>
+                          </div>
+                        </motion.div>
+                      ))}
+                  </div>
+                )}
+                {!activeTabId && chatHistory.documentTabs.length > 0 && (
+                  <p className="text-xs text-gray-600 dark:text-amber-300 mt-2">Select a tab to view documents</p>
+                )}
+                {chatHistory.documentTabs.length === 0 && !isLoading && (
+                  <p className="text-xs text-gray-600 dark:text-amber-300 mt-2">No documents found</p>
+                )}
+              </div>
             </div>
           </div>
-          {activeTabId && (
-                    <div className="space-y-4">
-                      {chatHistory.documentTabs
-                        .find((tab) => tab.id === activeTabId)
-                        ?.documents.map((doc, index) => (
-                          <motion.div
-                            key={index}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            transition={{ duration: 0.3 }}
-                            data-document-index={index}
-                            id={`doc-${index}`}
-                          >
-                            <div className="bg-white dark:bg-gray-800 shadow-md rounded-md p-4 mb-4 glow">
-                              <h3 className="text-xl font-semibold text-gray-800 dark:text-amber-400 mb-2 capitalize">
-                                {doc.title}
-                              </h3>
-                              <div className="text-sm text-gray-600 dark:text-amber-300 mb-2">
-                                <p><strong>Authors</strong></p>
-                                {doc.authors.map((author, index) => (
-                                  <p key={index}>{author}</p>
-                                ))}
-                              </div>
-                              <div className="text-sm text-gray-600 dark:text-amber-300 mb-2">
-                                <p><strong>Year Published</strong></p>
-                                <p>{doc.yearPublished}</p>
-                              </div>
-                              <div className="text-sm text-gray-600 dark:text-amber-300 mb-2">
-                                <p><strong>Abstract</strong></p>
-                                <p>{doc.abstract.length > 500 ? doc.abstract.slice(0, 500) + '...' : doc.abstract}</p>
-                              </div>
-                              <div className="mt-4">
-                                <a
-                                  href={doc.downloadUrl}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="inline-block px-4 py-2 text-sm font-semibold text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    setIsModalOpen(true);
-                                    setModalLinkUrl(doc.downloadUrl);
-                                  }}
-                                >
-                                  <span className="inline-flex items-center">
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      className="h-4 w-4 mr-1"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      stroke="currentColor"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                                      />
-                                    </svg>
-                                    Download
-                                  </span>
-                                </a>
-                              </div>
-                            </div>
-                          </motion.div>
-                ))}
-            </div>
-          )}
-          {!activeTabId && chatHistory.documentTabs.length > 0 && (
-            <p className="text-xs text-gray-600 dark:text-amber-300 mt-2">Select a tab to view documents</p>
-          )}
-          {chatHistory.documentTabs.length === 0 && !isLoading && (
-            <p className="text-xs text-gray-600 dark:text-amber-300 mt-2">No documents found</p>
-          )}
         </div>
-      </div>
+      )}
     </div>
-  </div>
-  )}
-</div>
   );
 }
 
