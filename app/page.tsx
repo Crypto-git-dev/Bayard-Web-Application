@@ -79,6 +79,7 @@ const lexendPetaStyle = Lexend_Peta({
   subsets: ['latin']
 });
 
+
 function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedModelOutputProps) {
   function handleDocumentClick(e: React.MouseEvent<HTMLAnchorElement>, index: number) {
     e.preventDefault();
@@ -235,8 +236,6 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
   );
 }
 
-
-
 export default function ChatPage() {
   const [message, setMessage] = useState("");
   const [chatHistory, setChatHistory] = useState<ChatHistory>({ messages: [], documentTabs: [] }); const [isLoading, setIsLoading] = useState(false);
@@ -280,6 +279,12 @@ export default function ChatPage() {
     setIsModalOpen(true);
     setModalLinkUrl(linkUrl);
   };
+
+  useEffect(() => {
+    // Reset the modal state when the screen size changes
+    setIsModalOpen(false);
+    setModalLinkUrl('');
+  }, [isMobile]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -564,7 +569,7 @@ export default function ChatPage() {
         <ResizablePanelGroup direction="horizontal">
           {!isMobile && (
             <>
-              <ResizablePanel className="shadow-md">
+            <ResizablePanel className="shadow-md" style={{ order: 2 }}>
                 <aside
                   ref={asideRef}
                   className="bg-amber-50 dark:bg-gray-700 p-4 pl-10 pr-10 transition-all duration-300 overflow-y-auto shadow-lg z-10 relative h-full"
@@ -712,10 +717,10 @@ export default function ChatPage() {
                   )}
                 </aside>
               </ResizablePanel>
-              <ResizableHandle style={{ width: '2px' }} />
+              <ResizableHandle style={{ width: '2px', order: 1 }} />
             </>
           )}
-          <ResizablePanel className="shadow-md">
+        <ResizablePanel className="shadow-md" style={{ order: 0 }}>
             <div className="w-0.5 bg-amber-200 dark:bg-gray-600"></div>
             <section className="flex-1 flex flex-col overflow-hidden" style={{ width: '100%', height: '100%' }}>
               <div className="flex items-center justify-between p-4 pr-10 pl-10 bg-amber-50 dark:bg-gray-800 text-gray-800 dark:text-amber-400">
