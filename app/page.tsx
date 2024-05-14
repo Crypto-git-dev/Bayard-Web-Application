@@ -995,193 +995,174 @@ export default function ChatPage() {
 
       {/* Drawer component on mobile devices */}
       {isMobile && isDrawerOpen && (
-        <div className="fixed inset-0 z-40 bg-white dark:bg-gray-800">
-          <div className="flex flex-col h-full">
-            <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-              <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold">Documents</h2>
+  <div className="fixed inset-0 z-40 bg-gradient-to-r from-amber-200 dark:from-gray-800 to-amber-100 dark:to-gray-900">
+    <div className="flex flex-col h-full">
+      <div className="p-4 border-b border-amber-300 dark:border-gray-700">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-semibold text-gray-800 dark:text-amber-400">Documents</h2>
+          <button
+            onClick={toggleDrawer}
+            className="text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-amber-500"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div className="flex-1 overflow-y-auto">
+        <div className="p-4">
+          <div className="flex items-center justify-between mb-2">
+            <div className="relative inline-block text-left">
+              <div>
                 <button
-                  onClick={toggleDrawer}
-                  className="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                  type="button"
+                  className="inline-flex justify-center w-full rounded-md border border-amber-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-amber-50 dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-amber-100 dark:focus:ring-offset-gray-800 focus:ring-amber-500"
+                  id="options-menu"
+                  aria-haspopup="true"
+                  aria-expanded={isDropdownOpen}
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 >
+                  {activeTabId
+                    ? chatHistory.documentTabs.find((tab) => tab.id === activeTabId)?.title.replace(/^["']|["']$/g, '')
+                    : 'Select a document set'}
                   <svg
+                    className="-mr-1 ml-2 h-5 w-5"
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
+                    viewBox="0 0 20 20"
+                    fill="currentColor"
+                    aria-hidden="true"
                   >
                     <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
+                      fillRule="evenodd"
+                      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                      clipRule="evenodd"
                     />
                   </svg>
                 </button>
               </div>
-            </div>
-            <div className="flex-1 overflow-y-auto">
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="relative inline-block text-left">
-                    <div>
-                      <button
-                        type="button"
-                        className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-amber-400 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-amber-500"
-                        id="options-menu"
-                        aria-haspopup="true"
-                        aria-expanded={isDropdownOpen}
-                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                      >
-                        {activeTabId
-                          ? chatHistory.documentTabs.find((tab) => tab.id === activeTabId)?.title.replace(/^["']|["']$/g, '')
-                          : 'Select a document set'}
-                        <svg
-                          className="-mr-1 ml-2 h-5 w-5"
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 20 20"
-                          fill="currentColor"
-                          aria-hidden="true"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
-                      </button>
-                    </div>
 
-                    {isDropdownOpen && (
-                      <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5">
-                        <div
-                          className="py-1"
-                          role="menu"
-                          aria-orientation="vertical"
-                          aria-labelledby="options-menu"
-                        >
-                          {chatHistory.documentTabs.map((tab) => (
-                            <button
-                              key={tab.id}
-                              className={`${activeTabId === tab.id
-                                ? 'bg-amber-100 dark:bg-gray-700 text-gray-900 dark:text-amber-400'
-                                : 'text-gray-700 dark:text-amber-400'
-                                } block px-4 py-2 text-sm w-full text-left`}
-                              role="menuitem"
-                              onClick={() => {
-                                setActiveTabId(tab.id);
-                                setIsDropdownOpen(false);
-                              }}
-                            >
-                              {tab.title.replace(/^["']|["']$/g, '')}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    )}
+              {isDropdownOpen && (
+                <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-amber-50 dark:bg-gray-700 ring-1 ring-black ring-opacity-5">
+                  <div
+                    className="py-1"
+                    role="menu"
+                    aria-orientation="vertical"
+                    aria-labelledby="options-menu"
+                  >
+                    {chatHistory.documentTabs.map((tab) => (
+                      <button
+                        key={tab.id}
+                        className={`${
+                          activeTabId === tab.id
+                            ? 'bg-amber-100 dark:bg-gray-600 text-gray-900 dark:text-amber-400'
+                            : 'text-gray-700 dark:text-amber-400'
+                        } block px-4 py-2 text-sm w-full text-left`}
+                        role="menuitem"
+                        onClick={() => {
+                          setActiveTabId(tab.id);
+                          setIsDropdownOpen(false);
+                        }}
+                      >
+                        {tab.title.replace(/^["']|["']$/g, '')}
+                      </button>
+                    ))}
                   </div>
                 </div>
-                <div
-                  className="w-2 h-full bg-amber-300 dark:bg-gray-500 hover:bg-amber-400 dark:hover:bg-gray-400 cursor-col-resize"
-                  onMouseDown={handleMouseDown}
-                ></div>
-              </div>
-              {activeTabId && (
-                <div className="space-y-4">
-                  {chatHistory.documentTabs
-                    .find((tab) => tab.id === activeTabId)
-                    ?.documents.map((doc, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
-                        transition={{ duration: 0.3 }}
-                        data-document-index={index}
-                        id={`doc-${index}`}
-                      >
-                        {activeTabId && (
-                          <div className="space-y-4">
-                            {chatHistory.documentTabs
-                              .find((tab) => tab.id === activeTabId)
-                              ?.documents.map((doc, index) => (
-                                <motion.div
-                                  key={index}
-                                  initial={{ opacity: 0, y: 20 }}
-                                  animate={{ opacity: 1, y: 0 }}
-                                  exit={{ opacity: 0, y: -20 }}
-                                  transition={{ duration: 0.3 }}
-                                  data-document-index={index}
-                                  id={`doc-${index}`}
-                                >
-                                  <div className="bg-white dark:bg-gray-800 shadow-md rounded-md p-4 mb-4 glow">
-                                    <h3 className="text-xl font-semibold text-gray-800 dark:text-amber-400 mb-2 capitalize">
-                                      {doc.title}
-                                    </h3>
-                                    <div className="text-sm text-gray-600 dark:text-amber-300 mb-2">
-                                      <p><strong>Authors</strong></p>
-                                      {doc.authors.map((author, index) => (
-                                        <p key={index}>{author}</p>
-                                      ))}
-                                    </div>
-                                    <div className="text-sm text-gray-600 dark:text-amber-300 mb-2">
-                                      <p><strong>Year Published</strong></p>
-                                      <p>{doc.yearPublished}</p>
-                                    </div>
-                                    <div className="text-sm text-gray-600 dark:text-amber-300 mb-2">
-                                      <p><strong>Abstract</strong></p>
-                                      <p>{doc.abstract.length > 500 ? doc.abstract.slice(0, 500) + '...' : doc.abstract}</p>
-                                    </div>
-                                    <div className="mt-4">
-                                      <a
-                                        href={doc.downloadUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="inline-block px-4 py-2 text-sm font-semibold text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
-                                        onClick={(e) => {
-                                          e.preventDefault();
-                                          setIsModalOpen(true);
-                                          setModalLinkUrl(doc.downloadUrl);
-                                        }}
-                                      >
-                                        <span className="inline-flex items-center">
-                                          <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            className="h-4 w-4 mr-1"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke="currentColor"
-                                          >
-                                            <path
-                                              strokeLinecap="round"
-                                              strokeLinejoin="round"
-                                              strokeWidth={2}
-                                              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                                            />
-                                          </svg>
-                                          Download
-                                        </span>
-                                      </a>
-                                    </div>
-                                  </div>
-                                </motion.div>
-                              ))}
-                          </div>
-                        )}                      </motion.div>
-                    ))}
-                </div>
-              )}
-              {!activeTabId && chatHistory.documentTabs.length > 0 && (
-                <p className="text-xs text-gray-600 dark:text-amber-300 mt-2">Select a tab to view documents</p>
-              )}
-              {chatHistory.documentTabs.length === 0 && !isLoading && (
-                <p className="text-xs text-gray-600 dark:text-amber-300 mt-2">No documents found</p>
               )}
             </div>
           </div>
+          {activeTabId && (
+                    <div className="space-y-4">
+                      {chatHistory.documentTabs
+                        .find((tab) => tab.id === activeTabId)
+                        ?.documents.map((doc, index) => (
+                          <motion.div
+                            key={index}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            transition={{ duration: 0.3 }}
+                            data-document-index={index}
+                            id={`doc-${index}`}
+                          >
+                            <div className="bg-white dark:bg-gray-800 shadow-md rounded-md p-4 mb-4 glow">
+                              <h3 className="text-xl font-semibold text-gray-800 dark:text-amber-400 mb-2 capitalize">
+                                {doc.title}
+                              </h3>
+                              <div className="text-sm text-gray-600 dark:text-amber-300 mb-2">
+                                <p><strong>Authors</strong></p>
+                                {doc.authors.map((author, index) => (
+                                  <p key={index}>{author}</p>
+                                ))}
+                              </div>
+                              <div className="text-sm text-gray-600 dark:text-amber-300 mb-2">
+                                <p><strong>Year Published</strong></p>
+                                <p>{doc.yearPublished}</p>
+                              </div>
+                              <div className="text-sm text-gray-600 dark:text-amber-300 mb-2">
+                                <p><strong>Abstract</strong></p>
+                                <p>{doc.abstract.length > 500 ? doc.abstract.slice(0, 500) + '...' : doc.abstract}</p>
+                              </div>
+                              <div className="mt-4">
+                                <a
+                                  href={doc.downloadUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-block px-4 py-2 text-sm font-semibold text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    setIsModalOpen(true);
+                                    setModalLinkUrl(doc.downloadUrl);
+                                  }}
+                                >
+                                  <span className="inline-flex items-center">
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="h-4 w-4 mr-1"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke="currentColor"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                                      />
+                                    </svg>
+                                    Download
+                                  </span>
+                                </a>
+                              </div>
+                            </div>
+                          </motion.div>
+                ))}
+            </div>
+          )}
+          {!activeTabId && chatHistory.documentTabs.length > 0 && (
+            <p className="text-xs text-gray-600 dark:text-amber-300 mt-2">Select a tab to view documents</p>
+          )}
+          {chatHistory.documentTabs.length === 0 && !isLoading && (
+            <p className="text-xs text-gray-600 dark:text-amber-300 mt-2">No documents found</p>
+          )}
         </div>
-      )}
+      </div>
     </div>
+  </div>
+  )}
+</div>
   );
 }
+
