@@ -426,6 +426,7 @@ export default function ChatPage() {
   const [asideWidth, setAsideWidth] = useState(400);
   const asideRef = useRef<HTMLElement>(null);
 
+
   const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     if (asideRef.current) {
       asideRef.current.style.transition = "none";
@@ -459,6 +460,45 @@ export default function ChatPage() {
       sendMessage();
     }
   };
+
+  const DETAILS_TIMEOUT = 5000; // 10 seconds
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      closeDetails();
+    }, DETAILS_TIMEOUT);
+  
+    const detailsElement = document.querySelector('details');
+    if (detailsElement) {
+      detailsElement.addEventListener('toggle', handleDetailsToggle);
+    }
+  
+    return () => {
+      clearTimeout(timer);
+      if (detailsElement) {
+        detailsElement.removeEventListener('toggle', handleDetailsToggle);
+      }
+    };
+  }, []);
+  
+  const closeDetails = (): void => {
+    document.querySelector('details')?.removeAttribute('open');
+    const svgElement = document.querySelector('details summary svg:last-child') as SVGElement;
+    if (svgElement) {
+      svgElement.style.transform = 'rotate(-90deg)';
+    }
+  };
+  
+  const handleDetailsToggle = (): void => {
+    const svgElement = document.querySelector('details summary svg:last-child') as SVGElement;
+    if (svgElement) {
+      svgElement.style.transition = 'transform 0.5s ease-in-out';
+      svgElement.style.transform = document.querySelector('details')?.hasAttribute('open')
+        ? 'rotate(0deg)'
+        : 'rotate(-90deg)';
+    }
+  };
+
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text).then(() => {
@@ -575,14 +615,20 @@ export default function ChatPage() {
           </ul>
         </nav>
       </header>
-      <div className="bg-gray-800 text-amber-100 dark:bg-amber-100 dark:text-gray-800 p-4 shadow-md flex items-center space-x-2">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-amber-400 dark:text-gray-800">
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-        </svg>
-        <p className="text-xs">
-          <strong>Caution:</strong> Bayard is an open-source, alpha-stage AI research assistant designed to facilitate access to LGBTQ+ scholarship; while it aims to provide reliable information, users should think critically, fact-check key details, and consult primary sources as they would with any research tool.
+      <details className="bg-gradient-to-r from-gray-800 to-gray-700 text-amber-100 dark:from-amber-500 dark:to-amber-400 dark:text-gray-800 p-4 shadow-md" open>
+        <summary className="flex items-center space-x-2 cursor-pointer">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-amber-400 dark:text-gray-800">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+          </svg>
+          <span className="font-bold">Beta</span>
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-2 transition-transform duration-300" style={{ transform: 'rotate(0deg)' }}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+          </svg>
+        </summary>
+        <p className="text-xs mt-2">
+          Bayard is an open-source, beta-stage AI research assistant designed to facilitate access to LGBTQ+ scholarship; while it aims to provide reliable information, users should think critically, fact-check key details, and consult primary sources as they would with any research tool.
         </p>
-      </div>
+      </details>
       <main className="flex-1 overflow-y-auto">
         <ResizablePanelGroup direction="horizontal">
           {!isMobile && (
