@@ -95,8 +95,9 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalLinkUrl, setModalLinkUrl] = useState('');
 
-  const handleExternalLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleExternalLinkClick = (event: React.MouseEvent<HTMLAnchorElement> | React.TouchEvent<HTMLAnchorElement>) => {
     event.preventDefault();
+    event.stopPropagation();
     const linkUrl = event.currentTarget.href;
     setIsModalOpen(true);
     setModalLinkUrl(linkUrl);
@@ -189,11 +190,10 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
           }
         }}
         contentLabel="You are leaving Bayard_One..."
-        className="fixed inset-0 flex items-center justify-center z-50 p-4 backdrop-filter backdrop-blur-md"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-40"
-      >
+        className="fixed inset-0 flex items-center justify-center z-50 p-4 sm:p-0"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-40">
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 max-w-xl mx-auto">
-          <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-amber-400">You are being redirected...</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white mb-4">You are being redirected...</h2>
           <p className="text-gray-700 dark:text-amber-300 mb-8 leading-7">
             Bayard Lab&apos;s mission is to promote the accessibility of scholarship and knowledge pertaining to LGBTQIA+ and other marginalized communities.<br /><br />
             However, we do not have editorial control over the content of external resources. We encourage users to critically evaluate the information found through these links using their own discretion and judgment.
@@ -210,7 +210,7 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
             </div>
           </div>
 
-          <div className="flex justify-end space-x-6 mt-12">
+          <div className="flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4">
             <button
               onClick={() => {
                 setIsModalOpen(false);
@@ -268,6 +268,13 @@ export default function ChatPage() {
   const [modalLinkUrl, setModalLinkUrl] = useState('');
 
   const handleExternalLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    const linkUrl = event.currentTarget.href;
+    setIsModalOpen(true);
+    setModalLinkUrl(linkUrl);
+  };
+
+  const handleExternalLinkTouchEnd = (event: React.TouchEvent<HTMLAnchorElement>) => {
     event.preventDefault();
     const linkUrl = event.currentTarget.href;
     setIsModalOpen(true);
@@ -1084,28 +1091,39 @@ export default function ChatPage() {
                                 rel="noopener noreferrer"
                                 className="inline-block px-4 py-2 text-sm font-semibold text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
                                 onClick={(e) => {
-                                  e.preventDefault();
-                                  setIsModalOpen(true);
-                                  setModalLinkUrl(doc.downloadUrl);
+                                  if (!isMobile) {
+                                    e.preventDefault();
+                                    setIsModalOpen(true);
+                                    setModalLinkUrl(doc.downloadUrl);
+                                  }
                                 }}
                               >
-                                <span className="inline-flex items-center">
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="h-4 w-4 mr-1"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth={2}
-                                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                                    />
-                                  </svg>
-                                  Download
-                                </span>
+                                <TooltipProvider>
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <span className="inline-flex items-center">
+                                        <svg
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          className="h-4 w-4 mr-1"
+                                          fill="none"
+                                          viewBox="0 0 24 24"
+                                          stroke="currentColor"
+                                        >
+                                          <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                                          />
+                                        </svg>
+                                        Download
+                                      </span>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                      <p>Redirects to an external resource.</p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                </TooltipProvider>
                               </a>
                             </div>
                           </div>
