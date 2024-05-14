@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from "react";
+import Header from '@/components/ui/Header';
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
@@ -75,11 +76,6 @@ const lexendPetaStyle = Lexend_Peta({
   style: 'normal',
   subsets: ['latin']
 });
-
-function formatMessage(message: string): string {
-  return message.replace(/\n/g, '<br>');
-}
-
 
 function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedModelOutputProps) {
   function handleDocumentClick(e: React.MouseEvent<HTMLAnchorElement>, index: number) {
@@ -549,86 +545,7 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex flex-col h-screen text-base bg-gray-100 dark:bg-gray-900 dark:text-base dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 dark:bg-fixed dark:bg-opacity-100">
-      <header className="bg-gradient-to-r from-amber-400 to-amber-200 dark:from-gray-900 dark:to-gray-800 text-gray-800 dark:text-amber-500 py-3 px-6 flex items-center justify-between shadow-lg backdrop-filter backdrop-blur-2xl bg-opacity-10">
-        <a href="https://bayardlab.org" target="_blank" rel="noopener noreferrer">
-          <Image src={isDarkMode ? BAYARD_LAB_YELLOW : BAYARD_LAB} alt="Bayard Lab Logo" width={150} height={50} />
-        </a>
-        <h1 className={`${lexendPetaStyle.className} uppercase text-sm`}>Bayard_One</h1>
-        <nav>
-          <ul className="flex space-x-4 items-center">
-            <li>
-              <a href="https://bayardlab.org" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
-                Home
-              </a>
-            </li>
-            <li>
-              <a href="https://www.bayardlab.org/about-bayard-one" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
-                About
-              </a>
-            </li>
-            <li>
-              <a href="https://docs.bayardlab.org" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
-                Documentation
-              </a>
-            </li>
-            <li>
-              <a href="https://www.bayardlab.org/contact" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
-                Contact
-              </a>
-            </li>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    onClick={toggleDarkMode}
-                    className="p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
-                  >
-                    <span className="sr-only">Toggle Dark Mode</span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      className={`w-5 h-5 ${isDarkMode ? 'text-amber-500' : 'text-gray-500'}`}
-                    >
-                      {isDarkMode ? (
-                        <path
-                          fillRule="evenodd"
-                          clipRule="evenodd"
-                          d="M12 1C5.92487 1 1 5.92487 1 12C1 18.0751 5.92487 23 12 23C18.0751 23 23 18.0751 23 12C23 5.92487 18.0751 1 12 1ZM12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3V21Z"
-                        />
-                      ) : (
-                        <path
-                          fillRule="evenodd"
-                          clipRule="evenodd"
-                          d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM12 20V4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20Z"
-                        />
-                      )}
-                    </svg>
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="left" sideOffset={30}>
-                  <p>{isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </ul>
-        </nav>
-      </header>
-      <details className="bg-gradient-to-r from-gray-800 to-gray-700 text-amber-100 dark:from-amber-500 dark:to-amber-400 dark:text-gray-800 p-4 shadow-md" open>
-        <summary className="flex items-center space-x-2 cursor-pointer">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-amber-400 dark:text-gray-800">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-          </svg>
-          <span className="font-bold">Beta</span>
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4 ml-2 transition-transform duration-300" style={{ transform: 'rotate(0deg)' }}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-          </svg>
-        </summary>
-        <p className="text-xs mt-2">
-          Bayard is an open-source, beta-stage AI research assistant designed to facilitate access to LGBTQ+ scholarship; while it aims to provide reliable information, users should think critically, fact-check key details, and consult primary sources as they would with any research tool.
-        </p>
-      </details>
+    <div className="flex flex-col h-view text-base bg-gray-100 dark:bg-gray-900 dark:text-base dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 dark:bg-fixed dark:bg-opacity-100">
       <main className="flex-1 overflow-y-auto">
         <ResizablePanelGroup direction="horizontal">
           {!isMobile && (
@@ -1028,22 +945,6 @@ export default function ChatPage() {
           </ResizablePanel>
         </ResizablePanelGroup>
       </main>
-
-      <footer>
-        <div className="bg-gradient-to-r from-amber-400 dark:from-gray-800 to-amber-100 dark:to-gray-900 text-gray-600 dark:text-gray-400 py-4 px-6 flex flex-col sm:flex-row items-left justify-between text-xs backdrop-filter backdrop-blur-3xl bg-opacity-20 bg-amber-100/60 dark:bg-gray-800/60 shadow-lg">
-          <div className="mb-4 sm:mb-0">
-            <span>© {new Date().getFullYear()} Bayard Lab. All rights reserved. Open-source use subject to <a href="https://docs.bayardlab.org/wl1.0gp-license-terms" target="_blank" rel="noopener noreferrer" className="underline text-gray-700 dark:text-amber-500 hover:text-gray-400 dark:hover:text-amber-300">terms</a>.</span>
-          </div>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 mr-12 sm:mr-0">
-            <a href="https://bayardlab.org/terms" target="_blank" rel="noopener noreferrer" className="text-gray-600 dark:text-gray-400 text-xs hover:text-gray-800 dark:hover:text-amber-500">
-              Terms & Conditions
-            </a>
-            <a href="https://bayardlab.org/privacy-notice" target="_blank" rel="noopener noreferrer" className="text-gray-600 dark:text-gray-400 text-xs hover:text-gray-800 dark:hover:text-amber-500">
-              Privacy Notice
-            </a>
-          </div>
-        </div>
-    </footer>
 
 
       {/* Drawer component on mobile devices */}
