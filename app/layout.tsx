@@ -3,7 +3,6 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import "@/styles/globals.css";
 import Script from 'next/script';
 import Header from "@/components/ui/Header";
-import Footer from "@/components/ui/Footer";
 import BetaBanner from "@/components/ui/Beta";
 
 const inter = Plus_Jakarta_Sans({ subsets: ["latin"] });
@@ -24,21 +23,20 @@ export default function RootLayout({
         {/* End Google Tag Manager */}
       </head>
       <body className={inter.className}>
-        <div className="flex flex-col min-h-screen">
-          <div className="sticky top-0 z-50">
-            <Header />
-            <BetaBanner />
-          </div>
-          <main className="relative">
-            {children}
+        <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+          <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+            <div style={{ flex: 1, overflowY: 'auto' }}>
+              {children}
+            </div>
+            {/* Add your input component here */}
+            <div style={{ marginTop: 'auto' }}>
+              {/* Input component */}
+            </div>
           </main>
-          <div className="sticky bottom-50 z-50">
-            <Footer />
-          </div>
         </div>
         <noscript>
           <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N984G6H2"
-          height="0" width="0" style={{display: "none", visibility: "hidden"}}></iframe>
+            height="0" width="0" style={{ display: "none", visibility: "hidden" }}></iframe>
         </noscript>
       </body>
     </html>

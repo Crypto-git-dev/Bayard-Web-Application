@@ -31,6 +31,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Modal from 'react-modal';
 import PromptSuggestions from "@/components/ui/PromptSuggestions";
+import BetaBanner from "@/components/ui/Beta";
+import Footer from "@/components/ui/Footer";
 
 
 const apiKey = process.env.AMPLITUDE_API_KEY || ""; // Set a default value if the API key is undefined
@@ -95,10 +97,11 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
 
   const handleExternalLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
-    const linkUrl = (event.target as HTMLAnchorElement).href;
+    const linkUrl = event.currentTarget.href;
     setIsModalOpen(true);
     setModalLinkUrl(linkUrl);
   };
+
 
   const [isDarkMode, setIsDarkMode] = useState(false);
 
@@ -266,7 +269,7 @@ export default function ChatPage() {
 
   const handleExternalLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault();
-    const linkUrl = (event.target as HTMLAnchorElement).href;
+    const linkUrl = event.currentTarget.href;
     setIsModalOpen(true);
     setModalLinkUrl(linkUrl);
   };
@@ -463,12 +466,12 @@ export default function ChatPage() {
     const timer = setTimeout(() => {
       closeDetails();
     }, DETAILS_TIMEOUT);
-  
+
     const detailsElement = document.querySelector('details');
     if (detailsElement) {
       detailsElement.addEventListener('toggle', handleDetailsToggle);
     }
-  
+
     return () => {
       clearTimeout(timer);
       if (detailsElement) {
@@ -476,7 +479,7 @@ export default function ChatPage() {
       }
     };
   }, []);
-  
+
   const closeDetails = (): void => {
     document.querySelector('details')?.removeAttribute('open');
     const svgElement = document.querySelector('details summary svg:last-child') as SVGElement;
@@ -484,7 +487,7 @@ export default function ChatPage() {
       svgElement.style.transform = 'rotate(-90deg)';
     }
   };
-  
+
   const handleDetailsToggle = (): void => {
     const svgElement = document.querySelector('details summary svg:last-child') as SVGElement;
     if (svgElement) {
@@ -545,7 +548,11 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex flex-col h-view text-base bg-gray-100 dark:bg-gray-900 dark:text-base dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 dark:bg-fixed dark:bg-opacity-100">
+    <div className="flex flex-col h-screen text-base bg-gray-100 dark:bg-gray-900 dark:text-base dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 dark:bg-fixed dark:bg-opacity-100">
+      <Header />
+      <div>
+        <BetaBanner />
+      </div>
       <main className="flex-1 overflow-y-auto">
         <ResizablePanelGroup direction="horizontal">
           {!isMobile && (
@@ -652,37 +659,38 @@ export default function ChatPage() {
                               <div className="text-sm text-gray-600 dark:text-amber-300 mb-2">
                                 <p><strong>Abstract</strong></p>
                                 <p>{doc.abstract.length > 500 ? doc.abstract.slice(0, 500) + '...' : doc.abstract}</p>
-                              </div>
-                              <div className="mt-4">
-                                <a
-                                  href={doc.downloadUrl}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="inline-block px-4 py-2 text-sm font-semibold text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    setIsModalOpen(true);
-                                    setModalLinkUrl(doc.downloadUrl);
-                                  }}
-                                >
-                                  <span className="inline-flex items-center">
-                                    <svg
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      className="h-4 w-4 mr-1"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      stroke="currentColor"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                                      />
-                                    </svg>
-                                    Download
-                                  </span>
-                                </a>
+                              </div>            <div className="mt-4">
+                                <div className="mt-4">
+                                  <a
+                                    href={doc.downloadUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-block px-4 py-2 text-sm font-semibold text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      setIsModalOpen(true);
+                                      setModalLinkUrl(doc.downloadUrl);
+                                    }}
+                                  >
+                                    <span className="inline-flex items-center">
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        className="h-4 w-4 mr-1"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth={2}
+                                          d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                                        />
+                                      </svg>
+                                      Download
+                                    </span>
+                                  </a>
+                                </div>
                               </div>
                             </div>
                           </motion.div>
@@ -895,62 +903,63 @@ export default function ChatPage() {
                   </div>
                 </div>
               </div>
-    <div className="flex flex-col items-center bg-gray-800">
-    {isMobile && (
-      <button
-        onClick={toggleDrawer}
-        className="px-6 py-3 bg-gray-800 dark:bg-amber-500 text-white dark:text-gray-800 shadow-lg w-full"
-      >
-        {isDrawerOpen ? (
-          <div className="flex items-center justify-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 mr-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-            <span>Close Documents Pane</span>
-          </div>
-        ) : (
-          <div className="flex items-center justify-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 mr-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-              />
-            </svg>
-            <span>Open Documents Pane</span>
-          </div>
-        )}
-      </button>
-    )}
-      </div>
+              <div className="flex flex-col items-center bg-gray-800">
+                {isMobile && (
+                  <button
+                    onClick={toggleDrawer}
+                    className="px-6 py-3 bg-gray-800 dark:bg-amber-500 text-white dark:text-gray-800 shadow-lg w-full"
+                  >
+                    {isDrawerOpen ? (
+                      <div className="flex items-center justify-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-6 w-6 mr-2"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                        <span>Close Documents Pane</span>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-6 w-6 mr-2"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                          />
+                        </svg>
+                        <span>Open Documents Pane</span>
+                      </div>
+                    )}
+                  </button>
+                )}
+              </div>
             </section>
           </ResizablePanel>
         </ResizablePanelGroup>
       </main>
 
+      <Footer />
 
       {/* Drawer component on mobile devices */}
       {isMobile && isDrawerOpen && (
-  <div className="fixed inset-0 z-40 bg-gradient-to-r from-amber-200 dark:from-gray-800 to-amber-100 dark:to-gray-900" style={{ height: 'calc(100% - 64px)' }}>
-  <div className="flex flex-col h-full">
+        <div className="fixed inset-0 z-40 bg-gradient-to-r from-amber-200 dark:from-gray-800 to-amber-100 dark:to-gray-900" style={{ height: 'calc(100% - 64px)' }}>
+          <div className="flex flex-col h-full">
             <div className="p-4 border-b border-amber-300 dark:border-gray-700">
               <div className="flex items-center justify-between">
                 <h2 className="text-lg font-semibold text-gray-800 dark:text-amber-400">Documents</h2>
@@ -1019,8 +1028,8 @@ export default function ChatPage() {
                             <button
                               key={tab.id}
                               className={`${activeTabId === tab.id
-                                  ? 'bg-amber-100 dark:bg-gray-600 text-gray-900 dark:text-amber-400'
-                                  : 'text-gray-700 dark:text-amber-400'
+                                ? 'bg-amber-100 dark:bg-gray-600 text-gray-900 dark:text-amber-400'
+                                : 'text-gray-700 dark:text-amber-400'
                                 } block px-4 py-2 text-sm w-full text-left`}
                               role="menuitem"
                               onClick={() => {

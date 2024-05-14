@@ -1,16 +1,35 @@
 'use client';
 
-import { useState} from "react";
+import { useState, useEffect } from "react";
 
 const BetaBanner = () => {
     const [isOpen, setIsOpen] = useState(true);
+    const [bannerOpacity, setBannerOpacity] = useState(1);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            const fadeOut = setInterval(() => {
+                setBannerOpacity((prevOpacity) => {
+                    const newOpacity = prevOpacity - 0.05;
+                    if (newOpacity <= 0) {
+                        clearInterval(fadeOut);
+                        setIsOpen(false);
+                    }
+                    return newOpacity;
+                });
+            }, 500);
+        }, 5000);
+
+        return () => {
+            clearTimeout(timer);
+        };
+    }, []);
 
     const toggleBanner = () => {
         setIsOpen(!isOpen);
     };
-
     return (
-        <div className={`bg-gradient-to-r from-gray-800 to-gray-700 text-amber-100 dark:from-amber-500 dark:to-amber-400 dark:text-gray-800 p-4 shadow-md ${isOpen ? 'block' : 'hidden'}`}>
+        <div className={`bg-gradient-to-r from-gray-800 to-gray-700 text-amber-100 dark:from-amber-500 dark:to-amber-400 dark:text-gray-800 p-4 shadow-md`}>
             <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-amber-400 dark:text-gray-800">
