@@ -193,29 +193,31 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
   className="fixed inset-0 flex items-center justify-center z-50 p-4 backdrop-filter backdrop-blur-md"
   overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-40"
 >
-  <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-xl mx-auto">
-    <h2 className="text-2xl font-bold mb-4 text-gray-800 dark:text-amber-4000">You clicked an external link...</h2>
-    <p className="text-gray-700 dark:text-amber-300 mb-6">
-      Please note that the links provided lead to third-party sources.<br /><br />
+<div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 max-w-xl mx-auto">
+    <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-amber-400">You are being redirected...</h2>
+    <p className="text-gray-700 dark:text-amber-300 mb-8 leading-7">
       Bayard Lab&apos;s mission is to promote the accessibility of scholarship and knowledge pertaining to LGBTQIA+ and other marginalized communities.<br /><br />
-      However, we do not have editorial control over the content of these external resources. We encourage users to critically evaluate the information found through these links using their own discretion and judgment.
+      However, we do not have editorial control over the content of external resources. We encourage users to critically evaluate the information found through these links using their own discretion and judgment.
     </p>
-    <div className="relative h-2 bg-gray-300 rounded-full mb-6">
+    
+    <div className="relative h-2 bg-gray-300 rounded-full mb-12">
       <div
-        className="progress-bar absolute top-0 right-0 h-2 bg-amber-500 rounded-full"
+        className="progress-bar absolute top-0 left-0 right-0 h-2 bg-amber-500 rounded-full"
         onAnimationEnd={() => {
           setIsModalOpen(false);
           window.open(modalLinkUrl, '_blank');
         }}
       >
       </div>
-    <div className="flex justify-end space-x-4">
+    </div>
+
+    <div className="flex justify-end space-x-6 mt-12">
       <button
         onClick={() => {
           setIsModalOpen(false);
           window.open(modalLinkUrl, '_blank');
         }}
-        className="px-4 py-2 text-sm font-semibold text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 dark:bg-amber-600 dark:hover:bg-amber-700 dark:focus:ring-amber-500 dark:focus:ring-offset-gray-800 dark:text-gray-800"
+        className="px-6 py-3 text-base font-semibold text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 dark:bg-amber-600 dark:hover:bg-amber-700 dark:focus:ring-amber-500 dark:focus:ring-offset-gray-800 dark:text-gray-800"
       >
         Proceed
       </button>
@@ -223,17 +225,16 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
         onClick={() => {
           setIsModalOpen(false);
         }}
-        className="px-4 py-2 text-sm font-semibold text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 dark:text-amber-400 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-amber-500 dark:focus:ring-offset-gray-800"
+        className="px-6 py-3 text-base font-semibold text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 dark:text-amber-400 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-amber-500 dark:focus:ring-offset-gray-800"
       >
         Cancel
       </button>
     </div>
   </div>
-  </div>
 </Modal>
 </div>
 );
-} 
+}
 
 
 
@@ -251,11 +252,18 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
     const [streamedText, setStreamedText] = useState("");
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isPromptModalOpen, setIsPromptModalOpen] = useState(false);
+    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+    const [isMobile, setIsMobile] = useState(false);
+
     const springProps = useSpring({
       from: { opacity: 0, transform: 'translateY(20px)' },
       to: { opacity: 1, transform: 'translateY(0)' },
       config: { tension: 220, friction: 20 },
     });
+
+    const toggleDrawer = () => {
+    setIsDrawerOpen(!isDrawerOpen);
+  };
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalLinkUrl, setModalLinkUrl] = useState('');
@@ -266,6 +274,19 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
       setIsModalOpen(true);
       setModalLinkUrl(linkUrl);
     };
+
+    useEffect(() => {
+      const handleResize = () => {
+        setIsMobile(window.innerWidth < 768);
+      };
+    
+      handleResize(); // Initial check
+      window.addEventListener('resize', handleResize);
+    
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }, []);
   
     const handlePromptSelect = (prompt: string) => {
       setMessage(prompt);
@@ -564,6 +585,8 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
         </div>
         <main className="flex flex-1 overflow-hidden">
           <ResizablePanelGroup direction="horizontal">
+          {!isMobile && (
+            <>
             <ResizablePanel className="shadow-md">
               <aside
                 ref={asideRef}
@@ -712,6 +735,8 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
               </aside>
             </ResizablePanel>
             <ResizableHandle style={{ width: '2px' }} />
+            </>
+          )}
             <ResizablePanel className="shadow-md">
               <div className="w-0.5 bg-amber-200 dark:bg-gray-600"></div>
               <section className="flex-1 flex flex-col overflow-hidden" style={{ width: '100%', height: '100%' }}>
@@ -908,7 +933,6 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
                     </div>
                   </div>
                 </div>
-  
               </section>
             </ResizablePanel>
           </ResizablePanelGroup>
@@ -931,6 +955,39 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
           
           </div>
         </footer>
-      </div>
-    );
-  }
+        {isMobile && (
+        <button
+          onClick={toggleDrawer}
+          className="fixed bottom-4 right-4 z-50 p-4 bg-amber-500 text-white rounded-full shadow-lg"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            className="w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </button>
+      )}
+
+      {/* Drawer component on mobile devices */}
+      {isMobile && isDrawerOpen && (
+        <div className="fixed inset-0 z-40 bg-black bg-opacity-50" onClick={toggleDrawer}>
+          <div className="fixed inset-y-0 right-0 z-50 w-full max-w-xs bg-white dark:bg-gray-800 shadow-lg">
+            <div className="p-4">
+              <h2 className="text-lg font-semibold mb-4">Documents</h2>
+              {/* Documents pane content */}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

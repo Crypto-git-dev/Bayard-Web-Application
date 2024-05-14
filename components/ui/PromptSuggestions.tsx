@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { FaInfoCircle } from 'react-icons/fa';
 import { Lexend_Peta } from 'next/font/google';
 import Image from 'next/image';
 import SQUIRREL from '@/assets/noun-squirrel-2777144.png';
 
 const lexend_peta = Lexend_Peta({
 subsets: ['latin'],
-weight: ['400', '700'],
+weight: ['700'],
 });
 
 
