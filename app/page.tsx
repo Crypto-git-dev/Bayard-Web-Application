@@ -26,7 +26,7 @@ import remarkGfm from 'remark-gfm';
 import BAYARD_AVATAR from '@/assets/noun-squirrel-2777144.png';
 import rehypeRaw from 'rehype-raw'
 import React from 'react';
-import { ToastContainer, toast  } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Modal from 'react-modal';
 import PromptSuggestions from "@/components/ui/PromptSuggestions";
@@ -176,577 +176,577 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
         rehypePlugins={[rehypeRaw]}
       >
         {formattedText}
-</ReactMarkdown>
-<Modal
-  isOpen={isModalOpen}
-  onRequestClose={() => setIsModalOpen(false)}
-  onAfterOpen={() => {
-    const progressBar = document.querySelector('.progress-bar') as HTMLElement;
-    if (progressBar) {
-      progressBar.style.animation = 'none';
-      setTimeout(() => {
-        progressBar.style.animation = 'countdown 5s linear forwards';
-      }, 100);
-    }
-  }}
-  contentLabel="You are leaving Bayard_One..."
-  className="fixed inset-0 flex items-center justify-center z-50 p-4 backdrop-filter backdrop-blur-md"
-  overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-40"
->
-<div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 max-w-xl mx-auto">
-    <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-amber-400">You are being redirected...</h2>
-    <p className="text-gray-700 dark:text-amber-300 mb-8 leading-7">
-      Bayard Lab&apos;s mission is to promote the accessibility of scholarship and knowledge pertaining to LGBTQIA+ and other marginalized communities.<br /><br />
-      However, we do not have editorial control over the content of external resources. We encourage users to critically evaluate the information found through these links using their own discretion and judgment.
-    </p>
-    
-    <div className="relative h-2 bg-gray-300 rounded-full mb-12">
-      <div
-        className="progress-bar absolute top-0 left-0 right-0 h-2 bg-amber-500 rounded-full"
-        onAnimationEnd={() => {
-          setIsModalOpen(false);
-          window.open(modalLinkUrl, '_blank');
+      </ReactMarkdown>
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+        onAfterOpen={() => {
+          const progressBar = document.querySelector('.progress-bar') as HTMLElement;
+          if (progressBar) {
+            progressBar.style.animation = 'none';
+            setTimeout(() => {
+              progressBar.style.animation = 'countdown 5s linear forwards';
+            }, 100);
+          }
         }}
+        contentLabel="You are leaving Bayard_One..."
+        className="fixed inset-0 flex items-center justify-center z-50 p-4 backdrop-filter backdrop-blur-md"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50 z-40"
       >
-      </div>
-    </div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 max-w-xl mx-auto">
+          <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-amber-400">You are being redirected...</h2>
+          <p className="text-gray-700 dark:text-amber-300 mb-8 leading-7">
+            Bayard Lab&apos;s mission is to promote the accessibility of scholarship and knowledge pertaining to LGBTQIA+ and other marginalized communities.<br /><br />
+            However, we do not have editorial control over the content of external resources. We encourage users to critically evaluate the information found through these links using their own discretion and judgment.
+          </p>
 
-    <div className="flex justify-end space-x-6 mt-12">
-      <button
-        onClick={() => {
-          setIsModalOpen(false);
-          window.open(modalLinkUrl, '_blank');
-        }}
-        className="px-6 py-3 text-base font-semibold text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 dark:bg-amber-600 dark:hover:bg-amber-700 dark:focus:ring-amber-500 dark:focus:ring-offset-gray-800 dark:text-gray-800"
-      >
-        Proceed
-      </button>
-      <button
-        onClick={() => {
-          setIsModalOpen(false);
-        }}
-        className="px-6 py-3 text-base font-semibold text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 dark:text-amber-400 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-amber-500 dark:focus:ring-offset-gray-800"
-      >
-        Cancel
-      </button>
+          <div className="relative h-2 bg-gray-300 rounded-full mb-12">
+            <div
+              className="progress-bar absolute top-0 left-0 right-0 h-2 bg-amber-500 rounded-full"
+              onAnimationEnd={() => {
+                setIsModalOpen(false);
+                window.open(modalLinkUrl, '_blank');
+              }}
+            >
+            </div>
+          </div>
+
+          <div className="flex justify-end space-x-6 mt-12">
+            <button
+              onClick={() => {
+                setIsModalOpen(false);
+                window.open(modalLinkUrl, '_blank');
+              }}
+              className="px-6 py-3 text-base font-semibold text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 dark:bg-amber-600 dark:hover:bg-amber-700 dark:focus:ring-amber-500 dark:focus:ring-offset-gray-800 dark:text-gray-800"
+            >
+              Proceed
+            </button>
+            <button
+              onClick={() => {
+                setIsModalOpen(false);
+              }}
+              className="px-6 py-3 text-base font-semibold text-gray-700 bg-gray-200 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 dark:text-amber-400 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-amber-500 dark:focus:ring-offset-gray-800"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
-  </div>
-</Modal>
-</div>
-);
+  );
 }
 
 
 
-  export default function ChatPage() {
-    const [message, setMessage] = useState("");
-    const [chatHistory, setChatHistory] = useState<ChatHistory>({ messages: [], documentTabs: [] }); const [isLoading, setIsLoading] = useState(false);
-    const [loadingStatus, setLoadingStatus] = useState("");
-    const chatContainerRef = useRef<HTMLDivElement>(null);
-    const [isDarkMode, setIsDarkMode] = useState(false);
-    const [activeTabId, setActiveTabId] = useState<string | null>(null);
-    const [activeTabIndex, setActiveTabIndex] = useState(0);
+export default function ChatPage() {
+  const [message, setMessage] = useState("");
+  const [chatHistory, setChatHistory] = useState<ChatHistory>({ messages: [], documentTabs: [] }); const [isLoading, setIsLoading] = useState(false);
+  const [loadingStatus, setLoadingStatus] = useState("");
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [activeTabId, setActiveTabId] = useState<string | null>(null);
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
 
-    const [modelOutput, setModelOutput] = useState("");
-    const [isStreaming, setIsStreaming] = useState(false);
-    const [streamedText, setStreamedText] = useState("");
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [isPromptModalOpen, setIsPromptModalOpen] = useState(false);
-    const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-    const [isMobile, setIsMobile] = useState(false);
+  const [modelOutput, setModelOutput] = useState("");
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [streamedText, setStreamedText] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isPromptModalOpen, setIsPromptModalOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-    const springProps = useSpring({
-      from: { opacity: 0, transform: 'translateY(20px)' },
-      to: { opacity: 1, transform: 'translateY(0)' },
-      config: { tension: 220, friction: 20 },
-    });
+  const springProps = useSpring({
+    from: { opacity: 0, transform: 'translateY(20px)' },
+    to: { opacity: 1, transform: 'translateY(0)' },
+    config: { tension: 220, friction: 20 },
+  });
 
-    const toggleDrawer = () => {
+  const toggleDrawer = () => {
     setIsDrawerOpen(!isDrawerOpen);
   };
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [modalLinkUrl, setModalLinkUrl] = useState('');
-  
-    const handleExternalLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-      event.preventDefault();
-      const linkUrl = (event.target as HTMLAnchorElement).href;
-      setIsModalOpen(true);
-      setModalLinkUrl(linkUrl);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalLinkUrl, setModalLinkUrl] = useState('');
+
+  const handleExternalLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    const linkUrl = (event.target as HTMLAnchorElement).href;
+    setIsModalOpen(true);
+    setModalLinkUrl(linkUrl);
+  };
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
     };
 
-    useEffect(() => {
-      const handleResize = () => {
-        setIsMobile(window.innerWidth < 768);
-      };
-    
-      handleResize(); // Initial check
-      window.addEventListener('resize', handleResize);
-    
-      return () => {
-        window.removeEventListener('resize', handleResize);
-      };
-    }, []);
-  
-    const handlePromptSelect = (prompt: string) => {
-      setMessage(prompt);
-      setIsPromptModalOpen(false);
-    };
-  
-    useEffect(() => {
-      // Check if the user has a preferred color scheme
-      const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setIsDarkMode(prefersDarkMode);
+    handleResize(); // Initial check
+    window.addEventListener('resize', handleResize);
 
-      // Apply dark mode class to body element
-      document.body.classList.toggle('dark', prefersDarkMode);
-    }, []);
-
-    
-    const toggleDarkMode = () => {
-      console.log('toggleDarkMode called');
-      const newIsDarkMode = !isDarkMode;
-      setIsDarkMode(newIsDarkMode);
-      document.body.classList.toggle('dark', newIsDarkMode);
+    return () => {
+      window.removeEventListener('resize', handleResize);
     };
-    useEffect(() => {
-      if (chatContainerRef.current) {
-        const lastMessage = chatContainerRef.current.lastElementChild;
-        if (lastMessage) {
-          lastMessage.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-            inline: 'nearest',
-          });
-        }
+  }, []);
+
+  const handlePromptSelect = (prompt: string) => {
+    setMessage(prompt);
+    setIsPromptModalOpen(false);
+  };
+
+  useEffect(() => {
+    // Check if the user has a preferred color scheme
+    const prefersDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setIsDarkMode(prefersDarkMode);
+
+    // Apply dark mode class to body element
+    document.body.classList.toggle('dark', prefersDarkMode);
+  }, []);
+
+
+  const toggleDarkMode = () => {
+    console.log('toggleDarkMode called');
+    const newIsDarkMode = !isDarkMode;
+    setIsDarkMode(newIsDarkMode);
+    document.body.classList.toggle('dark', newIsDarkMode);
+  };
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      const lastMessage = chatContainerRef.current.lastElementChild;
+      if (lastMessage) {
+        lastMessage.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+          inline: 'nearest',
+        });
       }
-    }, [chatHistory.messages]);
+    }
+  }, [chatHistory.messages]);
 
-    useEffect(() => {
-      if (isStreaming) {
-        const timer = setTimeout(() => {
-          setStreamedText((prevText) => {
-            const newText = modelOutput.slice(0, prevText.length + 1);
-            if (newText === modelOutput) {
-              setIsStreaming(false);
-            }
-            return newText;
-          });
-        }, 50);
+  useEffect(() => {
+    if (isStreaming) {
+      const timer = setTimeout(() => {
+        setStreamedText((prevText) => {
+          const newText = modelOutput.slice(0, prevText.length + 1);
+          if (newText === modelOutput) {
+            setIsStreaming(false);
+          }
+          return newText;
+        });
+      }, 50);
 
-        return () => clearTimeout(timer);
+      return () => clearTimeout(timer);
+    }
+  }, [isStreaming, modelOutput, streamedText]);
+
+  const sendMessage = async () => {
+    if (message.trim() === '') return;
+
+    const userMessage: Message = {
+      user: 'You',
+      text: message,
+      timestamp: new Date().toLocaleString(),
+    };
+
+    setChatHistory((prevChatHistory) => ({
+      ...prevChatHistory,
+      messages: [...prevChatHistory.messages, userMessage],
+    }));
+
+    setMessage('');
+    setIsLoading(true);
+    setLoadingStatus('Thinking...');
+
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setLoadingStatus('Querying...');
+
+      const response = await fetch('/api/bayard-proxy/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ input_text: message, documentTabs: chatHistory.documentTabs }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send message');
       }
-    }, [isStreaming, modelOutput, streamedText]);
 
-    const sendMessage = async () => {
-      if (message.trim() === '') return;
-
-      const userMessage: Message = {
-        user: 'You',
-        text: message,
+      const data = await response.json();
+      const botMessage: Message = {
+        user: 'Bayard',
+        text: data.model_output,
         timestamp: new Date().toLocaleString(),
       };
 
       setChatHistory((prevChatHistory) => ({
-        ...prevChatHistory,
-        messages: [...prevChatHistory.messages, userMessage],
+        messages: [...prevChatHistory.messages, botMessage],
+        documentTabs: data.documentTabs,
       }));
 
-      setMessage('');
-      setIsLoading(true);
-      setLoadingStatus('Thinking...');
+      setActiveTabId(data.documentTabs[data.documentTabs.length - 1].id);
+    } catch (error) {
+      console.error('Error:', error);
+    }
 
-      try {
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        setLoadingStatus('Querying...');
+    setIsLoading(false);
+    setLoadingStatus('');
+  };
 
-        const response = await fetch('/api/bayard-proxy/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ input_text: message, documentTabs: chatHistory.documentTabs }),
-        });
+  const regenerateResponse = async () => {
+    setIsLoading(true);
+    setLoadingStatus('Generating...');
 
-        if (!response.ok) {
-          throw new Error('Failed to send message');
-        }
+    try {
+      const lastUserMessage = chatHistory.messages[chatHistory.messages.length - 1].text;
 
-        const data = await response.json();
-        const botMessage: Message = {
-          user: 'Bayard',
-          text: data.model_output,
-          timestamp: new Date().toLocaleString(),
-        };
+      // Create a new message object with the last user message
+      const message: Message = {
+        user: 'You',
+        text: lastUserMessage,
+        timestamp: new Date().toLocaleString(),
+      };
 
-        setChatHistory((prevChatHistory) => ({
-          messages: [...prevChatHistory.messages, botMessage],
-          documentTabs: data.documentTabs,
-        }));
+      // Add the message to the chat history
+      setChatHistory((prevChatHistory) => ({
+        ...prevChatHistory,
+        messages: [...prevChatHistory.messages, message],
+      }));
 
-        setActiveTabId(data.documentTabs[data.documentTabs.length - 1].id);
-      } catch (error) {
-        console.error('Error:', error);
-      }
+      // Send the message to the backend for processing
+      await sendMessage(); // Remove the argument from the function call
+    } catch (error) {
+      console.error('Error:', error);
+    }
 
-      setIsLoading(false);
-      setLoadingStatus('');
-    };
+    setIsLoading(false);
+    setLoadingStatus('');
+  };
 
-    const regenerateResponse = async () => {
-      setIsLoading(true);
-      setLoadingStatus('Generating...');
+  const [asideWidth, setAsideWidth] = useState(400);
+  const asideRef = useRef<HTMLElement>(null);
 
-      try {
-        const lastUserMessage = chatHistory.messages[chatHistory.messages.length - 1].text;
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (asideRef.current) {
+      asideRef.current.style.transition = "none";
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+    }
+  };
 
-        // Create a new message object with the last user message
-        const message: Message = {
-          user: 'You',
-          text: lastUserMessage,
-          timestamp: new Date().toLocaleString(),
-        };
+  const handleMouseMove = (e: MouseEvent) => {
+    if (asideRef.current) {
+      const newWidth = e.clientX;
+      asideRef.current.style.width = `${newWidth}px`;
+    }
+  };
 
-        // Add the message to the chat history
-        setChatHistory((prevChatHistory) => ({
-          ...prevChatHistory,
-          messages: [...prevChatHistory.messages, message],
-        }));
+  const handleMouseUp = () => {
+    if (asideRef.current) {
+      asideRef.current.style.transition = "width 0.3s ease-in-out";
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    }
+  };
 
-        // Send the message to the backend for processing
-        await sendMessage(); // Remove the argument from the function call
-      } catch (error) {
-        console.error('Error:', error);
-      }
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setMessage(e.target.value);
+  };
 
-      setIsLoading(false);
-      setLoadingStatus('');
-    };
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  };
 
-    const [asideWidth, setAsideWidth] = useState(400);
-    const asideRef = useRef<HTMLElement>(null);
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      // Show a success message or toast notification
+      toast.success('Message copied to clipboard');
+    }).catch((error) => {
+      console.error('Failed to copy message:', error);
+      // Show an error message or toast notification
+      toast.error('Failed to copy message');
+    });
+  };
 
-    const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-      if (asideRef.current) {
-        asideRef.current.style.transition = "none";
-        document.addEventListener("mousemove", handleMouseMove);
-        document.addEventListener("mouseup", handleMouseUp);
-      }
-    };
-
-    const handleMouseMove = (e: MouseEvent) => {
-      if (asideRef.current) {
-        const newWidth = e.clientX;
-        asideRef.current.style.width = `${newWidth}px`;
-      }
-    };
-
-    const handleMouseUp = () => {
-      if (asideRef.current) {
-        asideRef.current.style.transition = "width 0.3s ease-in-out";
-        document.removeEventListener("mousemove", handleMouseMove);
-        document.removeEventListener("mouseup", handleMouseUp);
-      }
-    };
-
-    const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setMessage(e.target.value);
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
-      }
-    };
-
-    const copyToClipboard = (text: string) => {
-      navigator.clipboard.writeText(text).then(() => {
-        // Show a success message or toast notification
-        toast.success('Message copied to clipboard');
+  const shareMessage = (text: string) => {
+    if (navigator.share) {
+      navigator.share({
+        title: 'Bayard Chat Message',
+        text: text,
+      }).then(() => {
+        // Sharing successful
+        toast.success('Message shared successfully');
       }).catch((error) => {
-        console.error('Failed to copy message:', error);
-        // Show an error message or toast notification
-        toast.error('Failed to copy message');
-      });
-    };
-
-    const shareMessage = (text: string) => {
-      if (navigator.share) {
-        navigator.share({
-          title: 'Bayard Chat Message',
-          text: text,
-        }).then(() => {
-          // Sharing successful
-          toast.success('Message shared successfully');
-        }).catch((error) => {
-          console.error('Failed to share message:', error);
-          // Fallback to a custom share dialog or message
-          toast.error('Failed to share message');
-        });
-      } else {
+        console.error('Failed to share message:', error);
         // Fallback to a custom share dialog or message
-        toast('Sharing not supported', {
-          style: {
-            borderRadius: '10px',
-            background: '#333',
-            color: '#fff',
-          },
-        });
-      }
-    };
+        toast.error('Failed to share message');
+      });
+    } else {
+      // Fallback to a custom share dialog or message
+      toast('Sharing not supported', {
+        style: {
+          borderRadius: '10px',
+          background: '#333',
+          color: '#fff',
+        },
+      });
+    }
+  };
 
-    const provideFeedback = (message: Message) => {
-      // Open a modal or dialog to collect feedback
-      const feedback = prompt('Please provide your feedback for this message:', '');
+  const provideFeedback = (message: Message) => {
+    // Open a modal or dialog to collect feedback
+    const feedback = prompt('Please provide your feedback for this message:', '');
 
-      if (feedback !== null) {
-        // Send the feedback to the server or perform any necessary actions
-        console.log('Feedback submitted:', feedback);
-        // Show a success message or toast notification
-        toast.success('Feedback submitted successfully');
-      }
-    };
+    if (feedback !== null) {
+      // Send the feedback to the server or perform any necessary actions
+      console.log('Feedback submitted:', feedback);
+      // Show a success message or toast notification
+      toast.success('Feedback submitted successfully');
+    }
+  };
 
-    return (
-      <div className="flex flex-col h-screen text-base bg-gray-100 dark:bg-gray-900 dark:text-base dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 dark:bg-fixed dark:bg-opacity-100">
-        <header className="bg-gradient-to-r from-amber-400 to-amber-200 dark:from-gray-900 dark:to-gray-800 text-gray-800 dark:text-amber-500 py-3 px-6 flex items-center justify-between shadow-lg backdrop-filter backdrop-blur-2xl bg-opacity-10">
-          <a href="https://bayardlab.org" target="_blank" rel="noopener noreferrer">
-            <Image src={isDarkMode ? BAYARD_LAB_YELLOW : BAYARD_LAB} alt="Bayard Lab Logo" width={150} height={50} />
-          </a>
-          <h1 className={`${lexendPetaStyle.className} uppercase text-sm`}>Bayard_One</h1>
-          <nav>
-            <ul className="flex space-x-4 items-center">
-              <li>
-                <a href="https://bayardlab.org" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
-                  Home
-                </a>
-              </li>
-              <li>
-                <a href="https://www.bayardlab.org/about-bayard-one" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
-                  About
-                </a>
-              </li>
-              <li>
-                <a href="https://docs.bayardlab.org" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
-                  Documentation
-                </a>
-              </li>
-              <li>
-                <a href="https://www.bayardlab.org/contact" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
-                  Contact
-                </a>
-              </li>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <button
-                      onClick={toggleDarkMode}
-                      className="p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
+  return (
+    <div className="flex flex-col h-screen text-base bg-gray-100 dark:bg-gray-900 dark:text-base dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 dark:bg-fixed dark:bg-opacity-100">
+      <header className="bg-gradient-to-r from-amber-400 to-amber-200 dark:from-gray-900 dark:to-gray-800 text-gray-800 dark:text-amber-500 py-3 px-6 flex items-center justify-between shadow-lg backdrop-filter backdrop-blur-2xl bg-opacity-10">
+        <a href="https://bayardlab.org" target="_blank" rel="noopener noreferrer">
+          <Image src={isDarkMode ? BAYARD_LAB_YELLOW : BAYARD_LAB} alt="Bayard Lab Logo" width={150} height={50} />
+        </a>
+        <h1 className={`${lexendPetaStyle.className} uppercase text-sm`}>Bayard_One</h1>
+        <nav>
+          <ul className="flex space-x-4 items-center">
+            <li>
+              <a href="https://bayardlab.org" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
+                Home
+              </a>
+            </li>
+            <li>
+              <a href="https://www.bayardlab.org/about-bayard-one" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
+                About
+              </a>
+            </li>
+            <li>
+              <a href="https://docs.bayardlab.org" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
+                Documentation
+              </a>
+            </li>
+            <li>
+              <a href="https://www.bayardlab.org/contact" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
+                Contact
+              </a>
+            </li>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={toggleDarkMode}
+                    className="p-2 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500"
+                  >
+                    <span className="sr-only">Toggle Dark Mode</span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      fill="currentColor"
+                      className={`w-5 h-5 ${isDarkMode ? 'text-amber-500' : 'text-gray-500'}`}
                     >
-                      <span className="sr-only">Toggle Dark Mode</span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="currentColor"
-                        className={`w-5 h-5 ${isDarkMode ? 'text-amber-500' : 'text-gray-500'}`}
-                      >
-                        {isDarkMode ? (
-                          <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M12 1C5.92487 1 1 5.92487 1 12C1 18.0751 5.92487 23 12 23C18.0751 23 23 18.0751 23 12C23 5.92487 18.0751 1 12 1ZM12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3V21Z"
-                          />
-                        ) : (
-                          <path
-                            fillRule="evenodd"
-                            clipRule="evenodd"
-                            d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM12 20V4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20Z"
-                          />
-                        )}
-                      </svg>
-                    </button>
-                  </TooltipTrigger>
-                  <TooltipContent side="left" sideOffset={30}>
-                    <p>{isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </ul>
-          </nav>
-        </header>
-        <div className="bg-gray-800 text-amber-100 dark:bg-amber-100 dark:text-gray-800 p-4 shadow-md flex items-center space-x-2">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-amber-400 dark:text-gray-800">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
-          </svg>
-          <p className="text-xs">
-            <strong>Caution:</strong> Bayard is an open-source, alpha-stage AI research assistant designed to facilitate access to LGBTQ+ scholarship; while it aims to provide reliable information, users should think critically, fact-check key details, and consult primary sources as they would with any research tool.
-          </p>
-        </div>
-        <main className="flex flex-1 overflow-hidden">
-          <ResizablePanelGroup direction="horizontal">
+                      {isDarkMode ? (
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M12 1C5.92487 1 1 5.92487 1 12C1 18.0751 5.92487 23 12 23C18.0751 23 23 18.0751 23 12C23 5.92487 18.0751 1 12 1ZM12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3V21Z"
+                        />
+                      ) : (
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM12 20V4C7.58172 4 4 7.58172 4 12C4 16.4183 7.58172 20 12 20Z"
+                        />
+                      )}
+                    </svg>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="left" sideOffset={30}>
+                  <p>{isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </ul>
+        </nav>
+      </header>
+      <div className="bg-gray-800 text-amber-100 dark:bg-amber-100 dark:text-gray-800 p-4 shadow-md flex items-center space-x-2">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 text-amber-400 dark:text-gray-800">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+        </svg>
+        <p className="text-xs">
+          <strong>Caution:</strong> Bayard is an open-source, alpha-stage AI research assistant designed to facilitate access to LGBTQ+ scholarship; while it aims to provide reliable information, users should think critically, fact-check key details, and consult primary sources as they would with any research tool.
+        </p>
+      </div>
+      <main className="flex flex-1 overflow-hidden">
+        <ResizablePanelGroup direction="horizontal">
           {!isMobile && (
             <>
-            <ResizablePanel className="shadow-md">
-              <aside
-                ref={asideRef}
-                className="bg-amber-50 dark:bg-gray-700 p-4 pl-10 pr-10 transition-all duration-300 overflow-y-auto shadow-lg z-10 relative h-full"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <div>
-                    <h2 className="text-lg font-bold text-gray-800 dark:text-amber-400 mb-3">Documents</h2>
-                    <div className="relative inline-block text-left">
-                      <div>
-                        <button
-                          type="button"
-                          className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-amber-400 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-amber-500"
-                          id="options-menu"
-                          aria-haspopup="true"
-                          aria-expanded={isDropdownOpen}
-                          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                        >
-                          {activeTabId
-                            ? chatHistory.documentTabs.find((tab) => tab.id === activeTabId)?.title.replace(/^["']|["']$/g, '')
-                            : 'Select a document set'}
-                          <svg
-                            className="-mr-1 ml-2 h-5 w-5"
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 20 20"
-                            fill="currentColor"
-                            aria-hidden="true"
+              <ResizablePanel className="shadow-md">
+                <aside
+                  ref={asideRef}
+                  className="bg-amber-50 dark:bg-gray-700 p-4 pl-10 pr-10 transition-all duration-300 overflow-y-auto shadow-lg z-10 relative h-full"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div>
+                      <h2 className="text-lg font-bold text-gray-800 dark:text-amber-400 mb-3">Documents</h2>
+                      <div className="relative inline-block text-left">
+                        <div>
+                          <button
+                            type="button"
+                            className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-amber-400 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-amber-500"
+                            id="options-menu"
+                            aria-haspopup="true"
+                            aria-expanded={isDropdownOpen}
+                            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                           >
-                            <path
-                              fillRule="evenodd"
-                              d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        </button>
-                      </div>
+                            {activeTabId
+                              ? chatHistory.documentTabs.find((tab) => tab.id === activeTabId)?.title.replace(/^["']|["']$/g, '')
+                              : 'Select a document set'}
+                            <svg
+                              className="-mr-1 ml-2 h-5 w-5"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 20 20"
+                              fill="currentColor"
+                              aria-hidden="true"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                clipRule="evenodd"
+                              />
+                            </svg>
+                          </button>
+                        </div>
 
-                      {isDropdownOpen && (
-                        <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5">
-                          <div
-                            className="py-1"
-                            role="menu"
-                            aria-orientation="vertical"
-                            aria-labelledby="options-menu"
-                          >
-                            {chatHistory.documentTabs.map((tab) => (
-                              <button
-                                key={tab.id}
-                                className={`${activeTabId === tab.id
+                        {isDropdownOpen && (
+                          <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5">
+                            <div
+                              className="py-1"
+                              role="menu"
+                              aria-orientation="vertical"
+                              aria-labelledby="options-menu"
+                            >
+                              {chatHistory.documentTabs.map((tab) => (
+                                <button
+                                  key={tab.id}
+                                  className={`${activeTabId === tab.id
                                     ? 'bg-amber-100 dark:bg-gray-700 text-gray-900 dark:text-amber-400'
                                     : 'text-gray-700 dark:text-amber-400'
-                                  } block px-4 py-2 text-sm w-full text-left`}
-                                role="menuitem"
-                                onClick={() => {
-                                  setActiveTabId(tab.id);
-                                  setIsDropdownOpen(false);
-                                }}
-                              >
-                                {tab.title.replace(/^["']|["']$/g, '')}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div
-                    className="w-2 h-full bg-amber-300 dark:bg-gray-500 hover:bg-amber-400 dark:hover:bg-gray-400 cursor-col-resize"
-                    onMouseDown={handleMouseDown}
-                  ></div>
-                </div>
-                {activeTabId && (
-                  <div className="space-y-4">
-                          {chatHistory.documentTabs
-                            .find((tab) => tab.id === activeTabId)
-                            ?.documents.map((doc, index) => (
-                                  <motion.div
-                                    key={index}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -20 }}
-                                    transition={{ duration: 0.3 }}
-                                    data-document-index={index}
-                                    id={`doc-${index}`}
-                                  >
-                            <div className="bg-white dark:bg-gray-800 shadow-md rounded-md p-4 mb-4 glow">
-                            <h3 className="text-xl font-semibold text-gray-800 dark:text-amber-400 mb-2 capitalize">
-                              {doc.title}
-                            </h3>
-                            <div className="text-sm text-gray-600 dark:text-amber-300 mb-2">
-                              <p><strong>Authors</strong></p>
-                              {doc.authors.map((author, index) => (
-                                <p key={index}>{author}</p>
+                                    } block px-4 py-2 text-sm w-full text-left`}
+                                  role="menuitem"
+                                  onClick={() => {
+                                    setActiveTabId(tab.id);
+                                    setIsDropdownOpen(false);
+                                  }}
+                                >
+                                  {tab.title.replace(/^["']|["']$/g, '')}
+                                </button>
                               ))}
                             </div>
-                            <div className="text-sm text-gray-600 dark:text-amber-300 mb-2">
-                              <p><strong>Year Published</strong></p>
-                              <p>{doc.yearPublished}</p>
-                            </div>
-                            <div className="text-sm text-gray-600 dark:text-amber-300 mb-2">
-                              <p><strong>Abstract</strong></p>
-                              <p>{doc.abstract.length > 500 ? doc.abstract.slice(0, 500) + '...' : doc.abstract}</p>
-                            </div>
-                            <div className="mt-4">
-                              <a
-                                href={doc.downloadUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-block px-4 py-2 text-sm font-semibold text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  setIsModalOpen(true);
-                                  setModalLinkUrl(doc.downloadUrl);
-                                }}
-                              >
-                                <span className="inline-flex items-center">
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    className="h-4 w-4 mr-1"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth={2}
-                                      d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                                    />
-                                  </svg>
-                                  Download
-                                </span>
-                              </a>
-                            </div>
                           </div>
-                        </motion.div>
-                      ))}
+                        )}
+                      </div>
+                    </div>
+                    <div
+                      className="w-2 h-full bg-amber-300 dark:bg-gray-500 hover:bg-amber-400 dark:hover:bg-gray-400 cursor-col-resize"
+                      onMouseDown={handleMouseDown}
+                    ></div>
                   </div>
-                )}
-                {!activeTabId && chatHistory.documentTabs.length > 0 && (
-                  <p className="text-xs text-gray-600 dark:text-amber-300 mt-2">Select a tab to view documents</p>
-                )}
-                {chatHistory.documentTabs.length === 0 && !isLoading && (
-                  <p className="text-xs text-gray-600 dark:text-amber-300 mt-2">No documents found</p>
-                )}
-              </aside>
-            </ResizablePanel>
-            <ResizableHandle style={{ width: '2px' }} />
+                  {activeTabId && (
+                    <div className="space-y-4">
+                      {chatHistory.documentTabs
+                        .find((tab) => tab.id === activeTabId)
+                        ?.documents.map((doc, index) => (
+                          <motion.div
+                            key={index}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            transition={{ duration: 0.3 }}
+                            data-document-index={index}
+                            id={`doc-${index}`}
+                          >
+                            <div className="bg-white dark:bg-gray-800 shadow-md rounded-md p-4 mb-4 glow">
+                              <h3 className="text-xl font-semibold text-gray-800 dark:text-amber-400 mb-2 capitalize">
+                                {doc.title}
+                              </h3>
+                              <div className="text-sm text-gray-600 dark:text-amber-300 mb-2">
+                                <p><strong>Authors</strong></p>
+                                {doc.authors.map((author, index) => (
+                                  <p key={index}>{author}</p>
+                                ))}
+                              </div>
+                              <div className="text-sm text-gray-600 dark:text-amber-300 mb-2">
+                                <p><strong>Year Published</strong></p>
+                                <p>{doc.yearPublished}</p>
+                              </div>
+                              <div className="text-sm text-gray-600 dark:text-amber-300 mb-2">
+                                <p><strong>Abstract</strong></p>
+                                <p>{doc.abstract.length > 500 ? doc.abstract.slice(0, 500) + '...' : doc.abstract}</p>
+                              </div>
+                              <div className="mt-4">
+                                <a
+                                  href={doc.downloadUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-block px-4 py-2 text-sm font-semibold text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    setIsModalOpen(true);
+                                    setModalLinkUrl(doc.downloadUrl);
+                                  }}
+                                >
+                                  <span className="inline-flex items-center">
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      className="h-4 w-4 mr-1"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      stroke="currentColor"
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth={2}
+                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                                      />
+                                    </svg>
+                                    Download
+                                  </span>
+                                </a>
+                              </div>
+                            </div>
+                          </motion.div>
+                        ))}
+                    </div>
+                  )}
+                  {!activeTabId && chatHistory.documentTabs.length > 0 && (
+                    <p className="text-xs text-gray-600 dark:text-amber-300 mt-2">Select a tab to view documents</p>
+                  )}
+                  {chatHistory.documentTabs.length === 0 && !isLoading && (
+                    <p className="text-xs text-gray-600 dark:text-amber-300 mt-2">No documents found</p>
+                  )}
+                </aside>
+              </ResizablePanel>
+              <ResizableHandle style={{ width: '2px' }} />
             </>
           )}
-            <ResizablePanel className="shadow-md">
-              <div className="w-0.5 bg-amber-200 dark:bg-gray-600"></div>
-              <section className="flex-1 flex flex-col overflow-hidden" style={{ width: '100%', height: '100%' }}>
-                <div className="flex items-center justify-between p-4 pr-10 pl-10 bg-amber-50 dark:bg-gray-800 text-gray-800 dark:text-amber-400">
-                  <h2 className="text-lg font-semibold">Chat</h2>
-                </div>
-                <div ref={chatContainerRef} className="flex-1 p-4 pr-10 pl-10 bg-amber-50 dark:bg-gray-800 overflow-y-auto">
-            {chatHistory.messages.length === 0 ? (
+          <ResizablePanel className="shadow-md">
+            <div className="w-0.5 bg-amber-200 dark:bg-gray-600"></div>
+            <section className="flex-1 flex flex-col overflow-hidden" style={{ width: '100%', height: '100%' }}>
+              <div className="flex items-center justify-between p-4 pr-10 pl-10 bg-amber-50 dark:bg-gray-800 text-gray-800 dark:text-amber-400">
+                <h2 className="text-lg font-semibold">Chat</h2>
+              </div>
+              <div ref={chatContainerRef} className="flex-1 p-4 pr-10 pl-10 bg-amber-50 dark:bg-gray-800 overflow-y-auto">
+                {chatHistory.messages.length === 0 ? (
                   <PromptSuggestions onPromptSelect={handlePromptSelect}></PromptSuggestions>
-            ) : (
+                ) : (
                   <AnimatePresence>
                     {chatHistory.messages.map((message, index) => (
                       <motion.div
@@ -758,8 +758,8 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
                       >
                         <Card
                           className={`mb-4 p-4 rounded-lg shadow-md backdrop-filter backdrop-blur-2xl bg-opacity-30 ${message.user === 'You'
-                              ? 'bg-amber-100/70 dark:bg-gray-700/70 text-gray-800 dark:text-amber-500'
-                              : 'bg-amber-300/70 dark:bg-gray-900/70 text-gray-800 dark:text-amber-500'
+                            ? 'bg-amber-100/70 dark:bg-gray-700/70 text-gray-800 dark:text-amber-500'
+                            : 'bg-amber-300/70 dark:bg-gray-900/70 text-gray-800 dark:text-amber-500'
                             }`}
                         >
                           <CardHeader>
@@ -832,158 +832,352 @@ function FormattedModelOutput({ text, documentTabs, activeTabId }: FormattedMode
                               </ReactMarkdown>
                             )}
                           </CardContent>
-
                         </Card>
                       </motion.div>
                     ))}
                   </AnimatePresence>
-            )}
-                  {isLoading && (
-                    <motion.div
-                      initial={{ opacity: 0.6 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0.97 }}
-                      transition={{ duration: 0.1 }}
-                      className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50 dark:bg-opacity-70"
-                    >
-                      <div className="text-center w-1/2">
-                        <div className="relative">
-                          <div className="w-full h-2 bg-gray-300 rounded-full">
-                            <motion.div
-                              initial={{ width: 0 }}
-                              animate={{ width: `${loadingStatus === 'Thinking...' ? '33%' : loadingStatus === 'Querying...' ? '66%' : '100%'}` }}
-                              transition={{ duration: 0.1, ease: 'easeOut' }}
-                              className="absolute top-0 left-0 h-2 bg-amber-500 rounded-full"
-                            />
-                          </div>
+                )}
+                {isLoading && (
+                  <motion.div
+                    initial={{ opacity: 0.6 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0.97 }}
+                    transition={{ duration: 0.1 }}
+                    className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-70 z-50 dark:bg-opacity-70"
+                  >
+                    <div className="text-center w-1/2">
+                      <div className="relative">
+                        <div className="w-full h-2 bg-gray-300 rounded-full">
                           <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ duration: 0.8, repeat: Infinity, repeatType: 'reverse' }}
-                            className="absolute top-0 left-0 w-full h-2 bg-white rounded-full opacity-25"
+                            initial={{ width: 0 }}
+                            animate={{ width: `${loadingStatus === 'Thinking...' ? '33%' : loadingStatus === 'Querying...' ? '66%' : '100%'}` }}
+                            transition={{ duration: 0.1, ease: 'easeOut' }}
+                            className="absolute top-0 left-0 h-2 bg-amber-500 rounded-full"
                           />
                         </div>
-                        <motion.p
-                          initial={{ opacity: 0, y: 5 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.1, delay: 0.1 }}
-                          className="mt-1 text-amber-300 dark:text-amber-300 text-lg"
-                        >
-                          {loadingStatus}
-                        </motion.p>
+                        <motion.div
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ duration: 0.8, repeat: Infinity, repeatType: 'reverse' }}
+                          className="absolute top-0 left-0 w-full h-2 bg-white rounded-full opacity-25"
+                        />
                       </div>
-                    </motion.div>
-                  )}
-                </div>
-                <div className="p-4 bg-gradient-to-r from-amber-200 dark:from-gray-800 to-amber-100 dark:to-gray-900 backdrop-filter backdrop-blur-md bg-opacity-30">
-                  <div className="flex space-x-2">
-                    <div className="flex-1 mr-2">
-                      <Textarea
-                        value={message}
-                        onChange={handleInputChange}
-                        onKeyDown={handleKeyDown}
-                        className="w-full px-4 py-3 bg-amber-50 dark:bg-gray-700 text-gray-800 dark:text-amber-300 border border-amber-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 placeholder-gray-500 dark:placeholder-gray-400 text-sm"
-                        placeholder="Search over 20,000 LGBTQ+ research documents with Bayard..."
-                      />
-                    </div>
-                    <div className="flex flex-col space-y-2 mr-2">
-                      <Button
-                        onClick={sendMessage}
-                        disabled={isLoading}
-                        className="relative flex items-center justify-center mt-2 w-16 h-16 rounded-full bg-gray-800 text-amber-100 dark:bg-amber-500 dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-amber-600 font-bold group transition-colors duration-300"
+                      <motion.p
+                        initial={{ opacity: 0, y: 5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.1, delay: 0.1 }}
+                        className="mt-1 text-amber-300 dark:text-amber-300 text-lg"
                       >
-                        {isLoading ? (
-                          <span className="flex items-center justify-center">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              className="w-6 h-6 animate-spin"
-                            >
-                              <circle cx="12" cy="12" r="10" />
-                              <path d="M12 6v6m0 0v6" />
-                            </svg>
-                          </span>
-                        ) : (
-                          <span className="relative flex items-center justify-center">
-                            <span className="w-2 h-2 border-t-2 border-r-2 border-amber-100 dark:border-gray-900 transform -rotate-45 transition-transform duration-300 ease-in-out group-hover:scale-110"></span>
-                          </span>
-                        )}
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 hidden group-hover:block mb-2 transition-opacity duration-300 ease-in-out">
-                                <span className="bg-gray-800 text-amber-100 dark:bg-amber-500 dark:text-gray-900 px-2 py-1 rounded text-xs whitespace-nowrap">
-                                  {isLoading ? 'Sending...' : 'Send'}
-                                </span>
-                              </span>
-                            </TooltipTrigger>
-                            <TooltipContent side="top">
+                        {loadingStatus}
+                      </motion.p>
+                    </div>
+                  </motion.div>
+                )}
+              </div>
+              <div className="p-4 bg-gradient-to-r from-amber-200 dark:from-gray-800 to-amber-100 dark:to-gray-900 backdrop-filter backdrop-blur-md bg-opacity-30">
+                <div className="flex space-x-2">
+                  <div className="flex-1 mr-2">
+                    <Textarea
+                      value={message}
+                      onChange={handleInputChange}
+                      onKeyDown={handleKeyDown}
+                      className="w-full px-4 py-3 bg-amber-50 dark:bg-gray-700 text-gray-800 dark:text-amber-300 border border-amber-200 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-amber-500 placeholder-gray-500 dark:placeholder-gray-400 text-sm"
+                      placeholder="Search over 20,000 LGBTQ+ research documents with Bayard..."
+                    />
+                  </div>
+                  <div className="flex flex-col space-y-2 mr-2">
+                    <Button
+                      onClick={sendMessage}
+                      disabled={isLoading}
+                      className="relative flex items-center justify-center mt-2 w-16 h-16 rounded-full bg-gray-800 text-amber-100 dark:bg-amber-500 dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-amber-600 font-bold group transition-colors duration-300"
+                    >
+                      {isLoading ? (
+                        <span className="flex items-center justify-center">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            className="w-6 h-6 animate-spin"
+                          >
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M12 6v6m0 0v6" />
+                          </svg>
+                        </span>
+                      ) : (
+                        <span className="relative flex items-center justify-center">
+                          <span className="w-2 h-2 border-t-2 border-r-2 border-amber-100 dark:border-gray-900 transform -rotate-45 transition-transform duration-300 ease-in-out group-hover:scale-110"></span>
+                        </span>
+                      )}
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span className="absolute bottom-full left-1/2 transform -translate-x-1/2 hidden group-hover:block mb-2 transition-opacity duration-300 ease-in-out">
                               <span className="bg-gray-800 text-amber-100 dark:bg-amber-500 dark:text-gray-900 px-2 py-1 rounded text-xs whitespace-nowrap">
                                 {isLoading ? 'Sending...' : 'Send'}
                               </span>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
-                      </Button>
-                    </div>
+                            </span>
+                          </TooltipTrigger>
+                          <TooltipContent side="top">
+                            <span className="bg-gray-800 text-amber-100 dark:bg-amber-500 dark:text-gray-900 px-2 py-1 rounded text-xs whitespace-nowrap">
+                              {isLoading ? 'Sending...' : 'Send'}
+                            </span>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </Button>
                   </div>
                 </div>
-              </section>
-            </ResizablePanel>
-          </ResizablePanelGroup>
-        </main>
-        <div>
-        </div>
-        <footer>
-          <div className="bg-gradient-to-r from-amber-400 dark:from-gray-800 to-amber-100 dark:to-gray-900 text-gray-600 dark:text-gray-400 py-4 px-6 flex items-center justify-between text-xs backdrop-filter backdrop-blur-3xl bg-opacity-20 bg-amber-100/60 dark:bg-gray-800/60 shadow-lg">
-            <div>
-              <span>© {new Date().getFullYear()} Bayard Lab. All rights reserved. Open-source use subject to <a href="https://docs.bayardlab.org/wl1.0gp-license-terms" target="_blank" rel="noopener noreferrer" className="underline text-gray-700 dark:text-amber-500 hover:text-gray-400 dark:hover:text-amber-300">terms</a>.</span>
-            </div>
-            <div>
-              <a href="https://bayardlab.org/terms" target="_blank" rel="noopener noreferrer" className="text-gray-600 dark:text-gray-400 text-xs hover:text-gray-800 dark:hover:text-amber-500 mr-4">
-                Terms & Conditions
-              </a>
-              <a href="https://bayardlab.org/privacy-notice" target="_blank" rel="noopener noreferrer" className="text-gray-600 dark:text-gray-400 text-xs hover:text-gray-800 dark:hover:text-amber-500">
-                Privacy Notice
-              </a>
-            </div>
-          
+              </div>
+            </section>
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </main>
+      <div>
+      </div>
+      <footer>
+        <div className="bg-gradient-to-r from-amber-400 dark:from-gray-800 to-amber-100 dark:to-gray-900 text-gray-600 dark:text-gray-400 py-4 px-6 flex items-center justify-between text-xs backdrop-filter backdrop-blur-3xl bg-opacity-20 bg-amber-100/60 dark:bg-gray-800/60 shadow-lg">
+          <div>
+            <span>© {new Date().getFullYear()} Bayard Lab. All rights reserved. Open-source use subject to <a href="https://docs.bayardlab.org/wl1.0gp-license-terms" target="_blank" rel="noopener noreferrer" className="underline text-gray-700 dark:text-amber-500 hover:text-gray-400 dark:hover:text-amber-300">terms</a>.</span>
           </div>
-        </footer>
-        {isMobile && (
+          <div>
+            <a href="https://bayardlab.org/terms" target="_blank" rel="noopener noreferrer" className="text-gray-600 dark:text-gray-400 text-xs hover:text-gray-800 dark:hover:text-amber-500 mr-4">
+              Terms & Conditions
+            </a>
+            <a href="https://bayardlab.org/privacy-notice" target="_blank" rel="noopener noreferrer" className="text-gray-600 dark:text-gray-400 text-xs hover:text-gray-800 dark:hover:text-amber-500">
+              Privacy Notice
+            </a>
+          </div>
+
+        </div>
+      </footer>
+      {isMobile && (
         <button
           onClick={toggleDrawer}
           className="fixed bottom-4 right-4 z-50 p-4 bg-amber-500 text-white rounded-full shadow-lg"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 6h16M4 12h16M4 18h16"
-            />
-          </svg>
+          {isDrawerOpen ? (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M4 6h16M4 12h16M4 18h16"
+              />
+            </svg>
+          )}
         </button>
       )}
 
       {/* Drawer component on mobile devices */}
       {isMobile && isDrawerOpen && (
-        <div className="fixed inset-0 z-40 bg-black bg-opacity-50" onClick={toggleDrawer}>
-          <div className="fixed inset-y-0 right-0 z-50 w-full max-w-xs bg-white dark:bg-gray-800 shadow-lg">
-            <div className="p-4">
-              <h2 className="text-lg font-semibold mb-4">Documents</h2>
-              {/* Documents pane content */}
+        <div className="fixed inset-0 z-40 bg-white dark:bg-gray-800">
+          <div className="flex flex-col h-full">
+            <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-semibold">Documents</h2>
+                <button
+                  onClick={toggleDrawer}
+                  className="text-gray-500 dark:text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+            <div className="flex-1 overflow-y-auto">
+              <div className="p-4">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="relative inline-block text-left">
+                    <div>
+                      <button
+                        type="button"
+                        className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white dark:bg-gray-800 text-sm font-medium text-gray-700 dark:text-amber-400 hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-amber-500"
+                        id="options-menu"
+                        aria-haspopup="true"
+                        aria-expanded={isDropdownOpen}
+                        onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                      >
+                        {activeTabId
+                          ? chatHistory.documentTabs.find((tab) => tab.id === activeTabId)?.title.replace(/^["']|["']$/g, '')
+                          : 'Select a document set'}
+                        <svg
+                          className="-mr-1 ml-2 h-5 w-5"
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          aria-hidden="true"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+
+                    {isDropdownOpen && (
+                      <div className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5">
+                        <div
+                          className="py-1"
+                          role="menu"
+                          aria-orientation="vertical"
+                          aria-labelledby="options-menu"
+                        >
+                          {chatHistory.documentTabs.map((tab) => (
+                            <button
+                              key={tab.id}
+                              className={`${activeTabId === tab.id
+                                ? 'bg-amber-100 dark:bg-gray-700 text-gray-900 dark:text-amber-400'
+                                : 'text-gray-700 dark:text-amber-400'
+                                } block px-4 py-2 text-sm w-full text-left`}
+                              role="menuitem"
+                              onClick={() => {
+                                setActiveTabId(tab.id);
+                                setIsDropdownOpen(false);
+                              }}
+                            >
+                              {tab.title.replace(/^["']|["']$/g, '')}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div
+                  className="w-2 h-full bg-amber-300 dark:bg-gray-500 hover:bg-amber-400 dark:hover:bg-gray-400 cursor-col-resize"
+                  onMouseDown={handleMouseDown}
+                ></div>
+              </div>
+              {activeTabId && (
+                <div className="space-y-4">
+                  {chatHistory.documentTabs
+                    .find((tab) => tab.id === activeTabId)
+                    ?.documents.map((doc, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.3 }}
+                        data-document-index={index}
+                        id={`doc-${index}`}
+                      >
+                        {activeTabId && (
+                          <div className="space-y-4">
+                            {chatHistory.documentTabs
+                              .find((tab) => tab.id === activeTabId)
+                              ?.documents.map((doc, index) => (
+                                <motion.div
+                                  key={index}
+                                  initial={{ opacity: 0, y: 20 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  exit={{ opacity: 0, y: -20 }}
+                                  transition={{ duration: 0.3 }}
+                                  data-document-index={index}
+                                  id={`doc-${index}`}
+                                >
+                                  <div className="bg-white dark:bg-gray-800 shadow-md rounded-md p-4 mb-4 glow">
+                                    <h3 className="text-xl font-semibold text-gray-800 dark:text-amber-400 mb-2 capitalize">
+                                      {doc.title}
+                                    </h3>
+                                    <div className="text-sm text-gray-600 dark:text-amber-300 mb-2">
+                                      <p><strong>Authors</strong></p>
+                                      {doc.authors.map((author, index) => (
+                                        <p key={index}>{author}</p>
+                                      ))}
+                                    </div>
+                                    <div className="text-sm text-gray-600 dark:text-amber-300 mb-2">
+                                      <p><strong>Year Published</strong></p>
+                                      <p>{doc.yearPublished}</p>
+                                    </div>
+                                    <div className="text-sm text-gray-600 dark:text-amber-300 mb-2">
+                                      <p><strong>Abstract</strong></p>
+                                      <p>{doc.abstract.length > 500 ? doc.abstract.slice(0, 500) + '...' : doc.abstract}</p>
+                                    </div>
+                                    <div className="mt-4">
+                                      <a
+                                        href={doc.downloadUrl}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-block px-4 py-2 text-sm font-semibold text-white bg-gray-700 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2"
+                                        onClick={(e) => {
+                                          e.preventDefault();
+                                          setIsModalOpen(true);
+                                          setModalLinkUrl(doc.downloadUrl);
+                                        }}
+                                      >
+                                        <span className="inline-flex items-center">
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            className="h-4 w-4 mr-1"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                          >
+                                            <path
+                                              strokeLinecap="round"
+                                              strokeLinejoin="round"
+                                              strokeWidth={2}
+                                              d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                                            />
+                                          </svg>
+                                          Download
+                                        </span>
+                                      </a>
+                                    </div>
+                                  </div>
+                                </motion.div>
+                              ))}
+                          </div>
+                        )}                      </motion.div>
+                    ))}
+                </div>
+              )}
+              {!activeTabId && chatHistory.documentTabs.length > 0 && (
+                <p className="text-xs text-gray-600 dark:text-amber-300 mt-2">Select a tab to view documents</p>
+              )}
+              {chatHistory.documentTabs.length === 0 && !isLoading && (
+                <p className="text-xs text-gray-600 dark:text-amber-300 mt-2">No documents found</p>
+              )}
             </div>
           </div>
         </div>
