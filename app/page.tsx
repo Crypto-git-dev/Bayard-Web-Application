@@ -34,7 +34,8 @@ import PromptSuggestions from "@/components/ui/PromptSuggestions";
 import BetaBanner from "@/components/ui/Beta";
 import Footer from "@/components/ui/Footer";
 import MobilePage from "./MobilePage";
-import { useRouter } from "next/router";
+import { useSearchParams } from 'next/navigation';
+import { useCallback } from "react";
 
 
 const apiKey = process.env.AMPLITUDE_API_KEY || ""; // Set a default value if the API key is undefined
@@ -254,8 +255,11 @@ export default function ChatPage() {
   const [isPromptModalOpen, setIsPromptModalOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const searchParams = useSearchParams();
+  const searchQuery = searchParams?.get('q') || '';
+  const searchQueryRef = useRef('');
 
-
+  
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 768);
@@ -369,12 +373,12 @@ export default function ChatPage() {
     }
   }, [isStreaming, modelOutput, streamedText]);
 
-  const sendMessage = async () => {
-    if (message.trim() === '') return;
+  const sendMessage = useCallback(async (messageText: string) => {
+    if (messageText.trim() === '') return;
 
     const userMessage: Message = {
       user: 'You',
-      text: message,
+      text: messageText,
       timestamp: new Date().toLocaleString(),
     };
 
@@ -396,7 +400,7 @@ export default function ChatPage() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ input_text: message, documentTabs: chatHistory.documentTabs }),
+        body: JSON.stringify({ input_text: messageText, documentTabs: chatHistory.documentTabs }),
       });
 
       if (!response.ok) {
@@ -422,7 +426,16 @@ export default function ChatPage() {
 
     setIsLoading(false);
     setLoadingStatus('');
-  };
+  }, [chatHistory.documentTabs]);
+
+  useEffect(() => {
+    if (searchQuery && searchQuery !== searchQueryRef.current) {
+      searchQueryRef.current = searchQuery;
+      setMessage(searchQuery);
+      sendMessage(searchQuery);
+    }
+  }, [searchQuery, sendMessage]);
+
 
   const regenerateResponse = async () => {
     setIsLoading(true);
@@ -445,7 +458,7 @@ export default function ChatPage() {
       }));
 
       // Send the message to the backend for processing
-      await sendMessage(); // Remove the argument from the function call
+      await sendMessage(message.text); // Pass the message text as an argument
     } catch (error) {
       console.error('Error:', error);
     }
@@ -488,7 +501,7 @@ export default function ChatPage() {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      sendMessage();
+      sendMessage(message); // Pass the 'message' argument to the 'sendMessage' function
     }
   };
 
@@ -895,7 +908,7 @@ export default function ChatPage() {
                   </div>
                   <div className="flex flex-col space-y-2 mr-2">
                     <Button
-                      onClick={sendMessage}
+                      onClick={(event: React.MouseEvent<HTMLButtonElement>) => sendMessage(message)}
                       disabled={isLoading}
                       className="relative flex items-center justify-center mt-2 w-16 h-16 rounded-full bg-gray-800 text-amber-100 dark:bg-amber-500 dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-amber-600 font-bold group transition-colors duration-300"
                     >
