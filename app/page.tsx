@@ -313,26 +313,30 @@ export default function ChatPage() {
     document.body.classList.toggle('dark', prefersDarkMode);
   }, []);
 
-
   const toggleDarkMode = () => {
     console.log('toggleDarkMode called');
     const newIsDarkMode = !isDarkMode;
     setIsDarkMode(newIsDarkMode);
     document.body.classList.toggle('dark', newIsDarkMode);
   };
+
+
   useEffect(() => {
     if (chatContainerRef.current) {
       const lastMessage = chatContainerRef.current.lastElementChild;
       if (lastMessage) {
-        lastMessage.scrollIntoView({
+        const buffer = 20; // Adjust the buffer value as needed
+        const containerRect = chatContainerRef.current.getBoundingClientRect();
+        const lastMessageRect = lastMessage.getBoundingClientRect();
+        const scrollTop = lastMessageRect.top - containerRect.top - buffer;
+
+        chatContainerRef.current.scrollTo({
+          top: scrollTop,
           behavior: 'smooth',
-          block: 'start',
-          inline: 'nearest',
         });
       }
     }
   }, [chatHistory.messages]);
-
   useEffect(() => {
     if (isStreaming) {
       const timer = setTimeout(() => {
@@ -472,7 +476,7 @@ export default function ChatPage() {
     }
   };
 
-  const DETAILS_TIMEOUT = 5000; // 10 seconds
+  const DETAILS_TIMEOUT = 10000; // 10 seconds
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -940,7 +944,7 @@ export default function ChatPage() {
                         <span>Close Documents Pane</span>
                       </div>
                     ) : (
-                      <div className="flex items-center justify-center">
+                      <div className="flex items-center justify-center z-9999">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           className="h-6 w-6 mr-2"
@@ -970,7 +974,10 @@ export default function ChatPage() {
 
       {/* Drawer component on mobile devices */}
       {isMobile && isDrawerOpen && (
-        <div className="fixed inset-0 z-40 bg-gradient-to-r from-amber-200 dark:from-gray-800 to-amber-100 dark:to-gray-900" style={{ height: 'calc(100% - 64px)' }}>
+  <div
+    className="fixed inset-0 z-50 bg-gradient-to-r from-amber-200 dark:from-gray-800 to-amber-100 dark:to-gray-900"
+    style={{ height: 'calc(100% - 64px)' }}
+  >
           <div className="flex flex-col h-full">
             <div className="p-4 border-b border-amber-300 dark:border-gray-700">
               <div className="flex items-center justify-between">
@@ -1003,7 +1010,7 @@ export default function ChatPage() {
                     <div>
                       <button
                         type="button"
-                        className="inline-flex justify-center w-full rounded-md border border-amber-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-amber-50 dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-amber-100 dark:focus:ring-offset-gray-800 focus:ring-amber-500"
+                        className="inline-flex justify-center w-full rounded-md border border-amber-300 dark:border-gray-600 shadow-sm px-4 py-2 bg-amber-50 dark:bg-gray-700 text-sm font-medium text-gray-700 dark:text-amber-400 hover:bg-amber-100 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-amber-100 dark:focus:ring-offset-gray-800 focus:ring-amber-500 mt-5"
                         id="options-menu"
                         aria-haspopup="true"
                         aria-expanded={isDropdownOpen}

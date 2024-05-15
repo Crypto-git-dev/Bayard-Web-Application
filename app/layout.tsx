@@ -23,9 +23,9 @@ export default function RootLayout({
         {/* End Google Tag Manager */}
       </head>
       <body className={inter.className}>
-        <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
           <main style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-            <div style={{ flex: 1, overflowY: 'auto' }}>
+            <div>
               {children}
             </div>
             {/* Add your input component here */}
