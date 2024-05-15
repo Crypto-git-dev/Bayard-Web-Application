@@ -573,7 +573,7 @@ export default function ChatPage() {
         <ResizablePanelGroup direction="horizontal">
           {!isMobile && (
             <>
-            <ResizablePanel className="shadow-md" style={{ order: 2 }}>
+              <ResizablePanel className="shadow-md" style={{ order: 2 }}>
                 <aside
                   ref={asideRef}
                   className="bg-amber-50 dark:bg-gray-700 p-4 pl-10 pr-10 transition-all duration-300 overflow-y-auto shadow-lg z-10 relative h-full"
@@ -724,7 +724,7 @@ export default function ChatPage() {
               <ResizableHandle style={{ width: '2px', order: 1 }} />
             </>
           )}
-        <ResizablePanel className="shadow-md" style={{ order: 0 }}>
+          <ResizablePanel className="shadow-md" style={{ order: 0 }}>
             <div className="w-0.5 bg-amber-200 dark:bg-gray-600"></div>
             <section className="flex-1 flex flex-col overflow-hidden" style={{ width: '100%', height: '100%' }}>
               <div className="flex items-center justify-between p-4 pr-10 pl-10 bg-amber-50 dark:bg-gray-800 text-gray-800 dark:text-amber-400">
@@ -921,48 +921,51 @@ export default function ChatPage() {
               </div>
               <div className="flex flex-col items-center bg-gray-800">
                 {isMobile && (
-                  <button
-                    onClick={toggleDrawer}
-                    className="px-6 py-3 bg-gray-800 dark:bg-amber-500 text-white dark:text-gray-800 shadow-lg w-full"
-                  >
-                    {isDrawerOpen ? (
-                      <div className="flex items-center justify-center">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6 mr-2"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M6 18L18 6M6 6l12 12"
-                          />
-                        </svg>
-                        <span>Close Documents Pane</span>
-                      </div>
-                    ) : (
-                      <div className="flex items-center justify-center z-9999">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          className="h-6 w-6 mr-2"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                          />
-                        </svg>
-                        <span>Open Documents Pane</span>
-                      </div>
-                    )}
-                  </button>
+                  <div className="flex flex-col items-center bg-gray-800 w-full ">
+                    <button
+                      onClick={toggleDrawer}
+                      className="px-6 py-3 bg-gray-800 dark:bg-amber-500 text-white dark:text-gray-800 shadow-lg w-full"
+                      style={{ position: 'relative', zIndex: 60 }}
+                    >
+                      {isDrawerOpen ? (
+                        <div className="flex items-center justify-center">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 mr-2"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                          <span>Close Documents Pane</span>
+                        </div>
+                      ) : (
+                        <div className="flex items-center justify-center z-9999">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6 mr-2"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                            />
+                          </svg>
+                          <span>Open Documents Pane</span>
+                        </div>
+                      )}
+                    </button>
+                  </div>
                 )}
               </div>
             </section>
@@ -970,14 +973,15 @@ export default function ChatPage() {
         </ResizablePanelGroup>
       </main>
 
-      <Footer />
-
+      <div className="sticky bottom-0">
+        <Footer />
+      </div>
       {/* Drawer component on mobile devices */}
       {isMobile && isDrawerOpen && (
-  <div
-    className="fixed inset-0 z-50 bg-gradient-to-r from-amber-200 dark:from-gray-800 to-amber-100 dark:to-gray-900"
-    style={{ height: 'calc(100% - 64px)' }}
-  >
+        <div
+          className="fixed inset-0 z-50 bg-gradient-to-r from-amber-200 dark:from-gray-800 to-amber-100 dark:to-gray-900"
+          style={{ height: 'calc(100% - 128px)' }}
+        >
           <div className="flex flex-col h-full">
             <div className="p-4 border-b border-amber-300 dark:border-gray-700">
               <div className="flex items-center justify-between">
