@@ -55,22 +55,22 @@ function Header() {
             <nav className="hidden md:flex items-center space-x-5">
                 <ul className="flex space-x-4">
                     <li>
-                        <a href="https://bayardlab.org" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
+                        <a href="https://bayardlab.org" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
                             Home
                         </a>
                     </li>
                     <li>
-                        <a href="https://www.bayardlab.org/about-bayard-one" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
+                        <a href="https://www.bayardlab.org/about-bayard-one" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
                             About
                         </a>
                     </li>
                     <li>
-                        <a href="https://docs.bayardlab.org" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
+                        <a href="https://docs.bayardlab.org" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
                             Documentation
                         </a>
                     </li>
                     <li>
-                        <a href="https://www.bayardlab.org/contact" target="_blank" rel="noopener noreferrer" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
+                        <a href="https://www.bayardlab.org/contact" className="text-sm hover:text-gray-600 dark:hover:text-amber-400">
                             Contact
                         </a>
                     </li>
