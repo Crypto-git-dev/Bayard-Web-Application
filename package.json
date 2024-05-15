@@ -65,6 +65,7 @@
     "nextjs": "^0.0.3",
     "react": "^18.3.1",
     "react-day-picker": "^8.10.1",
+    "react-device-detect": "^2.2.3",
     "react-dom": "^18",
     "react-feather": "^2.0.10",
     "react-hook-form": "^7.51.4",

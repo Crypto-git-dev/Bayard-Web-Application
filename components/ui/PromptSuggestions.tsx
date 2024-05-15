@@ -147,9 +147,11 @@ const PromptSuggestions: React.FC<PromptSuggestionsProps> = ({ onPromptSelect })
             <p className="text-gray-700 dark:text-gray-200 mb-6">
                 Bayard_One is a retrieval-augmented generative (RAG) generative AI that combines the power of deep learning with a vast LGBTQ+ knowledge base. As a RAG AI, it generates highly relevant, contextual, and insightful responses by synthesizing information from multiple sources and drawing connections between ideas.
             </p>
+            <div className="hidden sm:block">
             <p className="text-gray-700 dark:text-gray-200 mb-6">
                 With access to over 20,000 LGBTQ+ research papers, journals, and resources, Bayard_One provides unparalleled support for researchers, students, and community members exploring LGBTQ+ issues. By democratizing access to LGBTQ+ scholarship, Bayard_One empowers individuals from all backgrounds to engage with and contribute to the dynamic field of queer studies, fostering a deeper understanding of the LGBTQ+ experience.
             </p>
+            </div>
             <div className="border-t border-gray-300 dark:border-gray-200 pt-6">
                 <h3 className="text-xl font-semibold text-gray-800 dark:text-amber-400 mb-4">Suggested Prompts</h3>
                 <div className="bg-gray-100 dark:bg-gray-700 rounded-lg p-4">

@@ -33,6 +33,8 @@ import Modal from 'react-modal';
 import PromptSuggestions from "@/components/ui/PromptSuggestions";
 import BetaBanner from "@/components/ui/Beta";
 import Footer from "@/components/ui/Footer";
+import MobilePage from "./MobilePage";
+import { useRouter } from "next/router";
 
 
 const apiKey = process.env.AMPLITUDE_API_KEY || ""; // Set a default value if the API key is undefined
@@ -252,6 +254,20 @@ export default function ChatPage() {
   const [isPromptModalOpen, setIsPromptModalOpen] = useState(false);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    handleResize(); // Initial check
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
 
   const springProps = useSpring({
     from: { opacity: 0, transform: 'translateY(20px)' },
@@ -563,8 +579,13 @@ export default function ChatPage() {
     }
   };
 
+
   return (
-    <div className="flex flex-col h-screen text-base bg-gray-100 dark:bg-gray-900 dark:text-base dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 dark:bg-fixed dark:bg-opacity-100">
+    <>
+      {isMobile ? (
+        <MobilePage />
+      ) : (
+        <div className="flex flex-col h-screen text-base bg-gray-100 dark:bg-gray-900 dark:text-base dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 dark:bg-fixed dark:bg-opacity-100">
       <Header />
       <div>
         <BetaBanner />
@@ -728,7 +749,7 @@ export default function ChatPage() {
             <div className="w-0.5 bg-amber-200 dark:bg-gray-600"></div>
             <section className="flex-1 flex flex-col overflow-hidden" style={{ width: '100%', height: '100%' }}>
               <div className="flex items-center justify-between p-4 pr-10 pl-10 bg-amber-50 dark:bg-gray-800 text-gray-800 dark:text-amber-400">
-                <h2 className="text-lg font-semibold">Chat</h2>
+                <h2 className="text-lg font-semibold hidden sm:block">Chat</h2>
               </div>
               <div ref={chatContainerRef} className="flex-1 p-4 pr-10 pl-10 bg-amber-50 dark:bg-gray-800 overflow-y-auto">
                 {chatHistory.messages.length === 0 ? (
@@ -1159,6 +1180,8 @@ export default function ChatPage() {
         </div>
       )}
     </div>
+      )}
+    </>
   );
 }
 
