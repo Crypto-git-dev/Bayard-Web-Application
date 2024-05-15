@@ -150,22 +150,22 @@ function Header() {
                             </div>
                             <ul className="space-y-4">
                                 <li>
-                                    <a href="https://bayardlab.org" target="_blank" rel="noopener noreferrer" className="block text-base text-gray-800 dark:text-amber-500 hover:text-gray-600 dark:hover:text-amber-400">
+                                    <a href="https://bayardlab.org" className="block text-base text-gray-800 dark:text-amber-500 hover:text-gray-600 dark:hover:text-amber-400">
                                         Home
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="https://www.bayardlab.org/about-bayard-one" target="_blank" rel="noopener noreferrer" className="block text-base text-gray-800 dark:text-amber-500 hover:text-gray-600 dark:hover:text-amber-400">
+                                    <a href="https://www.bayardlab.org/about-bayard-one" className="block text-base text-gray-800 dark:text-amber-500 hover:text-gray-600 dark:hover:text-amber-400">
                                         About
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="https://docs.bayardlab.org" target="_blank" rel="noopener noreferrer" className="block text-base text-gray-800 dark:text-amber-500 hover:text-gray-600 dark:hover:text-amber-400">
+                                    <a href="https://docs.bayardlab.org" className="block text-base text-gray-800 dark:text-amber-500 hover:text-gray-600 dark:hover:text-amber-400">
                                         Documentation
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="https://www.bayardlab.org/contact" target="_blank" rel="noopener noreferrer" className="block text-base text-gray-800 dark:text-amber-500 hover:text-gray-600 dark:hover:text-amber-400">
+                                    <a href="https://www.bayardlab.org/contact"  className="block text-base text-gray-800 dark:text-amber-500 hover:text-gray-600 dark:hover:text-amber-400">
                                         Contact
                                     </a>
                                 </li>
